@@ -905,6 +905,26 @@ export default function ProductDetailCard(props) {
               </Typography>
             </Box>
           </Grid>
+          {props.product.testimonials && (
+            <Grid item className={classes.thirdColumn}>
+              <Box>
+                <Typography>
+                  <strong>Testimonails:</strong>
+                </Typography>
+                <Typography
+                  variant="h5"
+                  style={{
+                    color: "black",
+                    marginTop: 20,
+                    marginBottom: 20,
+                    justifyContent: "center",
+                  }}
+                >
+                  <ReactMarkdown>{props.product.testimonials}</ReactMarkdown>
+                </Typography>
+              </Box>
+            </Grid>
+          )}
           {/**Images start here */}
           {images[0] && (
             <Typography
@@ -1656,6 +1676,26 @@ export default function ProductDetailCard(props) {
               </Typography>
             </Box>
           </Grid>
+          {props.product.testimonials && (
+            <Grid item className={classes.thirdColumnMobile}>
+              <Box>
+                <Typography>
+                  <strong>Testimonials:</strong>
+                </Typography>
+                <Typography
+                  variant="h5"
+                  style={{
+                    color: "black",
+                    marginTop: 20,
+                    marginBottom: 20,
+                    justifyContent: "center",
+                  }}
+                >
+                  <ReactMarkdown>{props.product.testimonials}</ReactMarkdown>
+                </Typography>
+              </Box>
+            </Grid>
+          )}
           {/**Images start here */}
           {images[0] && (
             <Typography

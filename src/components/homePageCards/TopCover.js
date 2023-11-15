@@ -144,22 +144,18 @@ export default function TopCover() {
             <Grid item style={{ width: "48%", border: "1px dotted grey" }}>
               <CardContent disableRipple>
                 <Typography variant="h5" color="textSecondary" component="p">
-                  At Herbal King, we believe that nature holds the key to a
-                  healthier, happier life. We are dedicated to bringing you the
-                  purest and most effective herbal supplements to support your
-                  well-being and vitality. Our mission is to empower you on your
-                  journey to optimal health through the incredible gifts of
-                  Mother Nature.
+                  At the heart of eHealt Plus lies a passion for innovation and
+                  a commitment to excellence. Our products are the result of
+                  cutting-edge research, utilizing the finest ingredients to
+                  ensure unparalleled quality. We believe in the synergy of
+                  science and nature, creating a harmonious balance that
+                  reflects in the efficacy of our offerings.
                 </Typography>
                 <br />
-                {/* <Typography variant="h5" color="textSecondary" component="p">
-                  Discover the incredible benefits of herbs and botanicals that
-                  have been cherished for centuries across cultures worldwide.
-                  Our meticulously crafted herbal supplements are designed to
-                  harness the power of these age-old remedies, providing you
-                  with a natural way to enhance your physical, mental, and
-                  emotional well-being.
-                </Typography> */}
+                <Typography variant="h5" color="textSecondary" component="p">
+                  Experience the eHealt Plus difference – a blend of science,
+                  nature, and unwavering commitment to your well-being.
+                </Typography>
               </CardContent>
             </Grid>
 
@@ -173,12 +169,10 @@ export default function TopCover() {
             >
               <CardContent disableRipple>
                 <Typography variant="h5" color="textSecondary" component="p">
-                  Discover the incredible benefits of herbs and botanicals that
-                  have been cherished for centuries across cultures worldwide.
-                  Our meticulously crafted herbal supplements are designed to
-                  harness the power of these age-old remedies, providing you
-                  with a natural way to enhance your physical, mental, and
-                  emotional well-being.
+                  Indulge in the luxury of self-care, embrace the transformative
+                  power of our products, and embark on a path to radiant health
+                  and timeless well-being with eHealt Plus products. Welcome to
+                  a world where excellence meets elegance
                 </Typography>
               </CardContent>
             </Grid>
@@ -192,19 +186,18 @@ export default function TopCover() {
             <Grid item style={{ width: "100%", border: "1px dotted grey" }}>
               <CardContent disableRipple>
                 <Typography variant="h5" color="textSecondary" component="p">
-                  At Herbal King, we believe that nature holds the key to a
-                  healthier, happier life. We are dedicated to bringing you the
-                  purest and most effective herbal supplements to support your
-                  well-being and vitality. Our mission is to empower you on your
-                  journey to optimal health through the incredible gifts of
-                  Mother Nature.
+                  At the heart of eHealt Plus lies a passion for innovation and
+                  a commitment to excellence. Our products are the result of
+                  cutting-edge research, utilizing the finest ingredients to
+                  ensure unparalleled quality. We believe in the synergy of
+                  science and nature, creating a harmonious balance that
+                  reflects in the efficacy of our offerings.
                 </Typography>
                 <br />
-                {/* <Typography variant="h5" color="textSecondary" component="p">
-                  A certificate of attendance will be awarded to all students at
-                  the completion of a course. However the students that meet the
-                  NextChamp grade mark on that course will become a NextChamp.
-                </Typography> */}
+                <Typography variant="h5" color="textSecondary" component="p">
+                  Experience the eHealt Plus difference – a blend of science,
+                  nature, and unwavering commitment to your well-being.
+                </Typography>
               </CardContent>
             </Grid>
 
@@ -219,12 +212,10 @@ export default function TopCover() {
             >
               <CardContent disableRipple>
                 <Typography variant="h5" color="textSecondary" component="p">
-                  Discover the incredible benefits of herbs and botanicals that
-                  have been cherished for centuries across cultures worldwide.
-                  Our meticulously crafted herbal supplements are designed to
-                  harness the power of these age-old remedies, providing you
-                  with a natural way to enhance your physical, mental, and
-                  emotional well-being.
+                  Indulge in the luxury of self-care, embrace the transformative
+                  power of our products, and embark on a path to radiant health
+                  and timeless well-being with eHealt Plus products. Welcome to
+                  a world where excellence meets elegance
                 </Typography>
               </CardContent>
             </Grid>

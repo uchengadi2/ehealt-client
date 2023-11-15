@@ -191,11 +191,11 @@ function AboutUsForm(props) {
               }}
             >
               <strong>
-                Your health is your greatest asset, and at Herbal King,we are
+                Your health is your greatest asset, and at eHealt Plus,we are
                 committed to helping you protect and enhance it naturally
                 <br />
-                <br /> Explore our wide range of herbal supplements and take the
-                first step towards a healthier, happier you.
+                <br /> Explore our wide range of SOS Food Supplements & Skin
+                Tonics and take the first step towards a healthier, happier you.
                 <br />
                 <br />
               </strong>

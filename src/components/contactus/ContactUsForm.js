@@ -97,7 +97,7 @@ function ContactUsForm(props) {
           </Typography>
           <Typography variant="h5" style={{ marginTop: 10 }}>
             <span style={{ color: "orange" }}>Email:</span>{" "}
-            <span style={{ marginLeft: 30 }}>sales@herbalkingmart.com </span>
+            <span style={{ marginLeft: 30 }}>sales@ehealtplus.com </span>
             <br /> <br /> <span style={{ color: "orange" }}>Tel:</span>{" "}
             <span style={{ marginLeft: 50 }}>+234 0708 999 7673</span>
             <br /> <br />

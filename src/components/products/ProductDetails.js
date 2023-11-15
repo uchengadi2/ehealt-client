@@ -236,10 +236,6 @@ function ProductDetails(props) {
   const categorySlug = params.catSlug;
   const slug = params.slug;
 
-  console.log("sluggg is:", slug);
-
-  console.log("category slug is:", categorySlug);
-
   const handleBecomeAPartnerOpenDialogBox = () => {
     setBecomePartnerOpen(false);
   };
@@ -358,6 +354,7 @@ function ProductDetails(props) {
           revenueMargin: product[0].revenueMargin,
           revenueMarginShouldPrevail: product[0].revenueMarginShouldPrevail,
           origins: product[0].origins,
+          testimonials: product[0].testimonials,
         });
 
         setProduct({
@@ -413,6 +410,7 @@ function ProductDetails(props) {
           revenueMargin: allData[0].revenueMargin,
           revenueMarginShouldPrevail: allData[0].revenueMarginShouldPrevail,
           origins: allData[0].origins,
+          testimonials: allData[0].testimonials,
         });
 
         setIsLoading(false);

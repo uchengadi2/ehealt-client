@@ -102,21 +102,21 @@ export default function CallToAction(props) {
       >
         <Grid container direction="column">
           <Grid item>
-            {matchesMD ? (
-              <Typography variant="h2" style={{ color: "black" }}>
-                A One-stop Platform for carefully brewed Herbal Supplements!!!{" "}
-                <br /> Revolutionary Testimonies
+            {/* {matchesMD ? (
+              <Typography variant="h2" style={{ color: "white" }}>
+                A One-stop Platform for careflly brewed SOS Food Supplements &
+                Skin Tonics!!! <br /> Revolutionary Testimonies
               </Typography>
             ) : (
               <Typography variant="h2" style={{ fontSize: "1.5rem" }}>
-                A One-stop Platform for carefully brewed Herbal Supplements!!!{" "}
-                <br /> Revolutionary Testimonies
+                A One-stop Platform for carefully brewed SOS Food Supplements &
+                Skin Tonics!!! <br /> Revolutionary Testimonies
               </Typography>
-            )}
-            {matchesMD ? (
+            )} */}
+            {/* {matchesMD ? (
               <Typography
                 variant="subtitle2"
-                style={{ fontSize: "1.5rem", color: "black" }}
+                style={{ fontSize: "1.5rem", color: "white" }}
               >
                 Take advantage of this Platform today
               </Typography>
@@ -127,7 +127,7 @@ export default function CallToAction(props) {
               >
                 Take advantage of this Platform today
               </Typography>
-            )}
+            )} */}
 
             {matchesMD ? (
               <Grid

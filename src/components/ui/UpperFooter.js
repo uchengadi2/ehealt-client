@@ -302,12 +302,13 @@ function UpperFooter(props) {
                   ) : (
                     <Typography variant="subtitle2" style={{ fontSize: 14 }}>
                       <strong>
-                        Your health is your greatest asset, and at Herbal King,{" "}
+                        Your health is your greatest asset, and at eHealt Plus,{" "}
                         <br />
                         we are committed to helping you protect and enhance it
                         naturally
                         <br />
-                        Explore our wide range of herbal supplements and take
+                        Explore our wide range of SOS food supplements & Skin
+                        Tonics and take
                         <br />
                         the first step towards a healthier, happier you <br />
                       </strong>
@@ -377,7 +378,7 @@ function UpperFooter(props) {
                       </span>
                       <br />
 
-                      <span>sales@herbalkingmart.com</span>
+                      <span>sales@ehealtplus.com</span>
                       <br />
 
                       <span>+234 0708 999 7673, +234 0806 908 6517</span>
