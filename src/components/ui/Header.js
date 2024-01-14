@@ -548,17 +548,15 @@ const Header = (props) => {
     } else {
       return (
         <Fragment>
-          <Button
+          {/**<Button
             onClick={() => <MainDashboard />}
             disableRipple
             component={Link}
-            // to={`/carts/${props.userId}`}
             to={`/dashboard/maindashboard`}
             className={classes.cart}
           >
-            {/* <img alt="company logo" src={logo} className={classes.logo} /> */}
             Dashboard
-          </Button>
+      </Button> **/}
           <Button
             onClick={() => <OrderPage />}
             disableRipple
