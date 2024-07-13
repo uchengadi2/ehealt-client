@@ -261,133 +261,42 @@ export default function FreezePriceDealPageAd(props) {
       {matchesMDUp ? (
         <>
           <Card className={classes.root} disableRipple={true}>
-            {/** place the grid here */}
-
-            <Grid
-              container
-              direction="row"
-              style={{ marginTop: 55, height: 300 }}
-            >
-              <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 0, width: "22%", marginTop: 0 }}
-              >
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundDerica}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "80%", marginTop: 0, marginLeft: 50 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "20%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/derica"
-                    onClick={() => <DericaHome />}
-                    className={classes.actionButton}
-                  >
-                    Buy Rice In Derica
-                  </Button>
-
-                  {/* {props.preference === "derica" && (
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/retail"
-                    onClick={() => <RetailHome />}
-                    className={classes.actionButton}
-                  >
-                    Buy Retail
-                  </Button>
-                )} */}
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 0, width: "22%", marginTop: 0 }}
-              >
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundPaint}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "80%", marginTop: 0, marginLeft: 50 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "20%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/paint"
-                    onClick={() => <PaintHome />}
-                    className={classes.actionButton}
-                  >
-                    Buy Rice In Paint
-                  </Button>
-                </Grid>
+            {/* <CardActionArea disableRipple> */}
+            <Grid container direction="row">
+              <Grid item style={{ width: "48%", border: "1px dotted grey" }}>
+                <CardContent disableRipple>
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    At the heart of eHealt Plus lies a passion for innovation
+                    and a commitment to excellence. Our products are the result
+                    of cutting-edge research, utilizing the finest ingredients
+                    to ensure unparalleled quality. We believe in the synergy of
+                    science and nature, creating a harmonious balance that
+                    reflects in the efficacy of our offerings.
+                  </Typography>
+                  <br />
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    Experience the eHealt Plus difference – a blend of science,
+                    nature, and unwavering commitment to your well-being.
+                  </Typography>
+                </CardContent>
               </Grid>
 
               <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 0, width: "22%", marginTop: 0 }}
+                item
+                style={{
+                  width: "50%",
+                  marginLeft: "1.7%",
+                  border: "1px dotted grey",
+                }}
               >
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundBulk}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "80%", marginTop: 0, marginLeft: 50 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "20%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/wholesale"
-                    onClick={() => <WholesaleHome />}
-                    className={classes.actionWholesaleButton}
-                  >
-                    Buy WholeSale & In Bulk
-                  </Button>
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 0, width: "22%", marginTop: 0 }}
-              >
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundCommunity}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "80%", marginTop: 0, marginLeft: 50 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "20%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/dealscentral"
-                    onClick={() => <DealHome />}
-                    className={classes.actionButton}
-                  >
-                    Deals Central
-                  </Button>
-                </Grid>
+                <CardContent disableRipple>
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    Indulge in the luxury of self-care, embrace the
+                    transformative power of our products, and embark on a path
+                    to radiant health and timeless well-being with eHealt Plus
+                    products. Welcome to a world where excellence meets elegance
+                  </Typography>
+                </CardContent>
               </Grid>
             </Grid>
             {/* </CardActionArea> */}
@@ -409,139 +318,46 @@ export default function FreezePriceDealPageAd(props) {
       ) : (
         <>
           <Card className={classes.rootMobile} disableRipple>
-            <Grid
-              container
-              direction="row"
-              style={{ marginTop: 15, height: 160 }}
-            >
-              <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 20, width: "22%", marginTop: 0 }}
-              >
-                <CardActionArea></CardActionArea>
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundDerica}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "70%", marginTop: 0, marginLeft: 15 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "30%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/derica"
-                    onClick={() => <DericaHome />}
-                    className={classes.actionButton}
-                    style={{ width: 75, marginLeft: 14, fontSize: 8 }}
-                    sx={{
-                      textAlign: "left",
-                      fontSize: 8,
-                    }}
-                  >
-                    Buy In Derica
-                  </Button>
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 0, width: "22%", marginTop: 0 }}
-              >
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundPaint}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "70%", marginTop: 0, marginLeft: 15 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "30%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/paint"
-                    onClick={() => <PaintHome />}
-                    className={classes.actionButton}
-                    style={{ width: 75, marginLeft: 18, fontSize: 8 }}
-                    sx={{
-                      textAlign: "left",
-                    }}
-                  >
-                    Buy In Paint
-                  </Button>
-                </Grid>
+            {/* <CardActionArea disableRipple> */}
+            <Grid container direction="column">
+              <Grid item style={{ width: "100%", border: "1px dotted grey" }}>
+                <CardContent disableRipple>
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    At the heart of eHealt Plus lies a passion for innovation
+                    and a commitment to excellence. Our products are the result
+                    of cutting-edge research, utilizing the finest ingredients
+                    to ensure unparalleled quality. We believe in the synergy of
+                    science and nature, creating a harmonious balance that
+                    reflects in the efficacy of our offerings.
+                  </Typography>
+                  <br />
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    Experience the eHealt Plus difference – a blend of science,
+                    nature, and unwavering commitment to your well-being.
+                  </Typography>
+                </CardContent>
               </Grid>
 
               <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 0, width: "22%", marginTop: 0 }}
+                item
+                style={{
+                  width: "100%",
+                  marginLeft: "0%",
+                  marginTop: 10,
+                  border: "1px dotted grey",
+                }}
               >
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundBulk}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "70%", marginTop: 0, marginLeft: 15 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "30%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/wholesale"
-                    onClick={() => <WholesaleHome />}
-                    className={classes.actionWholesaleButton}
-                    style={{ width: 75, marginLeft: 18, fontSize: 8 }}
-                    sx={{
-                      textAlign: "left",
-                    }}
-                  >
-                    Buy WholeSale
-                  </Button>
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                direction="column"
-                style={{ marginLeft: 0, width: "22%", marginTop: 0 }}
-              >
-                <Grid
-                  container
-                  //direction="row"
-                  alignItems="center"
-                  className={classes.backgroundRetail}
-                  justifyContent={matchesSM ? "center" : "space-between"}
-                  direction={matchesSM ? "column" : "row"}
-                  item
-                  style={{ height: "70%", marginTop: 0, marginLeft: 15 }}
-                ></Grid>
-                <Grid item alignItems="center" style={{ height: "30%" }}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to="/retail"
-                    onClick={() => <RetailHome />}
-                    className={classes.actionButton}
-                    style={{ width: 75, marginLeft: 18, fontSize: 8 }}
-                    sx={{
-                      textAlign: "left",
-                    }}
-                  >
-                    Buy Retail
-                  </Button>
-                </Grid>
+                <CardContent disableRipple>
+                  <Typography variant="h5" color="textSecondary" component="p">
+                    Indulge in the luxury of self-care, embrace the
+                    transformative power of our products, and embark on a path
+                    to radiant health and timeless well-being with eHealt Plus
+                    products. Welcome to a world where excellence meets elegance
+                  </Typography>
+                </CardContent>
               </Grid>
             </Grid>
+            {/* </CardActionArea> */}
           </Card>
           <Grid>
             {" "}
