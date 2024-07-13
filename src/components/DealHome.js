@@ -839,7 +839,7 @@ const DealHome = (props) => {
           </Grid>
           {/* </section> */}
           <FreezePriceAdDealPage />
-          <TopCoverDeal preference={preference} />
+          {/* <TopCoverDeal preference={preference} /> */}
           <DealPropositionPage />
           <DealSearchBox
             updateDealHandler={updateDealHandler}
@@ -907,7 +907,7 @@ const DealHome = (props) => {
           </Grid>
           {/* </section> */}
           <FreezePriceAdDealPage />
-          <TopCoverDeal preference={preference} />
+          {/* <TopCoverDeal preference={preference} /> */}
           <DealPropositionPage />
           <DealSearchBox
             updateDealHandler={updateDealHandler}
