@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+import useToken from "../../../custom-hooks/useToken";
+import useUserId from "../../../custom-hooks/useUserId";
+import Stack from "@mui/material/Stack";
+import Snackbar from "@material-ui/core/Snackbar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Dialog from "@material-ui/core/Dialog";
@@ -14,6 +18,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import api from "./../../../apis/local";
 import AddSupplierForm from "./AddSupplierForm";
+import SupplierDeleteForm from "./SupplierDeleteForm";
+import SupplierEditForm from "./SupplierEditForm";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -39,32 +45,59 @@ function Suppliers(props) {
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
-  const [open, setOpen] = React.useState(false);
+
+  const [updateSupplierCounter, setUpdateSupplierCounter] = useState(false);
+  const [updateEdittedSupplierCounter, setUpdateEdittedSupplierCounter] =
+    useState(false);
+  const [updateDeletedSupplierCounter, setUpdateDeletedSupplierCounter] =
+    useState(false);
+  const { token, setToken } = useToken();
+  const { userId, setUserId } = useUserId();
+  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [supplierList, setSupplierList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowId, setSelectedRowId] = useState();
+  const [rowNumber, setRowNumber] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       let allData = [];
-      api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       const response = await api.get(`/suppliers`);
       const workingData = response.data.data.data;
       workingData.map((supplier) => {
         allData.push({
           id: supplier._id,
           name: supplier.name,
-          refNumber: supplier.refNumber,
-          type: supplier.type,
+          supplierNumber: supplier.supplierNumber,
+          supplierType: supplier.supplierType,
           description: supplier.description,
           country: supplier.country,
+          state: supplier.state,
           address: supplier.address,
           contactPerson: supplier.contactPerson,
           contactPersonEmail: supplier.contactPersonEmail,
-          contactPhoneNumber: supplier.contactPhoneNumber,
-          product: supplier.product,
+          contactPhoneNumbers: supplier.contactPhoneNumbers,
+          products: supplier.products,
           bankDetails: supplier.bankDetails,
+          countryId: supplier.country,
+          stateId: supplier.state,
+          // bankName: supplier.bankDetails[0].bankName,
+          // bankAccountNumber: supplier.bankDetails[0].bankAccountNumber,
+          // bankAccountType: supplier.bankDetails[0].bankAccountType,
+          // bankAccountName: supplier.bankDetails[0].bankAccountName,
+          // bankCountry: supplier.bankDetails[0].country,
+          // bankAccountSwiftCode: supplier.bankDetails[0].bankAccountSwiftCode,
+          // bankAccountIBAN: supplier.bankDetails[0].bankAccountIBAN,
         });
       });
       setSupplierList(allData);
@@ -74,23 +107,102 @@ function Suppliers(props) {
     //call the function
 
     fetchData().catch(console.error);
-  }, []);
+  }, [
+    updateSupplierCounter,
+    updateEdittedSupplierCounter,
+    updateDeletedSupplierCounter,
+  ]);
 
   useEffect(() => {
     // 👇️ scroll to top on page load
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
+  const renderSupplierUpdateCounter = () => {
+    setUpdateSupplierCounter((prevState) => !prevState);
+  };
+
+  const renderSupplierEdittedUpdateCounter = () => {
+    setUpdateEdittedSupplierCounter((prevState) => !prevState);
+  };
+
+  const renderSupplierDeletedUpdateCounter = () => {
+    setUpdateDeletedSupplierCounter((prevState) => !prevState);
+  };
+
+  const handleSuccessfulCreateSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+  const handleSuccessfulEditSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleSuccessfulDeletedItemSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleFailedSnackbar = (message) => {
+    setAlert({
+      open: true,
+      message: message,
+      backgroundColor: "#FF3232",
+    });
+    //setBecomePartnerOpen(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOpen = () => {
+  const handleAddOpen = () => {
     setOpen(true);
   };
 
+  const handleDialogOpenStatus = () => {
+    setOpen(false);
+  };
+
+  const handleEditDialogOpenStatus = () => {
+    setEditOpen(false);
+  };
+
+  const handleDeleteDialogOpenStatus = () => {
+    setDeleteOpen(false);
+  };
+
+  const handleEditOpen = () => {
+    setEditOpen(true);
+  };
+
+  const handleDeleteOpen = () => {
+    setDeleteOpen(true);
+  };
+
   const onRowsSelectionHandler = (ids, rows) => {
+    const selectedIDs = new Set(ids);
     const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
     setSelectedRows(selectedRowsData);
+    setRowNumber(selectedIDs.size);
+    selectedIDs.forEach(function (value) {
+      setSelectedRowId(value);
+    });
   };
 
   const renderDataGrid = () => {
@@ -111,14 +223,14 @@ function Suppliers(props) {
         //editable: true,
       },
       {
-        field: "refNumber",
-        headerName: "Reference Number",
+        field: "supplierNumber",
+        headerName: "Supplier Number",
         width: 150,
         //editable: true,
       },
       {
-        field: "type",
-        headerName: "Type",
+        field: "supplierType",
+        headerName: "Supplier Type",
         //type: "number",
         width: 150,
         //editable: true,
@@ -142,9 +254,9 @@ function Suppliers(props) {
       let row = {
         numbering: ++counter,
         id: supplier.id,
-        refNumber: supplier.refNumber,
-        type: supplier.type
-          ? supplier.type.replace(
+        supplierNumber: supplier.supplierNumber,
+        supplierType: supplier.supplierType
+          ? supplier.supplierType.replace(
               /(^\w|\s\w)(\S*)/g,
               (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
             )
@@ -169,6 +281,21 @@ function Suppliers(props) {
               (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
             )
           : "",
+        description: supplier.description,
+        contactPerson: supplier.contactPerson,
+        contactPersonEmail: supplier.contactPersonEmail,
+        contactPhoneNumbers: supplier.contactPhoneNumbers,
+        products: supplier.products,
+        bankDetails: supplier.bankDetails,
+        countryId: supplier.country[0].id,
+        stateId: supplier.state,
+        // bankName: supplier.bankName,
+        // bankAccountNumber: supplier.bankAccountNumber,
+        // bankAccountType: supplier.bankAccountType,
+        // bankAccountName: supplier.bankAccountName,
+        // bankCountry: supplier.bankCountry,
+        // bankAccountSwiftCode: supplier.bankAccountSwiftCode,
+        // bankAccountIBAN: supplier.bankAccountIBAN,
       };
       rows.push(row);
     });
@@ -204,32 +331,93 @@ function Suppliers(props) {
       <Grid container spacing={1} direction="column">
         <Grid item xs>
           <Grid container spacing={2}>
-            <Grid item xs={10}>
+            <Grid item xs={9.3}>
               {/* <Item>xs=8</Item> */}
               <Typography variant="h4">Suppliers</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={2.7}>
               <div>
-                <Button variant="contained" onClick={handleOpen}>
-                  Add Supplier
-                </Button>
-                <Dialog
-                  //style={{ zIndex: 1302 }}
-                  fullScreen={matchesXS}
-                  open={open}
-                  // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
-                  onClose={() => [setOpen(false)]}
-                >
-                  <DialogContent>
-                    <AddSupplierForm
-                    // token={token}
-                    // userId={userId}
-                    // handleDialogOpenStatus={handleDialogOpenStatus}
-                    // handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
-                    // handleFailedSnackbar={handleFailedSnackbar}
-                    />
-                  </DialogContent>
-                </Dialog>
+                <Stack direction="row" spacing={1.5}>
+                  <Button variant="contained" onClick={handleAddOpen}>
+                    Add
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={open}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setOpen(false)]}
+                  >
+                    <DialogContent>
+                      <AddSupplierForm
+                        token={token}
+                        userId={userId}
+                        handleDialogOpenStatus={handleDialogOpenStatus}
+                        handleSuccessfulCreateSnackbar={
+                          handleSuccessfulCreateSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderSupplierUpdateCounter={
+                          renderSupplierUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="contained" onClick={handleEditOpen}>
+                    Edit
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={editOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setEditOpen(false)]}
+                  >
+                    <DialogContent>
+                      <SupplierEditForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleEditDialogOpenStatus={handleEditDialogOpenStatus}
+                        handleSuccessfulEditSnackbar={
+                          handleSuccessfulEditSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderSupplierEdittedUpdateCounter={
+                          renderSupplierEdittedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="contained" onClick={handleDeleteOpen}>
+                    Delete
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={deleteOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setDeleteOpen(false)]}
+                  >
+                    <DialogContent>
+                      <SupplierDeleteForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleDeleteDialogOpenStatus={
+                          handleDeleteDialogOpenStatus
+                        }
+                        handleSuccessfulDeletedItemSnackbar={
+                          handleSuccessfulDeletedItemSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderSupplierDeletedUpdateCounter={
+                          renderSupplierDeletedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </Stack>
               </div>
             </Grid>
           </Grid>
@@ -240,6 +428,16 @@ function Suppliers(props) {
             {!loading && renderDataGrid()}
           </Box>
         </Grid>
+        <Snackbar
+          open={alert.open}
+          message={alert.message}
+          ContentProps={{
+            style: { backgroundColor: alert.backgroundColor },
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={() => setAlert({ ...alert, open: false })}
+          autoHideDuration={4000}
+        />
       </Grid>
     </Box>
   );

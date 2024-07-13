@@ -46,6 +46,20 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.green,
     },
   },
+
+  sumitDisabledButton: {
+    borderRadius: 10,
+    height: 40,
+    width: 200,
+    marginLeft: 70,
+    marginTop: 30,
+    color: "white",
+    backgroundColor: theme.palette.common.grey,
+    "&:hover": {
+      backgroundColor: theme.palette.common.grey,
+    },
+  },
+
   offDeliveryLocationButton: {
     borderRadius: 10,
     height: 40,
@@ -222,8 +236,51 @@ const renderRequestedQuantityField = ({
   );
 };
 
+const renderDealSameQuantityField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="How many quantities do you need?"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={input.value}
+      fullWidth
+      //required
+      type={type}
+      //defaultValue={quantity}
+      {...custom}
+      onChange={input.onChange}
+      InputProps={{
+        inputProps: {
+          min: 1,
+          style: {
+            height: 1,
+          },
+          readOnly: true,
+        },
+        //readOnly: true,
+      }}
+    />
+  );
+};
+
 function CartUpdateAndDeliveryForm(props) {
-  const { price, productId, token, userId } = props;
+  const {
+    price,
+    productId,
+    token,
+    userId,
+    allowDealQuantityChange,
+    salesPreference,
+  } = props;
   const [quantity, setQuantity] = useState(+props.quantity);
   const [productQuantityInCart, setProductQuantityInCart] = useState();
   const [productLocation, setProductLocation] = useState();
@@ -411,13 +468,14 @@ function CartUpdateAndDeliveryForm(props) {
     label,
     meta: { touched, error, invalid },
     type,
+    helperText,
     id,
     ...custom
   }) => {
     return (
       <TextField
         //error={touched && invalid}
-        helperText="Minimum Required Quantity"
+        helperText={helperText}
         variant="outlined"
         label={label}
         id={input.name}
@@ -426,7 +484,9 @@ function CartUpdateAndDeliveryForm(props) {
         //required
         type={type}
         {...custom}
-        defaultValue={`${minimumQuantity} ${props.unit}`}
+        defaultValue={`${minimumQuantity} ${
+          minimumQuantity <= 1 ? "unit" : "units"
+        }`}
         onChange={input.onChange}
         //   inputProps={{
         //     style: {
@@ -576,7 +636,8 @@ function CartUpdateAndDeliveryForm(props) {
 
         setLoadingRemoval(false);
         props.cartCounterHandler(-1);
-        props.renderCartUpdate(props.cartId);
+        // props.renderCartUpdate(props.cartId);
+        props.renderCartUpdate();
       };
       createForm().catch((err) => {
         props.handleFailedSnackbar();
@@ -622,8 +683,21 @@ function CartUpdateAndDeliveryForm(props) {
 
     let data = {};
 
+    let weightInKg = 0;
+
+    if (props.unit === "kg") {
+      weightInKg = props.weightPerUnit * quantity;
+    } else if (props.unit === "g") {
+      weightInKg = (props.weightPerUnit / 1000) * quantity;
+    } else if (props.unit === "ibs") {
+      weightInKg = props.weightPerUnit * 0.45359237 * quantity;
+    } else if (props.unit === "tonnes") {
+      weightInKg = props.weightPerUnit * 1000 * quantity;
+    }
+
     data = {
       quantity: quantity,
+      weightInKg: weightInKg,
       // price: props.price,
       // currency: props.currency,
       // // totalDeliveryCost: totalDeliveryCost,
@@ -646,7 +720,8 @@ function CartUpdateAndDeliveryForm(props) {
           );
 
           setLoading(false);
-          props.renderCartUpdate(props.cartId);
+          // props.renderCartUpdate(props.cartId);
+          props.renderCartUpdate();
           //setIsCheckoutVisible(true);
         } else {
           props.handleFailedSnackbar(
@@ -685,6 +760,7 @@ function CartUpdateAndDeliveryForm(props) {
           id="minimumQuantity"
           name="minimumQuantity"
           defaultValue={`${minimumQuantity}`}
+          helperText="Minimum Required Order Quantity"
           type="text"
           component={renderMinimumQuantityField}
           style={{ width: 300 }}
@@ -696,7 +772,13 @@ function CartUpdateAndDeliveryForm(props) {
           defaultValue={quantity}
           type="number"
           onChange={onChange}
-          component={renderRequestedQuantityField}
+          component={
+            salesPreference === "deal" && allowDealQuantityChange
+              ? renderRequestedQuantityField
+              : salesPreference !== "deal"
+              ? renderRequestedQuantityField
+              : renderDealSameQuantityField
+          }
           style={{ width: 300, marginTop: 10 }}
         />
         <Grid container direction="row">
@@ -721,8 +803,21 @@ function CartUpdateAndDeliveryForm(props) {
           //component={Link}
           // to="/mobileapps"
           // to={`/checkouts/${userId}`}
-          className={classes.submitButton}
+          className={
+            salesPreference === "deal" && allowDealQuantityChange
+              ? classes.submitButton
+              : salesPreference !== "deal"
+              ? classes.submitButton
+              : classes.sumitDisabledButton
+          }
           onClick={onSubmit}
+          disabled={
+            salesPreference === "deal" && allowDealQuantityChange
+              ? false
+              : salesPreference !== "deal"
+              ? false
+              : true
+          }
         >
           {loading ? (
             <CircularProgress size={30} color="inherit" />

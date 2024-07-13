@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Field, reduxForm } from "redux-form";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -20,7 +21,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import api from "./../../../apis/local";
-//import { CREATE_CITY } from "../../../actions/types";
+import { CREATE_SUPPLIER } from "../../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +56,7 @@ const renderNameField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the name of the city"
+      helperText="Supplier Name"
       variant="outlined"
       label={label}
       id={input.name}
@@ -74,7 +75,7 @@ const renderNameField = ({
   );
 };
 
-const renderCityCodeField = ({
+const renderSupplierNumberField = ({
   input,
   label,
   meta: { touched, error, invalid },
@@ -85,7 +86,7 @@ const renderCityCodeField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the code for this City"
+      helperText="Supplier Number"
       variant="outlined"
       label={label}
       id={input.name}
@@ -117,7 +118,7 @@ const renderDescriptionField = ({
       error={touched && invalid}
       //placeholder="category description"
       variant="outlined"
-      helperText="Describe the city"
+      helperText="Describe the Supplier"
       label={label}
       id={input.name}
       // value={formInput.description}
@@ -134,6 +135,185 @@ const renderDescriptionField = ({
   );
 };
 
+const renderAddressField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Supplier Address"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={true}
+      minRows={5}
+      {...custom}
+      onChange={input.onChange}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderSupplierProductsField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Supplier Products"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={true}
+      minRows={5}
+      {...custom}
+      onChange={input.onChange}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderSupplierBankDetailsField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Supplier Bank Details"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={true}
+      minRows={5}
+      {...custom}
+      onChange={input.onChange}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderContactPersonField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={formInput.name}
+      fullWidth
+      style={{ marginTop: 20 }}
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+const renderContactPersonEmailAddressField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person Email Address"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      style={{ marginTop: 20 }}
+      fullWidth
+      //required
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+
+const renderContactPersonPhoneNumberField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person Phone Number"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={formInput.name}
+      fullWidth
+      style={{ marginTop: 20 }}
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+
 function AddSupplierForm(props) {
   const classes = useStyles();
   const [state, setState] = useState("");
@@ -141,6 +321,7 @@ function AddSupplierForm(props) {
   const [countryList, setCountryList] = useState([]);
   const [stateList, setStateList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [supplierType, setSupplierType] = useState("local");
 
   const dispatch = useDispatch();
 
@@ -184,6 +365,10 @@ function AddSupplierForm(props) {
     setState(event.target.value);
   };
 
+  const handleSupplierTypeChange = (event) => {
+    setSupplierType(event.target.value);
+  };
+
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
     setStateList([]);
@@ -211,6 +396,35 @@ function AddSupplierForm(props) {
     });
   };
 
+  const renderSupplierTypeField = ({
+    input,
+    label,
+    meta: { touched, error, invalid },
+    type,
+    id,
+    ...custom
+  }) => {
+    return (
+      <Box>
+        <FormControl variant="outlined">
+          {/* <InputLabel id="vendor_city">City</InputLabel> */}
+          <Select
+            labelId="type"
+            id="type"
+            value={supplierType}
+            onChange={handleSupplierTypeChange}
+            label="Supplier Type"
+            style={{ width: 500, height: 38, marginTop: 20 }}
+          >
+            <MenuItem value={"local"}>Local</MenuItem>
+            <MenuItem value={"foreign"}>Foreign</MenuItem>
+          </Select>
+          <FormHelperText>Select Supplier Type</FormHelperText>
+        </FormControl>
+      </Box>
+    );
+  };
+
   const renderStateField = ({
     input,
     label,
@@ -233,9 +447,7 @@ function AddSupplierForm(props) {
           >
             {renderStateList()}
           </Select>
-          <FormHelperText>
-            Select State/Region/Province where City is located
-          </FormHelperText>
+          <FormHelperText>Select Supplier State</FormHelperText>
         </FormControl>
       </Box>
     );
@@ -263,7 +475,7 @@ function AddSupplierForm(props) {
           >
             {renderCountryList()}
           </Select>
-          <FormHelperText>Select Country where city is located</FormHelperText>
+          <FormHelperText>Select Supplier Country</FormHelperText>
         </FormControl>
       </Box>
     );
@@ -277,28 +489,36 @@ function AddSupplierForm(props) {
     setLoading(true);
     const data = {
       name: formValues.name,
-      code: formValues.code
-        ? formValues.code
+      supplierNumber: formValues.supplierNumber
+        ? formValues.supplierNumber
         : "CT-" + Math.floor(Math.random() * 100000),
       description: formValues.description,
       country: country,
       state: state,
+      supplierType: supplierType,
+      address: formValues.address,
+      contactPerson: formValues.contactPerson,
+      contactPhoneNumbers: formValues.contactPhoneNumbers,
+      contactPersonEmail: formValues.contactPersonEmail,
+      products: formValues.products,
+      bankDetails: formValues.bankDetails,
       createdBy: props.userId,
     };
     if (data) {
       const createForm = async () => {
         api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
-        const response = await api.post(`/cities`, data);
+        const response = await api.post(`/suppliers`, data);
 
         if (response.data.status === "success") {
           dispatch({
-            //type: CREATE_CITY,
+            type: CREATE_SUPPLIER,
             payload: response.data.data.data,
           });
 
           props.handleSuccessfulCreateSnackbar(
-            `${response.data.data.data.name} City is added successfully!!!`
+            `${response.data.data.data.name} Supplier is added successfully!!!`
           );
+          props.renderSupplierUpdateCounter();
           props.handleDialogOpenStatus();
           setLoading(false);
         } else {
@@ -318,6 +538,22 @@ function AddSupplierForm(props) {
 
   return (
     <div className={classes.root}>
+      <Grid
+        item
+        container
+        style={{ marginTop: 1, marginBottom: 2 }}
+        justifyContent="center"
+      >
+        <CancelRoundedIcon
+          style={{
+            marginLeft: 460,
+            fontSize: 30,
+            marginTop: "-10px",
+            cursor: "pointer",
+          }}
+          onClick={() => [props.handleDialogOpenStatus()]}
+        />
+      </Grid>
       <Grid item container justifyContent="center">
         <FormLabel
           style={{ color: "grey", fontSize: "1.3em" }}
@@ -351,10 +587,10 @@ function AddSupplierForm(props) {
           <Grid item style={{ width: "33%", marginLeft: 10 }}>
             <Field
               label=""
-              id="code"
-              name="code"
+              id="supplierNumber"
+              name="supplierNumber"
               type="text"
-              component={renderCityCodeField}
+              component={renderSupplierNumberField}
             />
           </Grid>
         </Grid>
@@ -377,10 +613,59 @@ function AddSupplierForm(props) {
 
         <Field
           label=""
+          id="address"
+          name="address"
+          type="text"
+          component={renderAddressField}
+        />
+        <Field
+          label=""
           id="description"
           name="description"
           type="text"
           component={renderDescriptionField}
+        />
+        <Field
+          label=""
+          id="supplierType"
+          name="supplierType"
+          type="text"
+          component={renderSupplierTypeField}
+        />
+        <Field
+          label=""
+          id="contactPerson"
+          name="contactPerson"
+          type="text"
+          component={renderContactPersonField}
+        />
+        <Field
+          label=""
+          id="contactPhoneNumbers"
+          name="contactPhoneNumbers"
+          type="text"
+          component={renderContactPersonPhoneNumberField}
+        />
+        <Field
+          label=""
+          id="contactPersonEmail"
+          name="contactPersonEmail"
+          type="text"
+          component={renderContactPersonEmailAddressField}
+        />
+        <Field
+          label=""
+          id="products"
+          name="products"
+          type="text"
+          component={renderSupplierProductsField}
+        />
+        <Field
+          label=""
+          id="bankDetails"
+          name="bankDetails"
+          type="text"
+          component={renderSupplierBankDetailsField}
         />
 
         <Button

@@ -177,6 +177,7 @@ export default function LearningPath(props) {
             }}
           >
             <MenuItem value={"retail"}>Retail</MenuItem>
+            <MenuItem value={"derica"}>Derica</MenuItem>
             <MenuItem value={"wholesale"}>Wholesale(Bulk Purchase)</MenuItem>
           </Select>
           <FormHelperText>Choose Shopping Preference</FormHelperText>

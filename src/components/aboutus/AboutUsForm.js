@@ -158,13 +158,14 @@ function AboutUsForm(props) {
         // onSubmit={onSubmit}
         sx={{
           width: 800,
-          height: 350,
+          height: 500,
         }}
         noValidate
         autoComplete="off"
         // style={{ marginTop: 20 }}
         // className={classes.background}
-        style={{ height: "25em", marginTop: "-300" }}
+        // style={{ height: "25em", marginTop: "-300" }}
+        style={{ height: "39em", marginTop: "-300" }}
       >
         <Grid
           container
@@ -184,7 +185,7 @@ function AboutUsForm(props) {
             <Typography
               //variant="h4"
               style={{
-                marginTop: 70,
+                marginTop: 50,
                 marginLeft: 100,
                 color: "white",
                 fontSize: 20,

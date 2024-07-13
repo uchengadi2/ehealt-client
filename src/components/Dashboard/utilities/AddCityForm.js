@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Field, reduxForm } from "redux-form";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -20,7 +21,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import api from "./../../../apis/local";
-//import { CREATE_CITY } from "../../../actions/types";
+import { CREATE_CITY } from "../../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +56,7 @@ const renderNameField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the name of the city"
+      helperText="Enter the name of the city/place"
       variant="outlined"
       label={label}
       id={input.name}
@@ -85,7 +86,7 @@ const renderCityCodeField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the code for this City"
+      helperText="Enter the code for this City/Place"
       variant="outlined"
       label={label}
       id={input.name}
@@ -117,7 +118,7 @@ const renderDescriptionField = ({
       error={touched && invalid}
       //placeholder="category description"
       variant="outlined"
-      helperText="Describe the city"
+      helperText="Describe the city/place"
       label={label}
       id={input.name}
       // value={formInput.description}
@@ -140,6 +141,7 @@ function AddCityForm(props) {
   const [country, setCountry] = useState("");
   const [countryList, setCountryList] = useState([]);
   const [stateList, setStateList] = useState([]);
+  const [placeType, setPlaceType] = useState("conventional");
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -189,6 +191,10 @@ function AddCityForm(props) {
     setStateList([]);
   };
 
+  const handlePlaceTypeChange = (event) => {
+    setPlaceType(event.target.value);
+  };
+
   //get the state list
   const renderStateList = () => {
     return stateList.map((item) => {
@@ -234,7 +240,7 @@ function AddCityForm(props) {
             {renderStateList()}
           </Select>
           <FormHelperText>
-            Select State/Region/Province where City is located
+            Select State/Region/Entity where City is located
           </FormHelperText>
         </FormControl>
       </Box>
@@ -263,7 +269,38 @@ function AddCityForm(props) {
           >
             {renderCountryList()}
           </Select>
-          <FormHelperText>Select Country where city is located</FormHelperText>
+          <FormHelperText>
+            Select Country where city/place is located
+          </FormHelperText>
+        </FormControl>
+      </Box>
+    );
+  };
+
+  const renderPlaceTypeField = ({
+    input,
+    label,
+    meta: { touched, error, invalid },
+    type,
+    id,
+    ...custom
+  }) => {
+    return (
+      <Box>
+        <FormControl variant="outlined">
+          {/* <InputLabel id="vendor_city">City</InputLabel> */}
+          <Select
+            labelId="placeType"
+            id="placeType"
+            value={placeType}
+            onChange={handlePlaceTypeChange}
+            //label="Country Region"
+            style={{ width: 500, height: 38, marginTop: 20 }}
+          >
+            <MenuItem value={"conventional"}>Conventional</MenuItem>
+            <MenuItem value={"organizational"}>Organizational</MenuItem>
+          </Select>
+          <FormHelperText>Select City/Place Type</FormHelperText>
         </FormControl>
       </Box>
     );
@@ -283,6 +320,7 @@ function AddCityForm(props) {
       description: formValues.description,
       country: country,
       state: state,
+      placeType: placeType,
       createdBy: props.userId,
     };
     if (data) {
@@ -292,13 +330,14 @@ function AddCityForm(props) {
 
         if (response.data.status === "success") {
           dispatch({
-            //type: CREATE_CITY,
+            type: CREATE_CITY,
             payload: response.data.data.data,
           });
 
           props.handleSuccessfulCreateSnackbar(
             `${response.data.data.data.name} City is added successfully!!!`
           );
+          props.renderCityUpdateCounter();
           props.handleDialogOpenStatus();
           setLoading(false);
         } else {
@@ -308,7 +347,7 @@ function AddCityForm(props) {
         }
       };
       createForm().catch((err) => {
-        props.handleFailedSnackbar();
+        props.handleFailedSnackbar("Something went wrong, please try again!!!");
         console.log("err:", err.message);
       });
     } else {
@@ -318,12 +357,28 @@ function AddCityForm(props) {
 
   return (
     <div className={classes.root}>
+      <Grid
+        item
+        container
+        style={{ marginTop: 1, marginBottom: 2 }}
+        justifyContent="center"
+      >
+        <CancelRoundedIcon
+          style={{
+            marginLeft: 460,
+            fontSize: 30,
+            marginTop: "-10px",
+            cursor: "pointer",
+          }}
+          onClick={() => [props.handleDialogOpenStatus()]}
+        />
+      </Grid>
       <Grid item container justifyContent="center">
         <FormLabel
           style={{ color: "grey", fontSize: "1.3em" }}
           component="legend"
         >
-          Add City
+          Add City/Place
         </FormLabel>
       </Grid>
       <Box
@@ -339,7 +394,7 @@ function AddCityForm(props) {
         style={{ marginTop: 20 }}
       >
         <Grid container direction="row">
-          <Grid item style={{ width: "65%" }}>
+          <Grid item style={{ width: "55%" }}>
             <Field
               label=""
               id="name"
@@ -348,7 +403,7 @@ function AddCityForm(props) {
               component={renderNameField}
             />
           </Grid>
-          <Grid item style={{ width: "33%", marginLeft: 10 }}>
+          <Grid item style={{ width: "43%", marginLeft: 10 }}>
             <Field
               label=""
               id="code"
@@ -373,6 +428,13 @@ function AddCityForm(props) {
           name="state"
           type="text"
           component={renderStateField}
+        />
+        <Field
+          label=""
+          id="placeType"
+          name="placeType"
+          type="text"
+          component={renderPlaceTypeField}
         />
 
         <Field

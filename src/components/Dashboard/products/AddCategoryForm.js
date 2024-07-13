@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import useToken from "../../../custom-hooks/useToken";
+import useUserId from "../../../custom-hooks/useUserId";
 import { Field, reduxForm } from "redux-form";
 import { useDispatch } from "react-redux";
 import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
@@ -13,7 +15,7 @@ import Box from "@material-ui/core/Box";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import api from "./../../../apis/local";
-//import { CREATE_CATEGORY } from "../../actions/types";
+import { CREATE_CATEGORY } from "../../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -200,13 +202,14 @@ function AddCategoryForm(props) {
 
         if (response.data.status === "success") {
           dispatch({
-            //type: CREATE_CATEGORY,
+            type: CREATE_CATEGORY,
             payload: response.data.data.data,
           });
 
           props.handleSuccessfulCreateSnackbar(
             `${response.data.data.data.name} Category is created successfully!!!`
           );
+          props.renderCategoryUpdateCounter();
           props.handleDialogOpenStatus();
           setLoading(false);
         } else {
@@ -216,7 +219,7 @@ function AddCategoryForm(props) {
         }
       };
       createForm().catch((err) => {
-        props.handleFailedSnackbar();
+        props.handleFailedSnackbar("Something went wrong, please try again!!!");
         console.log("err:", err.message);
       });
     } else {

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Typography from "@mui/material/Typography";
-
+import Stack from "@mui/material/Stack";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import useToken from "../../../custom-hooks/useToken";
+import useUserId from "../../../custom-hooks/useUserId";
+import Snackbar from "@material-ui/core/Snackbar";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -9,9 +13,15 @@ import ViewListIcon from "@mui/icons-material/ViewList";
 import Grid from "@mui/material/Grid";
 import { DataGrid } from "@mui/x-data-grid";
 import Backdrop from "@mui/material/Backdrop";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import api from "./../../../apis/local";
+import TransactionForm from "./TransactionForm";
+import UpdateDeliveryStatusForm from "./UpdateDeliveryStatusForm";
+import RejectTransactionForm from "./RejectTransactionForm";
+import PlaceOrderForm from "./PlaceOrderForm";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -33,19 +43,50 @@ const useStyles = makeStyles((theme) => ({
 
 function Orders(props) {
   const classes = useStyles();
+  const { token, setToken } = useToken();
+  const { userId, setUserId } = useUserId();
+  const theme = useTheme();
+  const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+  const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
 
-  const [open, setOpen] = React.useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [editDeliveryOpen, setEditDeliveryOpen] = useState(false);
+  const [editRejectOpen, setEditRejectOpen] = useState(false);
+  const [placeOrderOpen, setPlaceOrderOpen] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowId, setSelectedRowId] = useState();
+  const [rowNumber, setRowNumber] = useState(0);
+  const [updateTransactionCounter, setUpdateTransactionCounter] =
+    useState(false);
+  const [updateEdittedTransactionCounter, setUpdateEdittedTransactionCounter] =
+    useState(false);
+  const [
+    updateRejectedTransactionCounter,
+    setUpdateRejectedTransactionCounter,
+  ] = useState(false);
+  const [
+    updatePlaceOrderTransactionCounter,
+    setUpdatePlaceOrderTransactionCounter,
+  ] = useState(false);
+
   const [transactionList, setTransactionList] = useState([]);
   const [currencyName, setCurrencyName] = useState();
+  const [rowSelected, setRowSelected] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       let allData = [];
-      api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       const response = await api.get(`/transactions`, {
-        params: { shopType: "online" },
+        params: { shopType: "online", status: "unprocessed" },
       });
       const workingData = response.data.data.data;
       workingData.map((transaction) => {
@@ -102,7 +143,12 @@ function Orders(props) {
     //call the function
 
     fetchData().catch(console.error);
-  }, []);
+  }, [
+    updateTransactionCounter,
+    updateEdittedTransactionCounter,
+    updateRejectedTransactionCounter,
+    updatePlaceOrderTransactionCounter,
+  ]);
 
   useEffect(() => {
     // 👇️ scroll to top on page load
@@ -110,10 +156,117 @@ function Orders(props) {
   }, []);
 
   const handleClose = () => {
-    setOpen(false);
+    setConfirmOpen(false);
   };
-  const handleOpen = () => {
-    setOpen(true);
+  const handleConfirmOpen = () => {
+    setConfirmOpen(true);
+  };
+
+  const handleEditDeliveryOpen = () => {
+    setEditDeliveryOpen(true);
+  };
+
+  const handleEditRejectOpen = () => {
+    setEditRejectOpen(true);
+  };
+
+  const handlePlaceOrderOpen = () => {
+    setPlaceOrderOpen(true);
+  };
+
+  const handleDialogOpenStatus = () => {
+    setConfirmOpen(false);
+  };
+
+  const handleEditDialogOpenStatus = () => {
+    setEditDeliveryOpen(false);
+  };
+
+  const handleEditRejectDialogOpenStatus = () => {
+    setEditRejectOpen(false);
+  };
+
+  const handlePlaceOrderDialogOpenStatus = () => {
+    setPlaceOrderOpen(false);
+  };
+
+  const renderTransactionUpdateCounter = () => {
+    setUpdateTransactionCounter((prevState) => !prevState);
+  };
+
+  const renderTransactionEdittedUpdateCounter = () => {
+    setUpdateEdittedTransactionCounter((prevState) => !prevState);
+  };
+
+  const renderTransactionRejectedUpdateCounter = () => {
+    setUpdateRejectedTransactionCounter((prevState) => !prevState);
+  };
+
+  const renderPlaceOrderTransactionUpdateCounter = () => {
+    setUpdatePlaceOrderTransactionCounter((prevState) => !prevState);
+  };
+
+  const handleSuccessfulCreateSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+  const handleSuccessfulEditSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleSuccessfulRejectedItemSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleSuccessfulPlaceOrderItemSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleFailedSnackbar = (message) => {
+    setAlert({
+      open: true,
+      message: message,
+      backgroundColor: "#FF3232",
+    });
+    //setBecomePartnerOpen(true);
+  };
+
+  const onRowsSelectionHandler = (ids, rows) => {
+    const selectedIDs = new Set(ids);
+    const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
+    setSelectedRows(selectedRowsData);
+    setRowNumber(selectedIDs.size);
+    selectedIDs.forEach(function (value) {
+      setSelectedRowId(value);
+    });
+    if (selectedIDs.size === 1) {
+      setRowSelected(true);
+    } else {
+      setRowSelected(false);
+    }
   };
 
   const getCurrencyCode = () => {
@@ -146,7 +299,7 @@ function Orders(props) {
       {
         field: "orderNumber",
         headerName: "Order Number",
-        width: 150,
+        width: 200,
 
         //editable: true,
       },
@@ -160,6 +313,13 @@ function Orders(props) {
       {
         field: "status",
         headerName: "Status",
+        width: 150,
+
+        //editable: true,
+      },
+      {
+        field: "paymentStatus",
+        headerName: "Payment Status",
         width: 150,
 
         //editable: true,
@@ -206,28 +366,28 @@ function Orders(props) {
 
         //editable: true,
       },
-      {
-        field: "orderaction",
-        headerName: "",
-        width: 30,
-        description: "transaction row",
-        renderCell: (params) => (
-          <strong>
-            {/* {params.value.getFullYear()} */}
-            <ViewListIcon
-              style={{ cursor: "pointer" }}
-              onClick={() => [
-                // this.setState({
-                //   editOpen: true,
-                //   id: params.id,
-                //   params: params.row,
-                // }),
-                // history.push(`/products/onboard/${params.id}`),
-              ]}
-            />
-          </strong>
-        ),
-      },
+      // {
+      //   field: "orderaction",
+      //   headerName: "",
+      //   width: 30,
+      //   description: "transaction row",
+      //   renderCell: (params) => (
+      //     <strong>
+      //       {/* {params.value.getFullYear()} */}
+      //       <ViewListIcon
+      //         style={{ cursor: "pointer" }}
+      //         onClick={() => [
+      //           // this.setState({
+      //           //   editOpen: true,
+      //           //   id: params.id,
+      //           //   params: params.row,
+      //           // }),
+      //           // history.push(`/products/onboard/${params.id}`),
+      //         ]}
+      //       />
+      //     </strong>
+      //   ),
+      // },
     ];
 
     transactionList.map((transaction, index) => {
@@ -256,14 +416,42 @@ function Orders(props) {
           /(^\w|\s\w)(\S*)/g,
           (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
         ),
-        daysToDelivery: transaction.daysToDelivery.replace(
-          /(^\w|\s\w)(\S*)/g,
-          (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
-        ),
-        paymentMethod: transaction.paymentMethod.replace(
-          /(^\w|\s\w)(\S*)/g,
-          (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
-        ),
+
+        daysToDelivery: transaction.daysToDelivery,
+        paymentMethod: transaction.paymentMethod,
+        paymentStatus: transaction.paymentStatus,
+        rejectionReason: transaction.rejectionReason,
+        customerName: transaction.customerName,
+        customerPhoneNumber: transaction.customerPhoneNumber,
+        customerEmailAddress: transaction.customerEmailAddress,
+        customerEmailAddress: transaction.customerEmailAddress,
+        recipientName: transaction.recipientName,
+        recipientPhoneNumber: transaction.recipientPhoneNumber,
+        recipientEmailAddress: transaction.recipientEmailAddress,
+        recipientAddress: transaction.recipientAddress,
+        nearestBusstop: transaction.nearestBusstop,
+        postalCode: transaction.postalCode,
+        recipientCountry: transaction.recipientCountry,
+        recipientState: transaction.recipientState,
+        recipientCity: transaction.recipientCity,
+        vatRate: transaction.vatRate,
+        vat: transaction.vat,
+        totalWeight: transaction.totalWeight,
+        payOnDeliveryMaxWeightInKg: transaction.payOnDeliveryMaxWeightInKg,
+        implementVatCollection: transaction.implementVatCollection,
+        salesTax: transaction.salesTax,
+        revenue: transaction.revenue,
+        origin: transaction.origin,
+        allowOriginSalesTax: transaction.allowOriginSalesTax,
+        implementSalesTaxCollection: transaction.implementSalesTaxCollection,
+        deliveryStatus: transaction.deliveryStatus,
+        deliveryMode: transaction.deliveryMode,
+        daysToDelivery: transaction.daysToDelivery,
+        recipientCountryName: transaction.recipientCountryName,
+        recipientStateName: transaction.recipientStateName,
+        recipientCityName: transaction.recipientCityName,
+        currency: transaction.currency,
+        currencyName: transaction.currency.name,
       };
       rows.push(row);
     });
@@ -280,8 +468,9 @@ function Orders(props) {
           },
         }}
         pageSizeOptions={[5]}
-        //checkboxSelection
+        checkboxSelection
         disableRowSelectionOnClick
+        onSelectionModelChange={(ids) => onRowsSelectionHandler(ids, rows)}
         sx={{
           boxShadow: 3,
           border: 3,
@@ -298,25 +487,135 @@ function Orders(props) {
       <Grid container spacing={1} direction="column">
         <Grid item xs>
           <Grid container spacing={2}>
-            <Grid item xs={10}>
+            <Grid item xs={4.2}>
               {/* <Item>xs=8</Item> */}
               <Typography variant="h4">Transactions</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={7.8}>
               <div>
-                <Button variant="contained" onClick={handleOpen}>
-                  Process Order
-                </Button>
-                <Backdrop
-                  sx={{
-                    color: "#fff",
-                    zIndex: (theme) => theme.zIndex.drawer + 1,
-                  }}
-                  open={open}
-                  onClick={handleClose}
-                >
-                  {/* <CircularProgress color="inherit" /> */}
-                </Backdrop>
+                <Stack direction="row" spacing={1.5}>
+                  <Button
+                    variant="contained"
+                    onClick={handleConfirmOpen}
+                    disabled={rowSelected ? false : true}
+                  >
+                    Confirm Payment
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={confirmOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setConfirmOpen(false)]}
+                  >
+                    <DialogContent>
+                      <TransactionForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleDialogOpenStatus={handleDialogOpenStatus}
+                        handleSuccessfulCreateSnackbar={
+                          handleSuccessfulCreateSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderTransactionUpdateCounter={
+                          renderTransactionUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button
+                    variant="contained"
+                    onClick={handleEditDeliveryOpen}
+                    disabled={rowSelected ? false : true}
+                  >
+                    Update Delivery Status
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={editDeliveryOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setEditDeliveryOpen(false)]}
+                  >
+                    <DialogContent>
+                      <UpdateDeliveryStatusForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleEditDialogOpenStatus={handleEditDialogOpenStatus}
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        handleSuccessfulEditSnackbar={
+                          handleSuccessfulEditSnackbar
+                        }
+                        renderTransactionEdittedUpdateCounter={
+                          renderTransactionEdittedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+
+                  <Button
+                    variant="contained"
+                    onClick={handleEditRejectOpen}
+                    disabled={rowSelected ? false : true}
+                  >
+                    Reject Transaction
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={editRejectOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setEditRejectOpen(false)]}
+                  >
+                    <DialogContent>
+                      <RejectTransactionForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleEditRejectDialogOpenStatus={
+                          handleEditRejectDialogOpenStatus
+                        }
+                        handleSuccessfulRejectedItemSnackbar={
+                          handleSuccessfulRejectedItemSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderTransactionRejectedUpdateCounter={
+                          renderTransactionRejectedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="contained" onClick={handlePlaceOrderOpen}>
+                    Place Order
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={placeOrderOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setPlaceOrderOpen(false)]}
+                  >
+                    <DialogContent>
+                      <PlaceOrderForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handlePlaceOrderDialogOpenStatus={
+                          handlePlaceOrderDialogOpenStatus
+                        }
+                        handleSuccessfulPlaceOrderItemSnackbar={
+                          handleSuccessfulPlaceOrderItemSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderPlaceOrderTransactionUpdateCounter={
+                          renderPlaceOrderTransactionUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </Stack>
               </div>
             </Grid>
           </Grid>
@@ -327,6 +626,16 @@ function Orders(props) {
             {!loading && renderDataGrid()}
           </Box>
         </Grid>
+        <Snackbar
+          open={alert.open}
+          message={alert.message}
+          ContentProps={{
+            style: { backgroundColor: alert.backgroundColor },
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={() => setAlert({ ...alert, open: false })}
+          autoHideDuration={4000}
+        />
       </Grid>
     </Box>
   );

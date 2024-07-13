@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Field, reduxForm } from "redux-form";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -20,7 +21,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import api from "./../../../apis/local";
-//import { CREATE_CITY } from "../../../actions/types";
+import { CREATE_LOCATION } from "../../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +56,7 @@ const renderNameField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the name of the city"
+      helperText="Location Name"
       variant="outlined"
       label={label}
       id={input.name}
@@ -74,7 +75,7 @@ const renderNameField = ({
   );
 };
 
-const renderCityCodeField = ({
+const renderLocationCodeField = ({
   input,
   label,
   meta: { touched, error, invalid },
@@ -85,7 +86,7 @@ const renderCityCodeField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the code for this City"
+      helperText="Location Code"
       variant="outlined"
       label={label}
       id={input.name}
@@ -117,7 +118,7 @@ const renderDescriptionField = ({
       error={touched && invalid}
       //placeholder="category description"
       variant="outlined"
-      helperText="Describe the city"
+      helperText="Describe the location"
       label={label}
       id={input.name}
       // value={formInput.description}
@@ -134,12 +135,170 @@ const renderDescriptionField = ({
   );
 };
 
+const renderTownField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Town"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={false}
+      minRows={1}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderAddressField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Address of the location"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={true}
+      minRows={5}
+      {...custom}
+      onChange={input.onChange}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderContactPersonField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={formInput.name}
+      fullWidth
+      style={{ marginTop: 20 }}
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+const renderContactPersonEmailAddressField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person Email Address"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      style={{ marginTop: 20 }}
+      fullWidth
+      //required
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+
+const renderContactPersonPhoneNumberField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person Phone Number"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={formInput.name}
+      fullWidth
+      style={{ marginTop: 20 }}
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+
 function AddLocationForm(props) {
   const classes = useStyles();
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [locationType, setLocationType] = useState("own-shop");
+  const [allowAffiliateSale, setAllowAffiliateSale] = useState(false);
   const [countryList, setCountryList] = useState([]);
   const [stateList, setStateList] = useState([]);
+  const [cityList, setCityList] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -180,13 +339,45 @@ function AddLocationForm(props) {
     fetchData().catch(console.error);
   }, [country]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      let allData = [];
+      api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
+      const response = await api.get(`/cities`, {
+        params: { state: state },
+      });
+      const workingData = response.data.data.data;
+      workingData.map((city) => {
+        allData.push({ id: city._id, name: city.name });
+      });
+      setCityList(allData);
+    };
+
+    //call the function
+
+    fetchData().catch(console.error);
+  }, [state]);
+
+  const handleCityChange = (event) => {
+    setCity(event.target.value);
+  };
+
   const handleStateChange = (event) => {
     setState(event.target.value);
+    setCityList([]);
   };
 
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
     setStateList([]);
+  };
+
+  const handleTypeChange = (event) => {
+    setLocationType(event.target.value);
+  };
+
+  const handleAllowAffiliateSaleChange = (event) => {
+    setAllowAffiliateSale(event.target.value);
   };
 
   //get the state list
@@ -209,6 +400,45 @@ function AddLocationForm(props) {
         </MenuItem>
       );
     });
+  };
+
+  //get the city list
+  const renderCityList = () => {
+    return cityList.map((item) => {
+      return (
+        <MenuItem key={item.id} value={item.id}>
+          {item.name}
+        </MenuItem>
+      );
+    });
+  };
+
+  const renderCityField = ({
+    input,
+    label,
+    meta: { touched, error, invalid },
+    type,
+    id,
+    ...custom
+  }) => {
+    return (
+      <Box>
+        <FormControl variant="outlined">
+          {/* <InputLabel id="vendor_city">City</InputLabel> */}
+          <Select
+            labelId="city"
+            id="city"
+            value={city}
+            onChange={handleCityChange}
+            label="City"
+            style={{ marginTop: 20, width: 500, height: 38 }}
+          >
+            {renderCityList()}
+          </Select>
+          <FormHelperText>Select the City of this Location</FormHelperText>
+        </FormControl>
+      </Box>
+    );
   };
 
   const renderStateField = ({
@@ -269,6 +499,68 @@ function AddLocationForm(props) {
     );
   };
 
+  const renderTypeField = ({
+    input,
+    label,
+    meta: { touched, error, invalid },
+    type,
+    id,
+    ...custom
+  }) => {
+    return (
+      <Box>
+        <FormControl variant="outlined">
+          {/* <InputLabel id="vendor_city">City</InputLabel> */}
+          <Select
+            labelId="locationType"
+            id="locationType"
+            value={locationType}
+            onChange={handleTypeChange}
+            label="Location Type"
+            style={{ width: 500, height: 38, marginTop: 20 }}
+          >
+            <MenuItem value={"own-shop"}>Own Shop</MenuItem>
+            <MenuItem value={"own-warehouse"}>Own Warehouse</MenuItem>
+            <MenuItem value={"affiliate-shop"}>Affiliate Shop</MenuItem>
+            <MenuItem value={"affiliate-warehouse"}>
+              Affiliate Warehouse
+            </MenuItem>
+          </Select>
+          <FormHelperText>Select Location Type</FormHelperText>
+        </FormControl>
+      </Box>
+    );
+  };
+
+  const renderAllowAffiliateSaleField = ({
+    input,
+    label,
+    meta: { touched, error, invalid },
+    type,
+    id,
+    ...custom
+  }) => {
+    return (
+      <Box>
+        <FormControl variant="outlined">
+          {/* <InputLabel id="vendor_city">City</InputLabel> */}
+          <Select
+            labelId="allowAffiliateSale"
+            id="allowAffiliateSale"
+            value={allowAffiliateSale}
+            onChange={handleAllowAffiliateSaleChange}
+            label="Allow Affilate Sale?"
+            style={{ width: 500, height: 38, marginTop: 20 }}
+          >
+            <MenuItem value={"false"}>No</MenuItem>
+            <MenuItem value={"true"}>Yes</MenuItem>
+          </Select>
+          <FormHelperText>Allow Affiliate Sale?</FormHelperText>
+        </FormControl>
+      </Box>
+    );
+  };
+
   const buttonContent = () => {
     return <React.Fragment> Submit</React.Fragment>;
   };
@@ -283,22 +575,31 @@ function AddLocationForm(props) {
       description: formValues.description,
       country: country,
       state: state,
+      city: city,
+      locationType: locationType,
+      allowAffiliateSale: allowAffiliateSale,
+      address: formValues.address,
+      town: formValues.town,
+      contactPerson: formValues.contactPerson,
+      contactPersonEmail: formValues.contactPersonEmail,
+      contactPhoneNumber: formValues.contactPhoneNumber,
       createdBy: props.userId,
     };
     if (data) {
       const createForm = async () => {
         api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
-        const response = await api.post(`/cities`, data);
+        const response = await api.post(`/locations`, data);
 
         if (response.data.status === "success") {
           dispatch({
-            //type: CREATE_CITY,
+            type: CREATE_LOCATION,
             payload: response.data.data.data,
           });
 
           props.handleSuccessfulCreateSnackbar(
-            `${response.data.data.data.name} City is added successfully!!!`
+            `${response.data.data.data.name} Location is added successfully!!!`
           );
+          props.renderLocationUpdateCounter();
           props.handleDialogOpenStatus();
           setLoading(false);
         } else {
@@ -308,7 +609,7 @@ function AddLocationForm(props) {
         }
       };
       createForm().catch((err) => {
-        props.handleFailedSnackbar();
+        props.handleFailedSnackbar("Something went wrong, please try again!!!");
         console.log("err:", err.message);
       });
     } else {
@@ -318,6 +619,22 @@ function AddLocationForm(props) {
 
   return (
     <div className={classes.root}>
+      <Grid
+        item
+        container
+        style={{ marginTop: 1, marginBottom: 2 }}
+        justifyContent="center"
+      >
+        <CancelRoundedIcon
+          style={{
+            marginLeft: 460,
+            fontSize: 30,
+            marginTop: "-10px",
+            cursor: "pointer",
+          }}
+          onClick={() => [props.handleDialogOpenStatus()]}
+        />
+      </Grid>
       <Grid item container justifyContent="center">
         <FormLabel
           style={{ color: "grey", fontSize: "1.3em" }}
@@ -354,7 +671,7 @@ function AddLocationForm(props) {
               id="code"
               name="code"
               type="text"
-              component={renderCityCodeField}
+              component={renderLocationCodeField}
             />
           </Grid>
         </Grid>
@@ -377,10 +694,68 @@ function AddLocationForm(props) {
 
         <Field
           label=""
+          id="city"
+          name="city"
+          type="text"
+          component={renderCityField}
+        />
+        <Field
+          label=""
+          id="town"
+          name="town"
+          type="text"
+          component={renderTownField}
+        />
+
+        <Field
+          label=""
+          id="address"
+          name="address"
+          type="text"
+          component={renderAddressField}
+        />
+        <Field
+          label=""
           id="description"
           name="description"
           type="text"
           component={renderDescriptionField}
+        />
+        <Field
+          label=""
+          id="type"
+          name="type"
+          type="text"
+          component={renderTypeField}
+        />
+        <Field
+          label=""
+          id="contactPerson"
+          name="contactPerson"
+          type="text"
+          component={renderContactPersonField}
+        />
+        <Field
+          label=""
+          id="contactPhoneNumber"
+          name="contactPhoneNumber"
+          type="text"
+          component={renderContactPersonPhoneNumberField}
+        />
+        <Field
+          label=""
+          id="contactPersonEmail"
+          name="contactPersonEmail"
+          type="text"
+          component={renderContactPersonEmailAddressField}
+        />
+
+        <Field
+          label=""
+          id="allowAffiliateSale"
+          name="allowAffiliateSale"
+          type="text"
+          component={renderAllowAffiliateSaleField}
         />
 
         <Button

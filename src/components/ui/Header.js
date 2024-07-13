@@ -30,7 +30,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import InputLabel from "@material-ui/core/InputLabel";
 
-import logo from "./../../assets/logo/logo.jpg";
+import logo from "./../../assets/logo/logo.png";
 import { RouterRounded, Search } from "@material-ui/icons";
 import Select from "@material-ui/core/Select";
 import history from "../../history";
@@ -55,6 +55,8 @@ import OrderPage from "../orders/OrderPage";
 import ProfileLayout from "../ProfileLayout";
 import Dashboard from "../Dashboard/Dashboard";
 import MainDashboard from "../Dashboard/MainDashboard";
+import OwnTargetsPage from "../targets/OwnTargetsPage";
+import OwnCreditScheme from "../credits/OwnCreditScheme";
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -100,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
   logoMobile: {
     height: "3em",
     width: "3em",
+    //width: 30,
     marginLeft: -30,
     marginRight: "1.5px",
     padding: 0,
@@ -156,7 +159,7 @@ const useStyles = makeStyles((theme) => ({
     height: "45px",
     fontSize: "13px",
     fontWeight: "500px",
-    width: "70px",
+    width: "40px",
     "&:hover": {
       backgroundColor: theme.palette.secondary.light,
       color: "white",
@@ -197,6 +200,48 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "2px",
     height: "45px",
     width: "70px",
+    fontSize: "13px",
+    fontWeight: "500px",
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.light,
+      color: "white",
+    },
+  },
+  target: {
+    ...theme.typography.estimate,
+    borderRadius: "250px",
+    marginLeft: "2px",
+    marginRight: "1px",
+    height: "45px",
+    width: "70px",
+    fontSize: "13px",
+    fontWeight: "500px",
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.light,
+      color: "white",
+    },
+  },
+  credit: {
+    ...theme.typography.estimate,
+    borderRadius: "250px",
+    marginLeft: "2px",
+    marginRight: "1px",
+    height: "45px",
+    width: "70px",
+    fontSize: "13px",
+    fontWeight: "500px",
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.light,
+      color: "white",
+    },
+  },
+  profile: {
+    ...theme.typography.estimate,
+    borderRadius: "250px",
+    marginLeft: "3px",
+    marginRight: "2px",
+    height: "45px",
+    width: "50px",
     fontSize: "13px",
     fontWeight: "500px",
     "&:hover": {
@@ -261,7 +306,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "30px",
     marginRight: "10px",
     height: "45px",
-    width: "100px",
+    width: "110px",
     "&:hover": {
       backgroundColor: theme.palette.common.orange,
       color: "white",
@@ -326,6 +371,7 @@ const Header = (props) => {
   const [userName, setUserName] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
   const [searchText, setSearchText] = useState();
+  const [role, setRole] = useState();
   const [alert, setAlert] = useState({
     open: false,
     message: "",
@@ -360,9 +406,11 @@ const Header = (props) => {
       // });
       const name = workingData.name;
       const email = workingData.email;
+      const role = workingData.role;
 
       setUserName(name);
       setUserEmail(email);
+      setRole(role);
     };
 
     //call the function
@@ -548,21 +596,23 @@ const Header = (props) => {
     } else {
       return (
         <Fragment>
-          {/**<Button
-            onClick={() => <MainDashboard />}
-            disableRipple
-            component={Link}
-            to={`/dashboard/maindashboard`}
-            className={classes.cart}
-          >
-            Dashboard
-      </Button> **/}
+          {role === "admin" && (
+            <Button
+              onClick={() => <MainDashboard />}
+              disableRipple
+              component={Link}
+              to={`/dashboard/maindashboard`}
+              className={classes.cart}
+            >
+              Dashboard
+            </Button>
+          )}
           <Button
             onClick={() => <OrderPage />}
             disableRipple
             component={Link}
             // to={`/carts/${props.userId}`}
-            to={`/orders`}
+            to={`/orders/orders`}
             className={classes.cart}
           >
             {/* <img alt="company logo" src={logo} className={classes.logo} /> */}
@@ -574,7 +624,7 @@ const Header = (props) => {
             disableRipple
             component={Link}
             // to={`/carts/${props.userId}`}
-            to={`/carts`}
+            to={`/carts/carts`}
             className={classes.checkout}
           >
             {/* <img alt="company logo" src={logo} className={classes.logo} /> */}
@@ -585,19 +635,41 @@ const Header = (props) => {
             disableRipple
             component={Link}
             // to={`/checkouts/${props.userId}`}
-            to={`/checkouts`}
+            to={`/checkouts/checkouts`}
             className={classes.checkout}
           >
             {/* <img alt="company logo" src={logo} className={classes.logo} /> */}
             Checkout
           </Button>
           <Button
+            onClick={() => <OwnTargetsPage />}
+            disableRipple
+            component={Link}
+            // to={`/checkouts/${props.userId}`}
+            to={`/targets/targets`}
+            className={classes.target}
+          >
+            {/* <img alt="company logo" src={logo} className={classes.logo} /> */}
+            Target Scheme
+          </Button>
+          <Button
+            onClick={() => <OwnCreditScheme />}
+            disableRipple
+            component={Link}
+            // to={`/checkouts/${props.userId}`}
+            to={`/targets/credits`}
+            className={classes.credit}
+          >
+            {/* <img alt="company logo" src={logo} className={classes.logo} /> */}
+            Credit Scheme
+          </Button>
+          <Button
             onClick={() => <ProfileLayout />}
             disableRipple
             component={Link}
             // to={`/profile/${props.userId}`}
-            to={`/profile`}
-            className={classes.checkout}
+            to={`/profile/profile`}
+            className={classes.profile}
           >
             {/* <img alt="company logo" src={logo} className={classes.logo} /> */}
             Profile
@@ -949,7 +1021,7 @@ const Header = (props) => {
                 button
                 component={Link}
                 // to={`/orders/${props.userId}`}
-                to={`/orders`}
+                to={`/orders/orders`}
                 classes={{
                   root: classes.drawerItem,
                   selected: classes.drawerItemSelected,
@@ -977,7 +1049,7 @@ const Header = (props) => {
                 button
                 component={Link}
                 // to={`/carts/${props.userId}`}
-                to={`/carts`}
+                to={`/carts/carts`}
                 classes={{
                   root: classes.drawerItem,
                   selected: classes.drawerItemSelected,
@@ -1001,7 +1073,7 @@ const Header = (props) => {
                 button
                 component={Link}
                 // to={`/checkouts/${props.userId}`}
-                to={`/checkouts`}
+                to={`/checkouts/checkouts`}
                 classes={{
                   root: classes.drawerItem,
                   selected: classes.drawerItemSelected,
@@ -1016,6 +1088,48 @@ const Header = (props) => {
                 className={classes.drawerItem}
                 onClick={() => [
                   setOpenDrawer(false),
+                  props.setValue(7),
+                  <OwnTargetsPage />,
+                ]}
+                divider
+                button
+                component={Link}
+                to={`/targets/targets`}
+                classes={{
+                  root: classes.drawerItem,
+                  selected: classes.drawerItemSelected,
+                }}
+                selected={props.value === 5}
+              >
+                <ListItemText className={classes.drawerItem} disableTypography>
+                  Target Scheme
+                </ListItemText>
+              </ListItem>
+              <ListItem
+                className={classes.drawerItem}
+                onClick={() => [
+                  setOpenDrawer(false),
+                  props.setValue(7),
+                  <OwnCreditScheme />,
+                ]}
+                divider
+                button
+                component={Link}
+                to={`/targets/credits`}
+                classes={{
+                  root: classes.drawerItem,
+                  selected: classes.drawerItemSelected,
+                }}
+                selected={props.value === 5}
+              >
+                <ListItemText className={classes.drawerItem} disableTypography>
+                  Credit Scheme
+                </ListItemText>
+              </ListItem>
+              <ListItem
+                className={classes.drawerItem}
+                onClick={() => [
+                  setOpenDrawer(false),
                   props.setValue(5),
                   <ProfileLayout />,
                 ]}
@@ -1023,7 +1137,7 @@ const Header = (props) => {
                 button
                 component={Link}
                 // to={`/profile/${props.userId}`}
-                to={`/profile`}
+                to={`/profile/profile`}
                 classes={{
                   root: classes.drawerItem,
                   selected: classes.drawerItemSelected,
@@ -1220,13 +1334,14 @@ const Header = (props) => {
                   backgroundColor: "white",
                   padding: 10,
                   borderRadius: 20,
+                  width: 500,
                 }}
               >
                 {renderCategoryField()}
                 <TextField
                   variant="outlined"
                   className={classes.root}
-                  style={{ width: 200, marginLeft: 8 }}
+                  style={{ width: 180, marginLeft: 8 }}
                   onChange={onChangeSearchText}
                   defaultValue={searchText}
                   component={Link}
@@ -1282,7 +1397,7 @@ const Header = (props) => {
                   <TextField
                     variant="outlined"
                     className={classes.rootMobile}
-                    style={{ width: "45%", marginLeft: "0.5%" }}
+                    style={{ width: "40%", marginLeft: "0.5%" }}
                     onChange={onChangeSearchText}
                     onKeyDown={(e) => (e.key === 13 ? <SearchPage /> : null)}
                     defaultValue={searchText}

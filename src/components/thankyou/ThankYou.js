@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
+import { useParams } from "react-router-dom";
 import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
 import FormControl from "@material-ui/core/FormControl";
@@ -123,6 +124,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ThankYou() {
   const classes = useStyles();
+  const params = useParams();
   const [open, setOpen] = useState(false);
   const [openLoginForm, setOpenLoginForm] = useState(false);
   const [openSignUpForm, setOpenSignUpForm] = useState(false);
@@ -146,6 +148,9 @@ export default function ThankYou() {
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
   const matchesMDUp = useMediaQuery(theme.breakpoints.up("md"));
+
+  const action = params.action;
+  const placementNumber = params.placementNumber;
 
   useEffect(() => {
     // 👇️ scroll to top on page load
@@ -177,16 +182,53 @@ export default function ThankYou() {
                 marginLeft: 250,
               }}
             >
-              <CardContent>
-                <Typography
-                  variant="h4"
-                  color="textSecondary"
-                  component="p"
-                  style={{ marginLeft: "20rem", marginBottom: 15 }}
-                >
-                  Thank You
-                </Typography>
-              </CardContent>
+              {action === "quotes" && (
+                <CardContent>
+                  <Typography
+                    variant="h5"
+                    color="textSecondary"
+                    component="p"
+                    style={{ marginLeft: "5rem", marginBottom: 15 }}
+                  >
+                    Your Request for a Quote is Received. We will get back to
+                    you as soon as possible. Thank You
+                  </Typography>
+                  <span style={{ marginLeft: 280, fontSize: 14 }}>
+                    Your Quote Number is {placementNumber}
+                  </span>
+                </CardContent>
+              )}
+              {action === "deals" && (
+                <CardContent>
+                  <Typography
+                    variant="h4"
+                    color="textSecondary"
+                    component="p"
+                    style={{ marginLeft: "20rem", marginBottom: 15 }}
+                  >
+                    Your Deal Proposal is Received. We will get back to you as
+                    soon as possible.
+                  </Typography>
+                  <span style={{ marginLeft: 280, fontSize: 14 }}>
+                    Your Proposed Deal Number is {placementNumber}
+                  </span>
+                </CardContent>
+              )}
+              {(action !== "deals" || action !== "quotes") && (
+                <CardContent>
+                  <Typography
+                    variant="h4"
+                    color="textSecondary"
+                    component="p"
+                    style={{ marginLeft: "20rem", marginBottom: 15 }}
+                  >
+                    Thank You
+                  </Typography>
+                  {/* <span style={{ marginLeft: 280, fontSize: 14 }}>
+                    Your Proposed Deal Number is {placementNumber}
+                  </span> */}
+                </CardContent>
+              )}
             </Grid>
             <Grid item className={classes.footer}>
               <UpperFooter />
@@ -211,16 +253,34 @@ export default function ThankYou() {
               marginLeft: 10,
             }}
           >
-            <CardContent>
-              <Typography
-                variant="h4"
-                color="textSecondary"
-                component="p"
-                style={{ marginLeft: "7rem", marginBottom: 15 }}
-              >
-                Thank You
-              </Typography>
-            </CardContent>
+            {action === "quotes" && (
+              <CardContent>
+                <Typography
+                  variant="h4"
+                  color="textSecondary"
+                  component="p"
+                  style={{ marginLeft: "7rem", marginBottom: 15 }}
+                >
+                  Your Request for a Quote is Received. We will get back to you
+                  as soon as possible. Thank You
+                </Typography>
+                <span style={{ marginLeft: "8rem", fontSize: 14 }}>
+                  Your Quote Number is {placementNumber}
+                </span>
+              </CardContent>
+            )}
+            {action !== "quotes" && (
+              <CardContent>
+                <Typography
+                  variant="h4"
+                  color="textSecondary"
+                  component="p"
+                  style={{ marginLeft: "7rem", marginBottom: 15 }}
+                >
+                  Thank You
+                </Typography>
+              </CardContent>
+            )}
           </Grid>
           <Grid item className={classes.footer}>
             <UpperFooter />

@@ -29,11 +29,31 @@ import CareerPage from "./career/CareerPage";
 import ThankYou from "./thankyou/ThankYou";
 import MainDashboard from "./Dashboard/MainDashboard";
 import Products from "./Dashboard/products/Products";
-
+import ProductCategories from "./Dashboard/products/Categories";
 import OrderPage from "./orders/OrderPage";
 import SearchPage from "./search/SearchPage";
+import RequestQuote from "./quote/RequestQuote";
+import FreezePriceForm from "./freeze/FreezePriceForm";
+import DericaHome from "./DericaHome";
+import PaintHome from "./PaintHome";
+import DealHome from "./DealHome";
 
 import api from "./../apis/local";
+import WholesaleHome from "./WholesaleHome";
+import CommunityHome from "./CommunityHome";
+import RetailHome from "./RetailHome";
+import FreezePriceHomePageAd from "./freeze/FreezePriceHomePageAd";
+import FreezePriceDericaPageAd from "./freeze/FreezePriceDericaPageAd";
+import FreezePricePaintPageAd from "./freeze/FreezePricePaintPageAd";
+import FreezePriceRetailPageAd from "./freeze/FreezePriceRetailPageAd";
+import FreezePriceWholesalePageAd from "./freeze/FreezePriceWholesalePageAd";
+import FreezePriceCommunityPageAd from "./freeze/FreezePriceCommunityPageAd";
+import FreezePriceDealPageAd from "./freeze/FreezePriceDealPageAdPage";
+import DealPropositionAdPage from "./deals/DealPropositionAdPage";
+import OwnTargetsPage from "./targets/OwnTargetsPage";
+import OwnCreditScheme from "./credits/OwnCreditScheme";
+import TargetProductDetailPage from "./targets/TargetProductDetailPage";
+import CreditProductDetailPage from "./credits/TargetProductDetailPage";
 
 function App() {
   const { token, setToken } = useToken();
@@ -151,8 +171,13 @@ function App() {
                 setUserId={setUserId ? setUserId : {}}
               />
             </Route>
-            {/* <Route path="/orders">
-              <OrderLayout token={token} />
+            {/* <Route exact path="/:preference">
+              <Marketplace
+                token={token}
+                userId={userId}
+                setToken={setToken ? setToken : {}}
+                setUserId={setUserId ? setUserId : {}}
+              />
             </Route> */}
 
             <Route exact path="/categories">
@@ -182,7 +207,29 @@ function App() {
                 handleFailedSnackbar={handleFailedSnackbar}
               />
             </Route>
-            <Route path="/carts">
+            <Route path="/requestquote/:catSlug/:slug">
+              <RequestQuote
+                token={token}
+                userId={userId}
+                setToken={setToken ? setToken : {}}
+                setUserId={setUserId ? setUserId : {}}
+                cartCounterHandler={cartCounterHandler}
+                handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
+                handleFailedSnackbar={handleFailedSnackbar}
+              />
+            </Route>
+            <Route path="/freezeprice/:catSlug/:slug">
+              <FreezePriceForm
+                token={token}
+                userId={userId}
+                setToken={setToken ? setToken : {}}
+                setUserId={setUserId ? setUserId : {}}
+                cartCounterHandler={cartCounterHandler}
+                handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
+                handleFailedSnackbar={handleFailedSnackbar}
+              />
+            </Route>
+            <Route path="/carts/carts">
               <ShowCustomerCart
                 token={token}
                 userId={userId}
@@ -196,7 +243,7 @@ function App() {
               />
             </Route>
 
-            <Route path="/checkouts">
+            <Route path="/checkouts/checkouts">
               <CheckoutPage
                 token={token}
                 userId={userId}
@@ -207,7 +254,55 @@ function App() {
                 handleFailedSnackbar={handleFailedSnackbar}
               />
             </Route>
-            <Route path="/orders">
+
+            <Route path="/targets/targets">
+              <OwnTargetsPage
+                token={token}
+                userId={userId}
+                setToken={setToken ? setToken : {}}
+                setUserId={setUserId ? setUserId : {}}
+                handleCartItemForCheckoutBox={handleCartItemForCheckoutBox}
+                handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
+                handleFailedSnackbar={handleFailedSnackbar}
+              />
+            </Route>
+
+            <Route path="/targets/credits">
+              <OwnCreditScheme
+                token={token}
+                userId={userId}
+                setToken={setToken ? setToken : {}}
+                setUserId={setUserId ? setUserId : {}}
+                handleCartItemForCheckoutBox={handleCartItemForCheckoutBox}
+                handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
+                handleFailedSnackbar={handleFailedSnackbar}
+              />
+            </Route>
+
+            <Route path="/targets/target/:target">
+              <TargetProductDetailPage
+                token={token}
+                userId={userId}
+                setToken={setToken ? setToken : {}}
+                setUserId={setUserId ? setUserId : {}}
+                handleCartItemForCheckoutBox={handleCartItemForCheckoutBox}
+                handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
+                handleFailedSnackbar={handleFailedSnackbar}
+              />
+            </Route>
+            <Route path="/targets/credit/:target">
+              <CreditProductDetailPage
+                token={token}
+                userId={userId}
+                setToken={setToken ? setToken : {}}
+                setUserId={setUserId ? setUserId : {}}
+                handleCartItemForCheckoutBox={handleCartItemForCheckoutBox}
+                handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
+                handleFailedSnackbar={handleFailedSnackbar}
+              />
+            </Route>
+
+            <Route path="/orders/orders">
               <OrderPage
                 token={token}
                 userId={userId}
@@ -236,7 +331,7 @@ function App() {
                 handleFailedSnackbar={handleFailedSnackbar}
               />
             </Route>
-            <Route path="/thankyou">
+            <Route path="/thankyou/:action/:placementNumber">
               <ThankYou
                 token={token}
                 userId={userId}
@@ -246,7 +341,7 @@ function App() {
                 handleFailedSnackbar={handleFailedSnackbar}
               />
             </Route>
-            <Route path="/profile">
+            <Route path="/profile/profile">
               <ProfileLayout
                 token={token}
                 setToken={setToken ? setToken : {}}
@@ -263,6 +358,111 @@ function App() {
 
             <Route path="/dashboard/:slug">
               <Dashboard
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/derica">
+              <DericaHome
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/paint">
+              <PaintHome
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/wholesale">
+              <WholesaleHome
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/dealscentral">
+              <DealHome
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/retail">
+              <RetailHome
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/freezehomepagead">
+              <FreezePriceHomePageAd
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/freezedericapagead">
+              <FreezePriceDericaPageAd
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+
+            <Route path="/freezepaintpagead">
+              <FreezePricePaintPageAd
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/freezeretailpagead">
+              <FreezePriceRetailPageAd
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/freezewholesalepagead">
+              <FreezePriceWholesalePageAd
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/freezecommunitypagead">
+              <FreezePriceCommunityPageAd
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/freezedealpagead">
+              <FreezePriceDealPageAd
+                token={token}
+                setToken={setToken ? setToken : {}}
+                userId={userId}
+                setUserId={setUserId ? setUserId : {}}
+              />
+            </Route>
+            <Route path="/dealproposition">
+              <DealPropositionAdPage
                 token={token}
                 setToken={setToken ? setToken : {}}
                 userId={userId}

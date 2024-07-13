@@ -4,7 +4,10 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-
+import useToken from "../../../custom-hooks/useToken";
+import useUserId from "../../../custom-hooks/useUserId";
+import Stack from "@mui/material/Stack";
+import Snackbar from "@material-ui/core/Snackbar";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -15,6 +18,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import api from "./../../../apis/local";
 import AddCarrierForm from "./AddCarrierForm";
+import CarrierDeleteForm from "./CarrierDeleteForm";
+import CarrierEditForm from "./CarrierEditForm";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -37,13 +42,30 @@ const useStyles = makeStyles((theme) => ({
 function Carriers(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const { token, setToken } = useToken();
+  const { userId, setUserId } = useUserId();
+  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
-  const [open, setOpen] = useState(false);
+
+  const [updateCarrierCounter, setUpdateCarrierCounter] = useState(false);
+  const [updateEdittedCarrierCounter, setUpdateEdittedCarrierCounter] =
+    useState(false);
+  const [updateDeletedCarrierCounter, setUpdateDeletedCarrierCounter] =
+    useState(false);
   const [carrierList, setCarrierList] = useState([]);
+  const [selectedRowId, setSelectedRowId] = useState();
+  const [rowNumber, setRowNumber] = useState(0);
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -57,16 +79,19 @@ function Carriers(props) {
           id: carrier._id,
           name: carrier.name,
           carrierNumber: carrier.carrierNumber,
-          type: carrier.type,
+          carrierType: carrier.carrierType,
           description: carrier.description,
           country: carrier.country,
+          state: carrier.state,
           address: carrier.address,
           contactPerson: carrier.contactPerson,
           contactPersonEmail: carrier.contactPersonEmail,
-          contactPhoneNumber: carrier.contactPhoneNumber,
-          state: carrier.state,
-          city: carrier.city,
+          contactPhoneNumbers: carrier.contactPhoneNumbers,
+          vehicleTypes: carrier.vehicleTypes,
           bankDetails: carrier.bankDetails,
+          countryId: carrier.country,
+          stateId: carrier.state,
+          vehicles: carrier.vehicles,
         });
       });
       setCarrierList(allData);
@@ -76,23 +101,104 @@ function Carriers(props) {
     //call the function
 
     fetchData().catch(console.error);
-  }, []);
+  }, [
+    updateCarrierCounter,
+    updateEdittedCarrierCounter,
+    updateDeletedCarrierCounter,
+  ]);
+
+  console.log("carrier:", carrierList);
 
   useEffect(() => {
     // 👇️ scroll to top on page load
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
+  const renderCarrierUpdateCounter = () => {
+    setUpdateCarrierCounter((prevState) => !prevState);
+  };
+
+  const renderCarrierEdittedUpdateCounter = () => {
+    setUpdateEdittedCarrierCounter((prevState) => !prevState);
+  };
+
+  const renderCarrierDeletedUpdateCounter = () => {
+    setUpdateDeletedCarrierCounter((prevState) => !prevState);
+  };
+
+  const handleSuccessfulCreateSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+  const handleSuccessfulEditSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleSuccessfulDeletedItemSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleFailedSnackbar = (message) => {
+    setAlert({
+      open: true,
+      message: message,
+      backgroundColor: "#FF3232",
+    });
+    //setBecomePartnerOpen(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOpen = () => {
+  const handleAddOpen = () => {
     setOpen(true);
   };
 
+  const handleDialogOpenStatus = () => {
+    setOpen(false);
+  };
+
+  const handleEditDialogOpenStatus = () => {
+    setEditOpen(false);
+  };
+
+  const handleDeleteDialogOpenStatus = () => {
+    setDeleteOpen(false);
+  };
+
+  const handleEditOpen = () => {
+    setEditOpen(true);
+  };
+
+  const handleDeleteOpen = () => {
+    setDeleteOpen(true);
+  };
+
   const onRowsSelectionHandler = (ids, rows) => {
+    const selectedIDs = new Set(ids);
     const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
     setSelectedRows(selectedRowsData);
+    setRowNumber(selectedIDs.size);
+    selectedIDs.forEach(function (value) {
+      setSelectedRowId(value);
+    });
   };
 
   const renderDataGrid = () => {
@@ -119,8 +225,8 @@ function Carriers(props) {
         //editable: true,
       },
       {
-        field: "type",
-        headerName: "Type",
+        field: "carrierType",
+        headerName: "Carrier Type",
         //type: "number",
         width: 150,
         //editable: true,
@@ -129,18 +235,6 @@ function Carriers(props) {
       {
         field: "address",
         headerName: "Address",
-        sortable: false,
-        width: 250,
-      },
-      {
-        field: "city",
-        headerName: "City",
-        sortable: false,
-        width: 250,
-      },
-      {
-        field: "state",
-        headerName: "State",
         sortable: false,
         width: 250,
       },
@@ -157,8 +251,8 @@ function Carriers(props) {
         numbering: ++counter,
         id: carrier.id,
         carrierNumber: carrier.carrierNumber,
-        type: carrier.type
-          ? carrier.type.replace(
+        carrierType: carrier.carrierType
+          ? carrier.carrierType.replace(
               /(^\w|\s\w)(\S*)/g,
               (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
             )
@@ -177,24 +271,20 @@ function Carriers(props) {
             )
           : "",
 
-        country: carrier.city[0].country[0].name
-          ? carrier.city[0].country[0].name.replace(
+        country: carrier.country[0].name
+          ? carrier.country[0].name.replace(
               /(^\w|\s\w)(\S*)/g,
               (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
             )
           : "",
-        state: carrier.city[0].state[0].name
-          ? carrier.city[0].state[0].name.replace(
-              /(^\w|\s\w)(\S*)/g,
-              (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
-            )
-          : "",
-        city: carrier.city[0].name
-          ? carrier.city[0].name.replace(
-              /(^\w|\s\w)(\S*)/g,
-              (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
-            )
-          : "",
+        description: carrier.description,
+        contactPerson: carrier.contactPerson,
+        contactPersonEmail: carrier.contactPersonEmail,
+        contactPhoneNumbers: carrier.contactPhoneNumbers,
+        vehicles: carrier.vehicles,
+        bankDetails: carrier.bankDetails,
+        countryId: carrier.country[0].id,
+        stateId: carrier.state,
       };
       rows.push(row);
     });
@@ -230,32 +320,94 @@ function Carriers(props) {
       <Grid container spacing={1} direction="column">
         <Grid item xs>
           <Grid container spacing={2}>
-            <Grid item xs={10}>
+            <Grid item xs={9.3}>
               {/* <Item>xs=8</Item> */}
               <Typography variant="h4">Carriers</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={2.7}>
               <div>
-                <Button variant="contained" onClick={handleOpen}>
-                  Add Carrier
-                </Button>
-                <Dialog
-                  //style={{ zIndex: 1302 }}
-                  fullScreen={matchesXS}
-                  open={open}
-                  // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
-                  onClose={() => [setOpen(false)]}
-                >
-                  <DialogContent>
-                    <AddCarrierForm
-                    // token={token}
-                    // userId={userId}
-                    // handleDialogOpenStatus={handleDialogOpenStatus}
-                    // handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
-                    // handleFailedSnackbar={handleFailedSnackbar}
-                    />
-                  </DialogContent>
-                </Dialog>
+                <Stack direction="row" spacing={1.5}>
+                  <Button variant="contained" onClick={handleAddOpen}>
+                    Add
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={open}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setOpen(false)]}
+                  >
+                    <DialogContent>
+                      <AddCarrierForm
+                        token={token}
+                        userId={userId}
+                        handleDialogOpenStatus={handleDialogOpenStatus}
+                        handleSuccessfulCreateSnackbar={
+                          handleSuccessfulCreateSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderCarrierUpdateCounter={renderCarrierUpdateCounter}
+                        renderCarrierEdittedUpdateCounter={
+                          renderCarrierEdittedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="contained" onClick={handleEditOpen}>
+                    Edit
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={editOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setEditOpen(false)]}
+                  >
+                    <DialogContent>
+                      <CarrierEditForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleEditDialogOpenStatus={handleEditDialogOpenStatus}
+                        handleSuccessfulEditSnackbar={
+                          handleSuccessfulEditSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderCarrierEdittedUpdateCounter={
+                          renderCarrierEdittedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="contained" onClick={handleDeleteOpen}>
+                    Delete
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={deleteOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setDeleteOpen(false)]}
+                  >
+                    <DialogContent>
+                      <CarrierDeleteForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleDeleteDialogOpenStatus={
+                          handleDeleteDialogOpenStatus
+                        }
+                        handleSuccessfulDeletedItemSnackbar={
+                          handleSuccessfulDeletedItemSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderCarrierDeletedUpdateCounter={
+                          renderCarrierDeletedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </Stack>
               </div>
             </Grid>
           </Grid>
@@ -266,6 +418,16 @@ function Carriers(props) {
             {!loading && renderDataGrid()}
           </Box>
         </Grid>
+        <Snackbar
+          open={alert.open}
+          message={alert.message}
+          ContentProps={{
+            style: { backgroundColor: alert.backgroundColor },
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={() => setAlert({ ...alert, open: false })}
+          autoHideDuration={4000}
+        />
       </Grid>
     </Box>
   );

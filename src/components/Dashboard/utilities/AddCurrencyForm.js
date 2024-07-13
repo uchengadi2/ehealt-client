@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Field, reduxForm } from "redux-form";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -16,7 +17,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import api from "./../../../apis/local";
-//import { CREATE_CURRENCY } from "../../../actions/types";
+import { CREATE_CURRENCY } from "../../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -246,13 +247,14 @@ function AddCurrencyForm(props) {
 
         if (response.data.status === "success") {
           dispatch({
-            //type: CREATE_CURRENCY,
+            type: CREATE_CURRENCY,
             payload: response.data.data.data,
           });
 
           props.handleSuccessfulCreateSnackbar(
             `${response.data.data.data.name} Currency is added successfully!!!`
           );
+          props.renderCurrencyUpdateCounter();
           props.handleDialogOpenStatus();
           setLoading(false);
         } else {
@@ -262,7 +264,7 @@ function AddCurrencyForm(props) {
         }
       };
       createForm().catch((err) => {
-        props.handleFailedSnackbar();
+        props.handleFailedSnackbar("Something went wrong, please try again!!!");
         console.log("err:", err.message);
       });
     } else {
@@ -272,6 +274,22 @@ function AddCurrencyForm(props) {
 
   return (
     <div className={classes.root}>
+      <Grid
+        item
+        container
+        style={{ marginTop: 1, marginBottom: 2 }}
+        justifyContent="center"
+      >
+        <CancelRoundedIcon
+          style={{
+            marginLeft: 460,
+            fontSize: 30,
+            marginTop: "-10px",
+            cursor: "pointer",
+          }}
+          onClick={() => [props.handleDialogOpenStatus()]}
+        />
+      </Grid>
       <Grid item container justifyContent="center">
         <FormLabel
           style={{ color: "blue", fontSize: "1.5em" }}

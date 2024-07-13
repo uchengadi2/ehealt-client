@@ -22,10 +22,12 @@ import Box from "@material-ui/core/Box";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import ProductDetails from "../products/ProductDetails";
+import RequestQuote from "../quote/RequestQuote";
 import ButtonArrow from "../ui/ButtonArrow";
 import theme from "./../ui/Theme";
 import api from "./../../apis/local";
 import { CREATE_RATE, EDIT_RATE } from "../../actions/types";
+import FreezePrice from "../freeze/FreezePriceDealPageAdPage";
 
 //import CheckoutPage from "./CheckoutPage";
 
@@ -61,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 30,
     marginBottom: 15,
     color: "white",
-    backgroundColor: theme.palette.common.grey,
+    backgroundColor: theme.palette.common.orange,
     "&:hover": {
       backgroundColor: theme.palette.common.green,
       color: "white",
@@ -94,6 +96,21 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.green,
     },
   },
+
+  submitFreezePricingButton: {
+    borderRadius: 10,
+    height: 40,
+    width: 200,
+    marginLeft: 40,
+    marginTop: 30,
+    marginBottom: 15,
+    color: "white",
+    backgroundColor: theme.palette.common.orange,
+    "&:hover": {
+      backgroundColor: theme.palette.common.green,
+      color: "white",
+    },
+  },
   checkout: {
     borderRadius: 10,
     height: 40,
@@ -119,6 +136,8 @@ function ProductInfo(props) {
     productId,
     pricingMechanism,
     policy,
+    allowPriceFreezing,
+    isACreditDeal,
 
     slug,
   } = props;
@@ -157,7 +176,7 @@ function ProductInfo(props) {
   }, [categoryId, props]);
 
   const buttonContent = () => {
-    return <React.Fragment>Show Details</React.Fragment>;
+    return <React.Fragment>View Details</React.Fragment>;
   };
 
   const requestQuoteButtonContent = () => {
@@ -166,6 +185,10 @@ function ProductInfo(props) {
 
   const biddingButtonContent = () => {
     return <React.Fragment>Submit a Bid</React.Fragment>;
+  };
+
+  const buttonFreezePriceContent = () => {
+    return <React.Fragment>Freeze Price</React.Fragment>;
   };
 
   return (
@@ -198,15 +221,41 @@ function ProductInfo(props) {
           <ReactMarkdown>{targetAudience}</ReactMarkdown>
         </Typography> */}
 
+        {categorySlug &&
+          pricingMechanism === "pricing" &&
+          allowPriceFreezing && (
+            <Button
+              component={Link}
+              // to="/mobileapps"
+              //to={`/categories/${categoryId}/${productId}`}
+              to={`/freezeprice/${categorySlug}/${slug}`}
+              //varaint="outlined"
+              className={classes.submitFreezePricingButton}
+              onClick={() => <FreezePrice />}
+            >
+              {/* <span style={{ marginRight: 10 }}>Show Details </span> */}
+              {loading ? (
+                <CircularProgress size={30} color="inherit" />
+              ) : (
+                buttonFreezePriceContent()
+              )}
+              {/* <ButtonArrow
+            height={10}
+            width={10}
+            fill={theme.palette.common.blue}
+          /> */}
+            </Button>
+          )}
+
         {categorySlug && pricingMechanism === "request-quote" && (
           <Button
             component={Link}
             // to="/mobileapps"
             //to={`/categories/${categoryId}/${productId}`}
-            to={`/categories/${categorySlug}/${slug}`}
+            to={`/requestquote/${categorySlug}/${slug}`}
             //varaint="outlined"
             className={classes.submitRequestQuoteButton}
-            onClick={() => <ProductDetails />}
+            onClick={() => <RequestQuote />}
           >
             {/* <span style={{ marginRight: 10 }}>Show Details </span> */}
             {loading ? (

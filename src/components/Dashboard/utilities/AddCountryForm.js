@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Field, reduxForm } from "redux-form";
 import { useDispatch } from "react-redux";
-
+import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -17,14 +17,14 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import api from "./../../../apis/local";
-// import { CREATE_COUNTRY } from "../../../actions/types";
+import { CREATE_COUNTRY } from "./../../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 10,
   },
   formStyles: {
-    width: 600,
+    width: 550,
   },
   submitButton: {
     borderRadius: 10,
@@ -198,9 +198,7 @@ function AddCountryForm(props) {
             label="Prefered Currency"
             style={{ width: 300, height: 38 }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
+            <MenuItem value="">{/* <em>None</em> */}</MenuItem>
             <MenuItem value={"africa"}>Africa</MenuItem>
             <MenuItem value={"europe"}>Europe</MenuItem>
             <MenuItem value={"asia"}>Asia</MenuItem>
@@ -233,9 +231,7 @@ function AddCountryForm(props) {
             label="Continent Region"
             style={{ width: 190, height: 38 }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
+            <MenuItem value="">{/* <em>None</em> */}</MenuItem>
             <MenuItem value={"west"}>West</MenuItem>
             <MenuItem value={"east"}>East</MenuItem>
             <MenuItem value={"north"}>North</MenuItem>
@@ -277,20 +273,23 @@ function AddCountryForm(props) {
       form.append("flag", formValues.flag[0]);
     }
 
-    if (form) {
+    console.log("formValues:", formValues);
+
+    if (formValues) {
       const createForm = async () => {
         api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
         const response = await api.post(`/countries`, form);
 
         if (response.data.status === "success") {
           dispatch({
-            //type: CREATE_COUNTRY,
+            type: CREATE_COUNTRY,
             payload: response.data.data.data,
           });
 
           props.handleSuccessfulCreateSnackbar(
             `${response.data.data.data.name} Country is added successfully!!!`
           );
+          props.renderCountryUpdateCounter();
           props.handleDialogOpenStatus();
           setLoading(false);
         } else {
@@ -300,7 +299,7 @@ function AddCountryForm(props) {
         }
       };
       createForm().catch((err) => {
-        props.handleFailedSnackbar();
+        props.handleFailedSnackbar("Something went wrong, please try again!!!");
         console.log("err:", err.message);
       });
     } else {
@@ -310,6 +309,22 @@ function AddCountryForm(props) {
 
   return (
     <div className={classes.root}>
+      <Grid
+        item
+        container
+        style={{ marginTop: 1, marginBottom: 2 }}
+        justifyContent="center"
+      >
+        <CancelRoundedIcon
+          style={{
+            marginLeft: 500,
+            fontSize: 30,
+            marginTop: "-10px",
+            cursor: "pointer",
+          }}
+          onClick={() => [props.handleDialogOpenStatus()]}
+        />
+      </Grid>
       <Grid item container justifyContent="center">
         <FormLabel
           style={{ color: "blue", fontSize: "1.5em" }}

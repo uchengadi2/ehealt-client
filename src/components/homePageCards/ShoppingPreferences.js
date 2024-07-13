@@ -129,7 +129,9 @@ export default function ShoppingPreferences(props) {
   const [product, setProduct] = useState({});
 
   const [learningPath, setLearningPath] = useState("retail");
-  const [buyingPath, setBuyingPath] = useState("retail");
+  const [buyingPath, setBuyingPath] = useState(
+    props.preference === undefined ? "retail" : props.preference
+  );
 
   // const { token, setToken } = useToken();
   // const { userId, setUserId } = useUserId();
@@ -179,7 +181,13 @@ export default function ShoppingPreferences(props) {
             }}
           >
             <MenuItem value={"retail"}>Retail</MenuItem>
+            {/* <MenuItem value={"derica"}>Derica</MenuItem>
+            <MenuItem value={"paint"}>Paint</MenuItem> */}
             <MenuItem value={"wholesale"}>Wholesale(Bulk Purchase)</MenuItem>
+            {/* <MenuItem value={"community"}>
+              Community Purchase(Shopping In Community)
+            </MenuItem> */}
+            <MenuItem value={"deal"}>Grab a Community Deal</MenuItem>
           </Select>
           <FormHelperText>Choose Shopping Preference</FormHelperText>
         </FormControl>

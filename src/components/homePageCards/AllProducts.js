@@ -44,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "100%",
     //height: 440,
     //height: 550,
-    width: "100%",
-
+    //width: "100%",
+    width: 1335,
     marginLeft: "10px",
     //borderRadius: 30,
     marginTop: "5rem",
@@ -112,8 +112,8 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: "100%",
     width: "100%",
+    //width: 650,
     marginLeft: "0px",
-    marginTop: "0px",
   },
 
   learnButton: {
@@ -466,7 +466,7 @@ export default function AllProducts(props) {
       {matchesMDUp ? (
         <Card className={classes.root}>
           {/* <CardActionArea disableRipple> */}
-          <Grid container direction="row">
+          <Grid container direction="row" style={{ width: "100%" }}>
             <Grid item style={{ width: "26.94%" }}>
               <CardMedia
                 className={classes.media}
@@ -494,7 +494,97 @@ export default function AllProducts(props) {
                   {Str(props.shortDescription).limit(200, "...").get()}
                 </Typography>
                 <br />
-                {props.pricingMechanism === "pricing" && (
+                {props.pricingMechanism === "pricing" &&
+                  props.salesPreference !== "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span style={{ marginLeft: 130 }}>
+                        <strong>
+                          {getCurrencyCode()}
+                          {props.pricePerUnit
+                            ? props.pricePerUnit
+                                .toFixed(2)
+                                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                            : 0}
+                        </strong>
+                      </span>
+                    </Typography>
+                  )}
+                {props.pricingMechanism === "pricing" &&
+                  props.salesPreference === "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {props.showDealPricePerUnit ? (
+                        <span style={{ marginLeft: 130 }}>
+                          <strong>
+                            {getCurrencyCode()}
+                            {props.pricePerUnit
+                              ? props.pricePerUnit
+                                  .toFixed(2)
+                                  .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                              : 0}
+                          </strong>
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: 50,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{props.priceLabel}</strong>
+                        </span>
+                      )}
+                    </Typography>
+                  )}
+                {props.pricingMechanism === "pricing" &&
+                  props.salesPreference !== "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span
+                        style={{ marginLeft: 130, color: "red", fontSize: 12 }}
+                      >
+                        <strong>{props.priceLabel}</strong>
+                      </span>
+                    </Typography>
+                  )}
+                {props.pricingMechanism === "pricing" &&
+                  props.salesPreference === "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {props.showDealPricePerUnit ? (
+                        <span
+                          style={{
+                            marginLeft: 130,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{props.priceLabel}</strong>
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Typography>
+                  )}
+                {props.pricingMechanism === "request-quote" && (
                   <Typography
                     variant="h4"
                     color="textSecondary"
@@ -510,102 +600,307 @@ export default function AllProducts(props) {
                               .replace(/\d(?=(\d{3})+\.)/g, "$&,")
                           : 0}
                       </strong>
+                      <span style={{ fontSize: 12 }}>per unit</span>
                     </span>
                   </Typography>
                 )}
-                {/* {props.pricingMechanism === "request-quote" && (
+                {props.pricingMechanism === "request-quote" && (
                   <Typography
-                    variant="h5"
+                    //variant="h6"
                     color="red"
                     component="p"
                     style={{ marginTop: 5, marginBottom: 15 }}
                   >
-                    <span style={{ marginLeft: 130, color: "red" }}>
-                      <strong>You Can Get A Quote</strong>
-                    </span>
-                  </Typography>
-                )} */}
-                <Typography>
-                  <span style={{ fontSize: 14, marginLeft: 10, marginTop: 20 }}>
-                    <strong>Minimum Quantity Required:</strong> &nbsp;
-                    <span>
-                      {props.minQuantity
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {props.minQuantity <= 1 ? props.unit : props.unit + "s"}
-                    </span>
-                  </span>
-                </Typography>
-                {props.remainingUnits && (
-                  <Typography>
                     <span
-                      style={{ fontSize: 14, marginLeft: 10, marginTop: 20 }}
+                      style={{ marginLeft: 130, color: "red", fontSize: 12 }}
                     >
-                      <strong>Quantity in Stock:</strong> &nbsp;
-                      <span>
-                        {props.remainingUnits
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        &nbsp;
-                        {props.remainingUnits <= 1
-                          ? props.unit
-                          : props.unit + "s"}
-                      </span>
+                      <strong>{props.priceLabel}</strong>
                     </span>
                   </Typography>
                 )}
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong> Market Pricing Condition:</strong>
+                    <span>{props.marketPricingCondition}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong> Product Type:</strong>
+                    <span>{props.productType}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Weight per Unit:</strong>
+                    <span>
+                      {props.weightPerUnit} {props.unit}{" "}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10, marginTop: 20 }}>
+                    <strong>Minimum Order Quantity Required:</strong> &nbsp;
+                    <span>
+                      {props.minimumQuantity
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      &nbsp; {props.minimumQuantity <= 1 ? "unit" : "units"}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Product SKU:</strong>
+                    <span>{props.sku}</span>
+                  </span>
+                </Typography>
                 <Typography>
                   <span style={{ fontSize: 14, marginLeft: 10 }}>
                     <strong> Sales Preference:</strong>
                     <span>{props.salesPreference}</span>
                   </span>
                 </Typography>
-                {props.type && (
-                  <Typography>
-                    <span style={{ fontSize: 14, marginLeft: 10 }}>
-                      <strong> Type:</strong>
-                      <span>{props.type} </span>
-                    </span>
-                  </Typography>
-                )}
-                {props.dosage && (
-                  <Typography>
-                    <span style={{ fontSize: 14, marginLeft: 10 }}>
-                      <strong> Dosage:</strong>
-                      <span>{props.dosage} </span>
-                    </span>
-                  </Typography>
-                )}
-                {/* <Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong> Stock Availability:</strong>
+                    <span>{props.stockStatus}</span>
+                  </span>
+                </Typography>
+                <Typography>
                   <span style={{ fontSize: 14, marginLeft: 10 }}>
                     <strong>Brand:</strong>
-                    <span>{props.brand} </span>
+                    <span>{props.brand}</span>
                   </span>
-                </Typography> */}
-                {/* <Typography>
-                  <span style={{ fontSize: 14, marginLeft: 10 }}>
-                    <strong>Product Category:</strong>
-                    <span>{props.category} </span>
-                  </span>
-                </Typography> */}
+                </Typography>
+                {props.deliverability && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deliverability:</strong>
+
+                      <span>{props.deliverability}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.pickupInfo && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Pickup Availability:</strong>
+                      <span>{props.pickupInfo}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Code:</strong>
+                      <span>{props.dealCode}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Expiry Date:</strong>
+                      <span>{props.dealExpiryDate}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Type:</strong>
+                      <span>{props.dealType}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Status:</strong>
+                      <span>{props.dealStatus}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.salesPreference === "deal" &&
+                  props.isAContributoryDeal && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong>Target Scheme Initial % Contribution:</strong>
+                        <span>
+                          {props.dealInitialPercentageContribution * 100}%
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.salesPreference === "deal" &&
+                  props.isAContributoryDeal && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong>
+                          Maximum Allowable Contribution Installments:
+                        </strong>
+                        <span>{props.dealMaximumInstallmentAllowed}</span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Instruction:</strong>
+                      <span>{props.dealComment}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.salesPreference === "deal" &&
+                  props.isAContributoryDeal === true &&
+                  props.dealType === "private" &&
+                  props.isACreditDeal === false && (
+                    <Typography>
+                      <span
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 700,
+                          marginLeft: 10,
+                        }}
+                      >
+                        {/* <strong> Note:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                            marginTop: 20,
+                          }}
+                        >
+                          This Is A Private TARGET SCHEME Without Credit
+                          Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.salesPreference === "deal" &&
+                  props.isAContributoryDeal === true &&
+                  props.dealType === "private" &&
+                  props.isACreditDeal === true && (
+                    <Typography>
+                      <span
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 700,
+                          marginLeft: 10,
+                        }}
+                      >
+                        {/* <strong> Note:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                            marginTop: 20,
+                          }}
+                        >
+                          This Is A Private TARGET SCHEME With Credit Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.salesPreference === "deal" &&
+                  props.isAContributoryDeal === true &&
+                  props.dealType === "public" &&
+                  props.isACreditDeal === false && (
+                    <Typography>
+                      <span
+                        style={{
+                          fontSize: 20,
+                          fontWeight: 700,
+                          marginLeft: 10,
+                          marginTop: 10,
+                        }}
+                      >
+                        {/* <strong> Note:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                            marginTop: 20,
+                          }}
+                        >
+                          This Is A Public TARGET SCHEME without Credit Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.salesPreference === "deal" &&
+                  props.isAContributoryDeal === true &&
+                  props.dealType === "public" &&
+                  props.isACreditDeal === true && (
+                    <Typography>
+                      <span
+                        style={{
+                          fontSize: 20,
+                          fontWeight: 700,
+                          marginLeft: 10,
+                          marginTop: 10,
+                        }}
+                      >
+                        {/* <strong> Note:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                            marginTop: 20,
+                          }}
+                        >
+                          This Is A Public TARGET SCHEME With Credit Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.salesPreference === "deal" &&
+                  props.isAContributoryDeal === false && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Note:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                            marginTop: 20,
+                          }}
+                        >
+                          This Is Not A TARGET SCHEME
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
                 <br /> <br />
               </CardContent>
             </Grid>
 
             <Grid item style={{ width: "26.50%", border: "1px dotted grey" }}>
               <ProductInfo
-                benefits={props.benefits}
                 pricingMechanism={props.pricingMechanism}
-                tools={props.tools}
-                policy={props.policy}
+                salesPreference={props.salesPreference}
+                showDealPricePerUnit={props.showDealPricePerUnit}
+                allowDealQuantityChange={props.allowDealQuantityChange}
+                dealStatus={props.dealStatus}
+                dealType={props.dealType}
+                isAContributoryDeal={props.isAContributoryDeal}
+                allowPriceFreezing={props.allowPriceFreezing}
+                isACreditDeal={props.isACreditDeal}
+                //tools={props.tools}
+                //policy={props.policy}
                 currency={props.currency}
-                targetAudience={props.targetAudience}
-                whatToLearn={props.whatToLearn}
-                venueLink={props.venueLink}
+                //targetAudience={props.targetAudience}
+                //whatToLearn={props.whatToLearn}
+                //venueLink={props.venueLink}
                 categoryId={props.category}
                 productId={props.courseId}
-                requestQuote={props.requestQuote}
+                //requestQuote={props.requestQuote}
                 slug={props.slug}
                 categorySlug={props.categorySlug}
                 updateBuyingPathInfoInfo={props.updateBuyingPathInfoInfo}
@@ -657,21 +952,152 @@ export default function AllProducts(props) {
                   >
                     {Str(props.shortDescription).limit(200, "...").get()}
                   </Typography>
-                  <Typography
-                    variant="h5"
-                    color="textSecondary"
-                    component="p"
-                    style={{ marginTop: 5, marginBottom: 15 }}
-                  >
-                    <span style={{ marginLeft: 130 }}>
-                      <strong>
-                        {getCurrencyCode()}
-                        {props.pricePerUnit
-                          ? props.pricePerUnit
-                              .toFixed(2)
-                              .replace(/\d(?=(\d{3})+\.)/g, "$&,")
-                          : 0}
-                      </strong>
+                  {props.pricingMechanism === "pricing" &&
+                    props.salesPreference !== "deal" && (
+                      <Typography
+                        variant="h4"
+                        color="textSecondary"
+                        component="p"
+                        style={{ marginTop: 5, marginBottom: 15 }}
+                      >
+                        <span style={{ marginLeft: 50 }}>
+                          <strong>
+                            {getCurrencyCode()}
+                            {props.pricePerUnit
+                              ? props.pricePerUnit
+                                  .toFixed(2)
+                                  .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                              : 0}
+                          </strong>
+                        </span>
+                      </Typography>
+                    )}
+                  {props.pricingMechanism === "pricing" &&
+                    props.salesPreference === "deal" && (
+                      <Typography
+                        variant="h4"
+                        color="textSecondary"
+                        component="p"
+                        style={{ marginTop: 5, marginBottom: 15 }}
+                      >
+                        {props.showDealPricePerUnit ? (
+                          <span style={{ marginLeft: 50 }}>
+                            <strong>
+                              {getCurrencyCode()}
+                              {props.pricePerUnit
+                                ? props.pricePerUnit
+                                    .toFixed(2)
+                                    .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                                : 0}
+                            </strong>
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </Typography>
+                    )}
+                  {props.pricingMechanism === "pricing" &&
+                    props.salesPreference !== "deal" && (
+                      <Typography
+                        //variant="h6"
+                        color="red"
+                        component="p"
+                        style={{ marginTop: 5, marginBottom: 15 }}
+                      >
+                        <span
+                          style={{
+                            marginLeft: 50,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{props.priceLabel}</strong>
+                        </span>
+                      </Typography>
+                    )}
+                  {props.pricingMechanism === "pricing" &&
+                    props.salesPreference === "deal" && (
+                      <Typography
+                        //variant="h6"
+                        color="red"
+                        component="p"
+                        style={{ marginTop: 5, marginBottom: 15 }}
+                      >
+                        {props.showDealPricePerUnit ? (
+                          <span
+                            style={{
+                              marginLeft: 50,
+                              color: "red",
+                              fontSize: 12,
+                            }}
+                          >
+                            <strong>{props.priceLabel}</strong>
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              marginLeft: 50,
+                              color: "red",
+                              fontSize: 12,
+                            }}
+                          >
+                            <strong>{props.priceLabel}</strong>
+                          </span>
+                        )}
+                      </Typography>
+                    )}
+                  {props.pricingMechanism === "request-quote" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span style={{ marginLeft: 50 }}>
+                        <strong>
+                          {getCurrencyCode()}
+                          {props.pricePerUnit
+                            ? props.pricePerUnit
+                                .toFixed(2)
+                                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                            : 0}
+                        </strong>
+                        <span style={{ fontSize: 12 }}>per unit</span>
+                      </span>
+                    </Typography>
+                  )}
+                  {props.pricingMechanism === "request-quote" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span
+                        style={{ marginLeft: 50, color: "red", fontSize: 12 }}
+                      >
+                        <strong>{props.priceLabel}</strong>
+                      </span>
+                    </Typography>
+                  )}
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Market Pricing Condition:</strong>
+                      <span>{props.marketPricingCondition}</span>
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Product Type:</strong>
+                      <span>{props.productType}</span>
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong>Weight per Unit:</strong>
+                      <span>
+                        {props.weightPerUnit} {props.unit}{" "}
+                      </span>
                     </span>
                   </Typography>
                   <Typography>
@@ -679,79 +1105,249 @@ export default function AllProducts(props) {
                       style={{ fontSize: 14, marginLeft: 10, marginTop: 20 }}
                     >
                       <strong>Minimum Quantity Required:</strong> &nbsp;
-                      <span>
-                        {props.minQuantity
+                      {/* <span>
+                        {props.minimumQuantity
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         &nbsp;
-                        {props.minQuantity <= 1 ? props.unit : props.unit + "s"}
-                      </span>
+                      {props.minimumQuantity <= 1 ? "unit" : "units"}
+                      </span> */}
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong>Product SKU:</strong>
+                      <span>{props.sku}</span>
                     </span>
                   </Typography>
 
-                  {props.remainingUnits && (
-                    <Typography>
-                      <span style={{ fontSize: 14, marginLeft: 10 }}>
-                        <strong>Quantity in Stock:</strong> &nbsp;
-                        <span>
-                          {props.remainingUnits
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                          &nbsp;
-                          {props.remainingUnits <= 1
-                            ? props.unit
-                            : props.unit + "s"}
-                        </span>
-                      </span>
-                    </Typography>
-                  )}
-                  {props.refNumber && (
-                    <Typography>
-                      <span style={{ fontSize: 14, marginLeft: 10 }}>
-                        <strong> Sku/Reference Number:</strong>
-                        <span>{props.refNumber} </span>
-                      </span>
-                    </Typography>
-                  )}
                   <Typography>
                     <span style={{ fontSize: 14, marginLeft: 10 }}>
                       <strong> Sales Preference:</strong>
                       <span>{props.salesPreference}</span>
                     </span>
                   </Typography>
-                  {props.type && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Stock Availability:</strong>
+                      <span>{props.stockStatus}</span>
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong>Brand:</strong>
+                      <span>{props.brand}</span>
+                    </span>
+                  </Typography>
+                  {props.deliverability && (
                     <Typography>
                       <span style={{ fontSize: 14, marginLeft: 10 }}>
-                        <strong> Type:</strong>
-                        <span>{props.type} </span>
-                      </span>
-                    </Typography>
-                  )}
+                        <strong> Deliverability:</strong>
 
-                  {props.dosage && (
-                    <Typography>
-                      <span style={{ fontSize: 14, marginLeft: 10 }}>
-                        <strong> Dosage:</strong>
-                        <span>{props.dosage} </span>
+                        <span>{props.deliverability}</span>
                       </span>
                     </Typography>
                   )}
+                  {props.pickupInfo && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Pickup Availability:</strong>
+                        <span>{props.pickupInfo}</span>
+                      </span>
+                    </Typography>
+                  )}
+                  {props.salesPreference === "deal" && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Deal Code:</strong>
+                        <span>{props.dealCode}</span>
+                      </span>
+                    </Typography>
+                  )}
+                  {props.salesPreference === "deal" && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Deal Expiry Date:</strong>
+                        <span>{props.dealExpiryDate}</span>
+                      </span>
+                    </Typography>
+                  )}
+                  {props.salesPreference === "deal" && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Deal Type:</strong>
+                        <span>{props.dealType}</span>
+                      </span>
+                    </Typography>
+                  )}
+                  {props.salesPreference === "deal" && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Deal Status:</strong>
+                        <span>{props.dealStatus}</span>
+                      </span>
+                    </Typography>
+                  )}
+                  {props.salesPreference === "deal" && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Deal Instruction:</strong>
+                        <span>{props.dealComment}</span>
+                      </span>
+                    </Typography>
+                  )}
+                  {props.salesPreference === "deal" &&
+                    props.isAContributoryDeal === true &&
+                    props.dealType === "private" &&
+                    props.isACreditDeal === false && (
+                      <Typography>
+                        <span
+                          style={{
+                            fontSize: 14,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                          }}
+                        >
+                          {/* <strong> Note:</strong> */}
+                          <span
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 700,
+                              marginLeft: 10,
+                              marginTop: 20,
+                            }}
+                          >
+                            This Is A Private TARGET SCHEME without Credit
+                            Facility
+                          </span>
+                        </span>
+                      </Typography>
+                    )}
+
+                  {props.salesPreference === "deal" &&
+                    props.isAContributoryDeal === true &&
+                    props.dealType === "private" &&
+                    props.isACreditDeal === true && (
+                      <Typography>
+                        <span
+                          style={{
+                            fontSize: 14,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                          }}
+                        >
+                          {/* <strong> Note:</strong> */}
+                          <span
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 700,
+                              marginLeft: 10,
+                              marginTop: 20,
+                            }}
+                          >
+                            This Is A Private TARGET SCHEME with Credit Facility
+                          </span>
+                        </span>
+                      </Typography>
+                    )}
+                  {props.salesPreference === "deal" &&
+                    props.isAContributoryDeal === true &&
+                    props.dealType === "public" &&
+                    props.isACreditDeal === false && (
+                      <Typography>
+                        <span
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                            marginTop: 10,
+                          }}
+                        >
+                          {/* <strong> Note:</strong> */}
+                          <span
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 700,
+                              marginLeft: 10,
+                              marginTop: 20,
+                            }}
+                          >
+                            This Is A Public TARGET SCHEME without Credit
+                            Facility
+                          </span>
+                        </span>
+                      </Typography>
+                    )}
+
+                  {props.salesPreference === "deal" &&
+                    props.isAContributoryDeal === true &&
+                    props.dealType === "public" &&
+                    props.isACreditDeal === true && (
+                      <Typography>
+                        <span
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 700,
+                            marginLeft: 10,
+                            marginTop: 10,
+                          }}
+                        >
+                          {/* <strong> Note:</strong> */}
+                          <span
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 700,
+                              marginLeft: 10,
+                              marginTop: 20,
+                            }}
+                          >
+                            This Is A Public TARGET SCHEME with Credit Facility
+                          </span>
+                        </span>
+                      </Typography>
+                    )}
+                  {props.salesPreference === "deal" &&
+                    props.isAContributoryDeal === false && (
+                      <Typography>
+                        <span style={{ fontSize: 14, marginLeft: 10 }}>
+                          {/* <strong> Note:</strong> */}
+                          <span
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 700,
+                              marginLeft: 10,
+                              marginTop: 20,
+                            }}
+                          >
+                            This Is Not A TARGET SCHEME
+                          </span>
+                        </span>
+                      </Typography>
+                    )}
                 </CardContent>
               </Grid>
 
               <Grid item style={{ width: "100%", border: "1px dotted grey" }}>
                 <ProductInfo
-                  benefits={props.benefits}
+                  //benefits={props.benefits}
                   pricingMechanism={props.pricingMechanism}
-                  tools={props.tools}
-                  policy={props.policy}
+                  salesPreference={props.salesPreference}
+                  showDealPricePerUnit={props.showDealPricePerUnit}
+                  allowDealQuantityChange={props.allowDealQuantityChange}
+                  dealStatus={props.dealStatus}
+                  dealType={props.dealType}
+                  isAContributoryDeal={props.isAContributoryDeal}
+                  allowPriceFreezing={props.allowPriceFreezing}
+                  isACreditDeal={props.isACreditDeal}
+                  //tools={props.tools}
+                  // policy={props.policy}
                   currency={props.currency}
-                  targetAudience={props.targetAudience}
-                  whatToLearn={props.whatToLearn}
-                  venueLink={props.venueLink}
+                  //targetAudience={props.targetAudience}
+                  // whatToLearn={props.whatToLearn}
+                  //venueLink={props.venueLink}
                   categoryId={props.category}
                   productId={props.courseId}
-                  requestQuote={props.requestQuote}
+                  //requestQuote={props.requestQuote}
                   slug={props.slug}
                   categorySlug={props.categorySlug}
                   updateBuyingPathInfoInfo={props.updateBuyingPathInfoInfo}

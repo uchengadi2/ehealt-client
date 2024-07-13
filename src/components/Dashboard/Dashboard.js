@@ -42,6 +42,7 @@ import PlaceIcon from "@mui/icons-material/Place";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SellIcon from "@mui/icons-material/Sell";
+import Diversity3Icon from "@mui/icons-material/Diversity3";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import CommuteIcon from "@mui/icons-material/Commute";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
@@ -98,6 +99,10 @@ import PoSSubscription from "./pos/Subscription";
 import Delistments from "./products/Delistments";
 import Accessories from "./utilities/Accessories";
 import Affiliates from "./utilities/Affiliates";
+import OrderList from "./ecommerce/OrderList";
+import RejectedTransactions from "./ecommerce/RejectedTransactions";
+import ProposedDeals from "./ecommerce/ProposedDeals";
+import Communities from "./utilities/Communities";
 
 // const Item = styled(Paper)(({ theme }) => ({
 //   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -292,18 +297,63 @@ function Dashboard(props) {
               </Typography>
               <MenuItem
                 className={
-                  slug === "ecommerce-orders" ? classes.selected : null
+                  slug === "ecommerce-transactions" ? classes.selected : null
                 }
-                selected={slug === "ecommerce-orders" ? true : false}
+                selected={slug === "ecommerce-transactions" ? true : false}
                 onClick={(event) => {
                   event.preventDefault();
-                  history.push(`/dashboard/ecommerce-orders`);
+                  history.push(`/dashboard/ecommerce-transactions`);
                 }}
               >
                 <ListItemIcon>
                   <ShoppingBasketIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Orders</ListItemText>
+                <ListItemText>Transactions</ListItemText>
+              </MenuItem>
+              <MenuItem
+                className={
+                  slug === "ecommerce-quotes" ? classes.selected : null
+                }
+                selected={slug === "ecommerce-quotes" ? true : false}
+                onClick={(event) => {
+                  event.preventDefault();
+                  history.push(`/dashboard/ecommerce-quotes`);
+                }}
+              >
+                <ListItemIcon>
+                  <LuggageIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Requested Quotes</ListItemText>
+              </MenuItem>
+              <MenuItem
+                className={
+                  slug === "ecommerce-proposed-deals" ? classes.selected : null
+                }
+                selected={slug === "ecommerce-proposed-deals" ? true : false}
+                onClick={(event) => {
+                  event.preventDefault();
+                  history.push(`/dashboard/ecommerce-proposed-deals`);
+                }}
+              >
+                <ListItemIcon>
+                  <LuggageIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Proposed Deals</ListItemText>
+              </MenuItem>
+              <MenuItem
+                className={
+                  slug === "ecommerce-orderslist" ? classes.selected : null
+                }
+                selected={slug === "ecommerce-orderslist" ? true : false}
+                onClick={(event) => {
+                  event.preventDefault();
+                  history.push(`/dashboard/ecommerce-orderslist`);
+                }}
+              >
+                <ListItemIcon>
+                  <AssignmentReturnIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Orders List</ListItemText>
               </MenuItem>
               <MenuItem
                 className={
@@ -320,21 +370,22 @@ function Dashboard(props) {
                 </ListItemIcon>
                 <ListItemText>Payment & Reconciliation</ListItemText>
               </MenuItem>
-              {/* <MenuItem
+              <MenuItem
                 className={
-                  slug === "ecommerce-packaging" ? classes.selected : null
+                  slug === "ecommerce-packagings" ? classes.selected : null
                 }
-                selected={slug === "ecommerce-packaging" ? true : false}
+                selected={slug === "ecommerce-packagings" ? true : false}
                 onClick={(event) => {
                   event.preventDefault();
-                  history.push(`/dashboard/ecommerce-packaging`);
+                  history.push(`/dashboard/ecommerce-packagings`);
                 }}
               >
                 <ListItemIcon>
-                  <LuggageIcon fontSize="small" />
+                  <RequestQuoteIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Packaging</ListItemText>
-              </MenuItem> */}
+                <ListItemText>Packaging & Offboarding</ListItemText>
+              </MenuItem>
+
               <MenuItem
                 className={
                   slug === "ecommerce-delivery" ? classes.selected : null
@@ -364,6 +415,21 @@ function Dashboard(props) {
                   <AssignmentReturnIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Returns</ListItemText>
+              </MenuItem>
+              <MenuItem
+                className={
+                  slug === "ecommerce-rejections" ? classes.selected : null
+                }
+                selected={slug === "ecommerce-rejections" ? true : false}
+                onClick={(event) => {
+                  event.preventDefault();
+                  history.push(`/dashboard/ecommerce-rejections`);
+                }}
+              >
+                <ListItemIcon>
+                  <LuggageIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Rejections</ListItemText>
               </MenuItem>
               {/* <MenuItem
                 className={
@@ -395,21 +461,7 @@ function Dashboard(props) {
                 </ListItemIcon>
                 <ListItemText>Biddings</ListItemText>
               </MenuItem> */}
-              {/* <MenuItem
-                className={
-                  slug === "ecommerce-quotations" ? classes.selected : null
-                }
-                selected={slug === "ecommerce-quotations" ? true : false}
-                onClick={(event) => {
-                  event.preventDefault();
-                  history.push(`/dashboard/ecommerce-quotations`);
-                }}
-              >
-                <ListItemIcon>
-                  <RequestQuoteIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Quotations</ListItemText>
-              </MenuItem> */}
+
               <Divider />
               <Typography style={{ marginLeft: 10, fontWeight: "Bold" }}>
                 Point of Sale (PoS) Transactions
@@ -722,6 +774,21 @@ function Dashboard(props) {
               </MenuItem>
               <MenuItem
                 className={
+                  slug === "utilities-communities" ? classes.selected : null
+                }
+                selected={slug === "utilities-communities" ? true : false}
+                onClick={(event) => {
+                  event.preventDefault();
+                  history.push(`/dashboard/utilities-communities`);
+                }}
+              >
+                <ListItemIcon>
+                  <Diversity3Icon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Communities</ListItemText>
+              </MenuItem>
+              <MenuItem
+                className={
                   slug === "utilities-carriers" ? classes.selected : null
                 }
                 selected={slug === "utilities-carriers" ? true : false}
@@ -869,9 +936,30 @@ function Dashboard(props) {
             <Delistments />
           </Grid>
         )}
-        {slug === "ecommerce-orders" && (
+        {slug === "ecommerce-transactions" && (
           <Grid item xs={9.5}>
             <Orders />
+          </Grid>
+        )}
+
+        {slug === "ecommerce-quotes" && (
+          <Grid item xs={9.5}>
+            <Quotations />
+          </Grid>
+        )}
+        {slug === "ecommerce-proposed-deals" && (
+          <Grid item xs={9.5}>
+            <ProposedDeals />
+          </Grid>
+        )}
+        {slug === "ecommerce-orderslist" && (
+          <Grid item xs={9.5}>
+            <OrderList />
+          </Grid>
+        )}
+        {slug === "ecommerce-rejections" && (
+          <Grid item xs={9.5}>
+            <RejectedTransactions />
           </Grid>
         )}
         {slug === "ecommerce-payment" && (
@@ -894,6 +982,11 @@ function Dashboard(props) {
             <Returns />
           </Grid>
         )}
+        {slug === "ecommerce-packagings" && (
+          <Grid item xs={9.5}>
+            <Packaging />
+          </Grid>
+        )}
         {slug === "ecommerce-subscriptions" && (
           <Grid item xs={9.5}>
             <Subscription />
@@ -904,11 +997,7 @@ function Dashboard(props) {
             <Bidding />
           </Grid>
         )}
-        {slug === "ecommerce-quotations" && (
-          <Grid item xs={9.5}>
-            <Quotations />
-          </Grid>
-        )}
+
         {slug === "direct-orders" && (
           <Grid item xs={9.5}>
             <DirectOrders />
@@ -987,6 +1076,11 @@ function Dashboard(props) {
         {slug === "utilities-affiliates" && (
           <Grid item xs={9.5}>
             <Affiliates />
+          </Grid>
+        )}
+        {slug === "utilities-communities" && (
+          <Grid item xs={9.5}>
+            <Communities />
           </Grid>
         )}
         {slug === "settings-policy" && (

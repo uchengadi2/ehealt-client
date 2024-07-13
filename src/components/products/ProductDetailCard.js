@@ -40,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     // maxWidth: 325,
     maxWidth: "100%",
-    //width: 1320,
     width: "98%",
+    //width: "98%",
+    //width: "100%",
     //height: 440,
     //height: 500,
 
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
     //height: 440,
     //height: 800,
-    width: "73%",
+    width: "85%",
 
     marginLeft: "0px",
     //borderRadius: 30,
@@ -82,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
     //height: 400,
     //width: 400,
     width: "25%",
+    height: "100%",
   },
 
   mediaImageMobile: {
@@ -201,7 +203,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 50,
     border: "1px dotted",
     padding: 10,
-    width: "98%",
+    width: "100%",
   },
   forthColumn: {
     marginTop: 15,
@@ -302,6 +304,7 @@ export default function ProductDetailCard(props) {
 
   useEffect(() => {
     setPrice(props.product.pricePerUnit);
+    setCurrency(props.product.currency);
   }, [props.product]);
   useEffect(() => {
     setImages(props.product.images);
@@ -347,7 +350,7 @@ export default function ProductDetailCard(props) {
       });
 
       setPolicy(allData[0]);
-      setCurrency(allData[0].currency);
+      //setCurrency(allData[0].currency);
     };
 
     //call the function
@@ -359,7 +362,7 @@ export default function ProductDetailCard(props) {
     const fetchData = async () => {
       let allData = [];
       api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
-      const response = await api.get(`/currencies/${policy.currency}`);
+      const response = await api.get(`/currencies/${props.product.currency}`);
       const currency = response.data.data.data;
       allData.push({ id: currency._id, name: currency.name });
       setCurrencyName(allData[0].name);
@@ -368,7 +371,7 @@ export default function ProductDetailCard(props) {
     //call the function
 
     fetchData().catch(console.error);
-  }, [policy]);
+  }, [props]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -610,21 +613,6 @@ export default function ProductDetailCard(props) {
                     ({props.product.configuration})
                   </span>
                 </Typography>
-                {props.product.pricingMechanism === "pricing" && (
-                  <Typography
-                    variant="h4"
-                    style={{ marginTop: 10, marginLeft: 150 }}
-                  >
-                    {getCurrencyCode()}
-                    {price
-                      ? price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
-                      : 0}
-                    &nbsp;
-                    <span style={{ fontSize: 12, marginLeft: 0 }}>
-                      {`per ${props.product.unit}`}
-                    </span>
-                  </Typography>
-                )}
                 <Typography
                   variant="h5"
                   style={{
@@ -638,82 +626,373 @@ export default function ProductDetailCard(props) {
                     {props.product.shortDescription}
                   </ReactMarkdown>
                 </Typography>
-                {props.product.minQuantity !== undefined && (
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference !== "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span style={{ marginLeft: 130 }}>
+                        <strong>
+                          {getCurrencyCode()}
+                          {price
+                            ? price
+                                .toFixed(2)
+                                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                            : 0}
+                        </strong>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference === "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {props.product.showDealPricePerUnit ? (
+                        <span style={{ marginLeft: 130 }}>
+                          <strong>
+                            {getCurrencyCode()}
+                            {price
+                              ? price
+                                  .toFixed(2)
+                                  .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                              : 0}
+                          </strong>
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference !== "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: 130,
+                          color: "red",
+                          fontSize: 12,
+                        }}
+                      >
+                        <strong>{props.product.priceLabel}</strong>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference === "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {props.product.showDealPricePerUnit ? (
+                        <span
+                          style={{
+                            marginLeft: 130,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{props.product.priceLabel}</strong>
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: 130,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{props.product.priceLabel}</strong>
+                        </span>
+                      )}
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "request-quote" && (
                   <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
+                    variant="h4"
+                    color="textSecondary"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
                   >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Minimum Quantity Required:</strong>
+                    <span style={{ marginLeft: 130 }}>
+                      <strong>
+                        {getCurrencyCode()}
+                        {price
+                          ? price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                          : 0}
+                      </strong>
+                      <span style={{ fontSize: 12 }}>per unit</span>
                     </span>
+                  </Typography>
+                )}
+                {props.product.pricingMechanism === "request-quote" && (
+                  <Typography
+                    //variant="h6"
+                    color="red"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
+                  >
+                    <span
+                      style={{ marginLeft: 130, color: "red", fontSize: 12 }}
+                    >
+                      <strong>{props.product.priceLabel}</strong>
+                    </span>
+                  </Typography>
+                )}
+
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10, marginTop: 15 }}>
+                    <strong> Market Pricing Condition:</strong>
+                    <span>{props.product.marketPricingCondition}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10, marginTop: 15 }}>
+                    <strong> Product Type:</strong>
+                    <span>{props.product.productType}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Weight per Unit:</strong>
                     <span>
-                      {props.product.minQuantity
+                      {props.product.weightPerUnit} {props.product.unit}{" "}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10, marginTop: 20 }}>
+                    <strong>Minimum Order Quantity Required:</strong> &nbsp;
+                    <span>
+                      {props.product.minimumQuantity
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {props.product.minQuantity <= 1
-                        ? props.product.unit
-                        : props.product.unit + "s"}
+                      &nbsp;{" "}
+                      {props.product.minimumQuantity <= 1 ? "unit" : "units"}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Product SKU:</strong>
+                    <span>{props.product.sku}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong> Sales Preference:</strong>
+                    <span>{props.product.salesPreference}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong> Stock Availability:</strong>
+                    <span>{props.product.stockStatus}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Brand:</strong>
+                    <span>{props.product.brand}</span>
+                  </span>
+                </Typography>
+                {props.product.deliverability && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deliverability:</strong>
+
+                      <span>{props.product.deliverability}</span>
                     </span>
                   </Typography>
                 )}
-                {props.product.refNumber !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Reference Number/Sku:</strong>
-                    </span>
-                    {props.product.refNumber}
-                  </Typography>
-                )}
-                {props.product.remainingUnits !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Quantity in Stock:</strong>
-                    </span>
-                    <span>
-                      {props.product.remainingUnits
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {props.product.remainingUnits <= 1
-                        ? props.product.unit
-                        : props.product.unit + "s"}
+                {props.product.pickupInfo && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Pickup Availability:</strong>
+                      <span>{props.product.pickupInfo}</span>
                     </span>
                   </Typography>
                 )}
-                {props.product.type !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Product Type:</strong>
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Code:</strong>
+                      <span>{props.product.dealCode}</span>
                     </span>
-                    {props.product.type}
                   </Typography>
                 )}
-                {props.product.dosage !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Dosage:</strong>
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Expiry Date:</strong>
+                      <span>{props.product.dealExpiryDate}</span>
                     </span>
-                    {props.product.dosage}
                   </Typography>
                 )}
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Type:</strong>
+                      <span>{props.product.dealType}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Status:</strong>
+                      <span>{props.product.dealStatus}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Instruction:</strong>
+                      <span>{props.product.dealComment}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.isAContributoryDeal && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Target Scheme Initial % Contribution:</strong>
+                        <span>
+                          {props.product.dealInitialPercentageContribution *
+                            100}
+                          %
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.isAContributoryDeal && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong>
+                          Maximum Allowable Contribution Installments :
+                        </strong>
+                        <span>
+                          {props.product.dealMaximumInstallmentAllowed}
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "private" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === false && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Private Target Scheme without a Credit
+                          Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "private" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === true && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Private Target Scheme with a Credit Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "public" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === false && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Public Target Scheme without a Credit
+                          Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "public" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === true && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Public Target Scheme with a Credit Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "public" &&
+                  props.product.isAContributoryDeal === false && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is Not A Target Scheme
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
               </Box>
             </Grid>
 
@@ -723,14 +1002,63 @@ export default function ProductDetailCard(props) {
                   price={price}
                   currency={currency}
                   unit={props.product.unit}
-                  minQuantity={props.product.minQuantity}
+                  minQuantity={props.product.minimumQuantity}
+                  weightPerUnit={props.product.weightPerUnit}
                   productId={props.product.id}
+                  categorySlug={props.categorySlug}
+                  slug={props.slug}
+                  category={props.category}
                   token={props.token}
                   requestQuote={props.product.requestQuote}
                   pricingMechanism={props.product.pricingMechanism}
                   allowSubscription={props.product.allowSubscription}
-                  weightInKg={props.product.weightInKg}
                   presentWeightUnitIn={props.product.presentWeightUnitIn}
+                  salesPreference={props.product.salesPreference}
+                  dealCode={props.product.dealCode}
+                  dealExpiryDate={props.product.dealExpiryDate}
+                  showDealPricePerUnit={props.product.showDealPricePerUnit}
+                  allowDealQuantityChange={
+                    props.product.allowDealQuantityChange
+                  }
+                  dealStatus={props.product.dealStatus}
+                  dealType={props.product.dealType}
+                  dealComment={props.product.dealComment}
+                  dealDeliveryMode={props.product.dealDeliveryMode}
+                  dealCentralizedDeliveryLocation={
+                    props.product.dealCentralizedDeliveryLocation
+                  }
+                  dealCentralizedAgreedDeliveryCost={
+                    props.product.dealCentralizedAgreedDeliveryCost
+                  }
+                  dealDecentralizedDeliveryLocation={
+                    props.product.dealDecentralizedDeliveryLocation
+                  }
+                  dealDecentralizedAgreedDeliveryCost={
+                    props.product.dealDecentralizedAgreedDeliveryCost
+                  }
+                  showDealDeliveryCost={props.product.showDealDeliveryCost}
+                  productType={props.product.productType}
+                  dealPaymentPreference={props.product.dealPaymentPreference}
+                  showDealPaymentDetails={props.product.showDealPaymentDetails}
+                  requestDealRedemptionCode={
+                    props.product.requestDealRedemptionCode
+                  }
+                  isAContributoryDeal={props.product.isAContributoryDeal}
+                  isACreditDeal={props.product.isACreditDeal}
+                  dealOwner={props.product.dealOwner}
+                  dealOwnerEntity={props.product.dealOwnerEntity}
+                  dealInitialPercentageContribution={
+                    props.product.dealInitialPercentageContribution
+                  }
+                  dealMaximumInstallmentAllowed={
+                    props.product.dealMaximumInstallmentAllowed
+                  }
+                  includeGatewayChargesInPrice={
+                    props.product.includeGatewayChargesInPrice
+                  }
+                  gatewayFixedCharge={props.product.gatewayFixedCharge}
+                  gatewayRateCharge={props.product.gatewayRateCharge}
+                  allowPriceFreezing={props.product.allowPriceFreezing}
                   isVatable={props.product.isVatable}
                   revenueMargin={props.product.revenueMargin}
                   revenueMarginShouldPrevail={
@@ -1427,88 +1755,375 @@ export default function ProductDetailCard(props) {
                   </Typography>
                 )}
 
-                {props.product.pricingMechanism === "pricing" && (
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference !== "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span style={{ marginLeft: 50 }}>
+                        <strong>
+                          {getCurrencyCode()}
+                          {price
+                            ? price
+                                .toFixed(2)
+                                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                            : 0}
+                        </strong>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference === "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {props.product.showDealPricePerUnit ? (
+                        <span style={{ marginLeft: 50 }}>
+                          <strong>
+                            {getCurrencyCode()}
+                            {price
+                              ? price
+                                  .toFixed(2)
+                                  .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                              : 0}
+                          </strong>
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference !== "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: 50,
+                          color: "red",
+                          fontSize: 12,
+                        }}
+                      >
+                        <strong>{props.product.priceLabel}</strong>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "pricing" &&
+                  props.product.salesPreference === "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {props.product.showDealPricePerUnit ? (
+                        <span
+                          style={{
+                            marginLeft: 50,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{props.product.priceLabel}</strong>
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: 50,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{props.product.priceLabel}</strong>
+                        </span>
+                      )}
+                    </Typography>
+                  )}
+                {props.product.pricingMechanism === "request-quote" && (
                   <Typography
-                    variant="h5"
-                    // style={{ marginTop: 10, marginLeft: 150 }}
+                    variant="h4"
+                    color="textSecondary"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
                   >
-                    {getCurrencyCode()}
-                    {price
-                      ? price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
-                      : 0}
-                    &nbsp;
-                    <span style={{ fontSize: 12, marginLeft: 0 }}>
-                      {`per ${props.product.unit}`}
+                    <span style={{ marginLeft: 50 }}>
+                      <strong>
+                        {getCurrencyCode()}
+                        {price
+                          ? price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                          : 0}
+                      </strong>
+                      <span style={{ fontSize: 12 }}>per unit</span>
                     </span>
                   </Typography>
                 )}
-                <Typography
-                  variant="h5"
-                  style={{
-                    color: "black",
-                    marginTop: 20,
-                    marginBottom: 20,
-                    justifyContent: "center",
-                  }}
-                >
-                  {props.product.shortDescription}
+                {props.product.pricingMechanism === "request-quote" && (
+                  <Typography
+                    //variant="h6"
+                    color="red"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
+                  >
+                    <span
+                      style={{ marginLeft: 50, color: "red", fontSize: 12 }}
+                    >
+                      <strong>{props.product.priceLabel}</strong>
+                    </span>
+                  </Typography>
+                )}
+
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5, marginTop: 15 }}>
+                    <strong> Market Condition:</strong>
+                    <span>{props.product.marketPricingCondition}</span>
+                  </span>
                 </Typography>
-                {props.product.refNumber !== "undefined" && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 10 }}>
-                      {" "}
-                      <strong>Sku:</strong>
-                    </span>
-                    {props.product.refNumber}
-                  </Typography>
-                )}
-                {props.product.remainingUnits !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 10 }}>
-                      {" "}
-                      <strong>Stock:</strong>
-                    </span>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5, marginTop: 15 }}>
+                    <strong> Product Type:</strong>
+                    <span>{props.product.productType}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Weight per Unit:</strong>
                     <span>
-                      {props.product.remainingUnits
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {props.product.remainingUnits <= 1
-                        ? props.product.unit
-                        : props.product.unit + "s"}
+                      {props.product.weightPerUnit} {props.product.unit}{" "}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5, marginTop: 20 }}>
+                    <strong>MQR:</strong> &nbsp;
+                    <span>
+                      {
+                        props.product.minimumQuantity
+                        // .toString()
+                        // .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      &nbsp;{" "}
+                      {props.product.minimumQuantity <= 1 ? "unit" : "units"}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Product SKU:</strong>
+                    <span>{props.product.sku}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong> Sales Preference:</strong>
+                    <span>{props.product.salesPreference}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong> Stock Availability:</strong>
+                    <span>{props.product.stockStatus}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Brand:</strong>
+                    <span>{props.product.brand}</span>
+                  </span>
+                </Typography>
+                {props.product.deliverability && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 5 }}>
+                      <strong> Deliverability:</strong>
+
+                      <span>{props.product.deliverability}</span>
                     </span>
                   </Typography>
                 )}
-                {props.product.type !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Type:</strong>
+                {props.product.pickupInfo && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 5 }}>
+                      <strong> Pickup Availability:</strong>
+                      <span>{props.product.pickupInfo}</span>
                     </span>
-                    {props.product.type}
                   </Typography>
                 )}
-                {props.product.dosage !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Dosage:</strong>
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Code:</strong>
+                      <span>{props.product.dealCode}</span>
                     </span>
-                    {props.product.dosage}
                   </Typography>
                 )}
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Expiry Date:</strong>
+                      <span>{props.product.dealExpiryDate}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Type:</strong>
+                      <span>{props.product.dealType}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Status:</strong>
+                      <span>{props.product.dealStatus}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Instruction:</strong>
+                      <span>{props.product.dealComment}</span>
+                    </span>
+                  </Typography>
+                )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.isAContributoryDeal && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong> Target Scheme Initial % Contribution:</strong>
+                        <span>
+                          {props.product.dealInitialPercentageContribution *
+                            100}
+                          %
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.isAContributoryDeal && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        <strong>
+                          Maximum Allowable Contribution Installments :
+                        </strong>
+                        <span>
+                          {props.product.dealMaximumInstallmentAllowed}
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "private" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === false && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Private Target Scheme without a Credit
+                          Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "private" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === true && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Private Target Scheme with a Credit Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "public" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === false && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Public Target Scheme without a Credit
+                          Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "public" &&
+                  props.product.isAContributoryDeal === true &&
+                  props.product.isACreditDeal === true && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is A Public Target Scheme with a Credit Facility
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
+                {props.product.salesPreference === "deal" &&
+                  props.product.dealType === "public" &&
+                  props.product.isAContributoryDeal === false && (
+                    <Typography>
+                      <span style={{ fontSize: 14, marginLeft: 10 }}>
+                        {/* <strong> Deal Instruction:</strong> */}
+                        <span
+                          style={{
+                            fontSize: 14,
+                            marginLeft: 10,
+                            marginTop: 20,
+                            fontWeight: 700,
+                          }}
+                        >
+                          This Is Not A Target Scheme
+                        </span>
+                      </span>
+                    </Typography>
+                  )}
               </Box>
             </Grid>
             <Grid item className={classes.thirdRowMobile}>
@@ -1517,14 +2132,63 @@ export default function ProductDetailCard(props) {
                   price={price}
                   currency={currency}
                   unit={props.product.unit}
-                  minQuantity={props.product.minQuantity}
+                  minQuantity={props.product.minimumQuantity}
+                  weightPerUnit={props.product.weightPerUnit}
                   productId={props.product.id}
+                  categorySlug={props.categorySlug}
+                  slug={props.slug}
+                  category={props.category}
                   token={props.token}
                   requestQuote={props.product.requestQuote}
                   pricingMechanism={props.product.pricingMechanism}
                   allowSubscription={props.product.allowSubscription}
-                  weightInKg={props.product.weightInKg}
                   presentWeightUnitIn={props.product.presentWeightUnitIn}
+                  salesPreference={props.product.salesPreference}
+                  dealCode={props.product.dealCode}
+                  dealType={props.product.dealType}
+                  dealExpiryDate={props.product.dealExpiryDate}
+                  showDealPricePerUnit={props.product.showDealPricePerUnit}
+                  allowDealQuantityChange={
+                    props.product.allowDealQuantityChange
+                  }
+                  dealStatus={props.product.dealStatus}
+                  dealComment={props.product.dealComment}
+                  dealDeliveryMode={props.product.dealDeliveryMode}
+                  dealCentralizedDeliveryLocation={
+                    props.product.dealCentralizedDeliveryLocation
+                  }
+                  dealCentralizedAgreedDeliveryCost={
+                    props.product.dealCentralizedAgreedDeliveryCost
+                  }
+                  dealDecentralizedDeliveryLocation={
+                    props.product.dealDecentralizedDeliveryLocation
+                  }
+                  dealDecentralizedAgreedDeliveryCost={
+                    props.product.dealDecentralizedAgreedDeliveryCost
+                  }
+                  showDealDeliveryCost={props.product.showDealDeliveryCost}
+                  productType={props.product.productType}
+                  dealPaymentPreference={props.product.dealPaymentPreference}
+                  showDealPaymentDetails={props.product.showDealPaymentDetails}
+                  requestDealRedemptionCode={
+                    props.product.requestDealRedemptionCode
+                  }
+                  isAContributoryDeal={props.product.isAContributoryDeal}
+                  isACreditDeal={props.product.isACreditDeal}
+                  dealOwner={props.product.dealOwner}
+                  dealOwnerEntity={props.product.dealOwnerEntity}
+                  dealInitialPercentageContribution={
+                    props.product.dealInitialPercentageContribution
+                  }
+                  dealMaximumInstallmentAllowed={
+                    props.product.dealMaximumInstallmentAllowed
+                  }
+                  includeGatewayChargesInPrice={
+                    props.product.includeGatewayChargesInPrice
+                  }
+                  gatewayFixedCharge={props.product.gatewayFixedCharge}
+                  gatewayRateCharge={props.product.gatewayRateCharge}
+                  allowPriceFreezing={props.product.allowPriceFreezing}
                   isVatable={props.product.isVatable}
                   revenueMargin={props.product.revenueMargin}
                   revenueMarginShouldPrevail={

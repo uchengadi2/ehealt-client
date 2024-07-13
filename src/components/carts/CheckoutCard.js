@@ -163,51 +163,76 @@ export default function CheckoutCard(props) {
         id: product._id,
         name: product.name,
         imageCover: product.imageCover,
-        mainImage: product.mainImage,
-        images: product.images,
         shortDescription: product.shortDescription,
         fullDescription: product.fullDescription,
-        features: product.features,
-        totalUnit: product.totalUnits,
         pricePerUnit: product.pricePerUnit,
         category: product.category,
+        minimumQuantity: product.minimumQuantity,
         currency: product.currency,
-        minQuantity: product.minQuantity,
-        refNumber: product.refNumber,
         unit: product.unit,
         isFeaturedProduct: product.isFeaturedProduct,
         configuration: product.configuration,
         displayOnStore: product.displayOnStore,
-        expiryDate: product.expiryDate,
-        manufacturer: product.manufacturer,
-        benefits: product.benefits,
-        sideEffects: product.sideEffects,
-        model: product.model,
-        yearManufactured: product.yearManufactured,
         brand: product.brand,
-        make: product.make,
-        source: product.source,
-        dosage: product.dosage,
-        ingredients: product.ingredients,
         salesPreference: product.salesPreference,
         keyword1: product.keyword1,
         keyword2: product.keyword2,
         keyword3: product.keyword3,
-        remainingUnits: product.remainingUnits,
-        shopsAvailable: product.shopsAvailable,
         slug: product.slug,
-        requestQuote: product.requestQuote,
-        allowSubscription: product.allowSubscription,
-        video: product.video,
-        type: product.type,
-        createBy: product.createBy,
-        howToUse: product.howToUse,
+        images: product.images,
+        sku: product.sku,
         pricingMechanism: product.pricingMechanism,
+        priceLabel: product.priceLabel,
+        weightPerUnit: product.weightPerUnit,
+        stockStatus: product.stockStatus,
+        allowSubscription: product.allowSubscription,
+        isVatable: product.isVatable,
+        hasVariant: product.hasVariant,
+        barcode: product.barcode,
+        marketPricingCondition: product.marketPricingCondition,
+        deliverability: product.deliverability,
+        pickupInfo: product.pickupInfo,
+        allowPriceFreezing: product.allowPriceFreezing,
+        allowFreezedPriceLowBound: product.allowFreezedPriceLowBound,
+        freezedPriceLowBound: product.freezedPriceLowBound,
+        chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+          product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+        chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+          product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+        freezedPriceMaximumDurationInWeeks:
+          product.freezedPriceMaximumDurationInWeeks,
+        minimumFreezableQuantity: product.minimumFreezableQuantity,
+        datePriceWasSet: product.datePriceWasSet,
+        requiredMaximumNumberOfCommunityMembers:
+          product.requiredMaximumNumberOfCommunityMembers,
+        communityTotalPurchaseableUnit: product.communityTotalPurchaseableUnit,
+        communityDeliveryPeriod: product.communityDeliveryPeriod,
+        communityDeliveryType: product.communityDeliveryType,
+        communityInstruction: product.communityInstruction,
+        dealCode: product.dealCode,
+        dealExpiryDate: product.dealExpiryDate,
+        dealType: product.dealType,
+        showDealPricePerUnit: product.showDealPricePerUnit,
+        allowDealQuantityChange: product.allowDealQuantityChange,
+        dealStatus: product.dealStatus,
+        dealComment: product.dealComment,
+        productType: product.productType,
+        dealDeliveryMode: product.dealDeliveryMode,
+        dealCentralizedDeliveryLocation:
+          product.dealCentralizedDeliveryLocation,
+        dealCentralizedAgreedDeliveryCost:
+          product.dealCentralizedAgreedDeliveryCost,
+        dealDecentralizedDeliveryLocation:
+          product.dealDecentralizedDeliveryLocation,
+        dealDecentralizedAgreedDeliveryCost:
+          product.dealDecentralizedAgreedDeliveryCost,
+        showDealDeliveryCost: product.showDealDeliveryCost,
       });
 
       if (!allData) {
         return;
       }
+
       setProduct({
         id: allData[0].id,
         name: allData[0].name,
@@ -216,43 +241,73 @@ export default function CheckoutCard(props) {
         images: allData[0].images,
         shortDescription: allData[0].shortDescription,
         fullDescription: allData[0].fullDescription,
-        features: allData[0].features,
-        totalUnit: allData[0].totalUnit,
         pricePerUnit: allData[0].pricePerUnit,
         category: allData[0].category,
-        minQuantity: allData[0].minQuantity,
+        minimumQuantity: allData[0].minimumQuantity,
         currency: allData[0].currency,
         unit: allData[0].unit,
-        refNumber: allData[0].refNumber,
+        sku: allData[0].sku,
         isFeaturedProduct: allData[0].isFeaturedProduct,
         configuration: allData[0].configuration,
         displayOnStore: allData[0].displayOnStore,
-        expiryDate: allData[0].expiryDate,
-        manufacturer: allData[0].manufacturer,
-        benefits: allData[0].benefits,
-        sideEffects: allData[0].sideEffects,
-        model: allData[0].model,
-        yearManufactured: allData[0].yearManufactured,
         brand: allData[0].brand,
-        make: allData[0].make,
-        source: allData[0].source,
-        dosage: allData[0].dosage,
-        ingredients: allData[0].ingredients,
         salesPreference: allData[0].salesPreference,
         keyword1: allData[0].keyword1,
         keyword2: allData[0].keyword2,
         keyword3: allData[0].keyword3,
-        remainingUnits: allData[0].remainingUnits,
-        shopsAvailable: allData[0].shopsAvailable,
-        channel: allData[0].channel,
         slug: allData[0].slug,
-        requestQuote: allData[0].requestQuote,
         allowSubscription: allData[0].allowSubscription,
-        video: allData[0].video,
-        type: allData[0].type,
+        //video: allData[0].video,
         createBy: allData[0].createBy,
-        howToUse: allData[0].howToUse,
         pricingMechanism: allData[0].pricingMechanism,
+        weightPerUnit: allData[0].weightPerUnit,
+        isVatable: allData[0].isVatable,
+        priceLabel: allData[0].priceLabel,
+        stockStatus: allData[0].stockStatus,
+        marketPricingCondition: allData[0].marketPricingCondition,
+        hasVariant: allData[0].hasVariant,
+        barcode: allData[0].barcode,
+        deliverability: allData[0].deliverability,
+        pickupInfo: allData[0].pickupInfo,
+
+        allowPriceFreezing: allData[0].allowPriceFreezing,
+        allowFreezedPriceLowBound: allData[0].allowFreezedPriceLowBound,
+        freezedPriceLowBound: allData[0].freezedPriceLowBound,
+        chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+          allData[0].chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+        chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+          allData[0].chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+        freezedPriceMaximumDurationInWeeks:
+          allData[0].freezedPriceMaximumDurationInWeeks,
+        minimumFreezableQuantity: allData[0].minimumFreezableQuantity,
+        datePriceWasSet: allData[0].datePriceWasSet,
+
+        requiredMaximumNumberOfCommunityMembers:
+          allData[0].requiredMaximumNumberOfCommunityMembers,
+        communityTotalPurchaseableUnit:
+          allData[0].communityTotalPurchaseableUnit,
+        communityDeliveryPeriod: allData[0].communityDeliveryPeriod,
+        communityDeliveryType: allData[0].communityDeliveryType,
+        communityInstruction: allData[0].communityInstruction,
+        dealCode: allData[0].dealCode,
+        dealExpiryDate: allData[0].dealExpiryDate,
+        dealType: allData[0].dealType,
+        showDealPricePerUnit: allData[0].showDealPricePerUnit,
+        allowDealQuantityChange: allData[0].allowDealQuantityChange,
+        dealStatus: allData[0].dealStatus,
+        dealComment: allData[0].dealComment,
+
+        productType: allData[0].productType,
+        dealDeliveryMode: allData[0].dealDeliveryMode,
+        dealCentralizedDeliveryLocation:
+          allData[0].dealCentralizedDeliveryLocation,
+        dealCentralizedAgreedDeliveryCost:
+          allData[0].dealCentralizedAgreedDeliveryCost,
+        dealDecentralizedDeliveryLocation:
+          allData[0].dealDecentralizedDeliveryLocation,
+        dealDecentralizedAgreedDeliveryCost:
+          allData[0].dealDecentralizedAgreedDeliveryCost,
+        showDealDeliveryCost: allData[0].showDealDeliveryCost,
       });
     };
 
@@ -262,7 +317,7 @@ export default function CheckoutCard(props) {
   }, []);
 
   let imageUrl = "";
-  if (course) {
+  if (product) {
     imageUrl = `${baseURL}/images/products/${product.image}`;
   }
 
@@ -521,103 +576,211 @@ export default function CheckoutCard(props) {
                 </Typography>
                 <br />
 
-                <Typography
-                  variant="h4"
-                  color="textSecondary"
-                  component="p"
-                  style={{ marginTop: 10, marginBottom: 15 }}
-                >
-                  <span style={{ marginLeft: 130 }}>
-                    <strong>
-                      {getCurrencyCode()}
-                      {product.pricePerUnit
-                        ? product.pricePerUnit
-                            .toFixed(2)
-                            .replace(/\d(?=(\d{3})+\.)/g, "$&,")
-                        : ""}
-                      <span style={{ fontSize: 12 }}>
-                        {" "}
-                        &nbsp;{`per ${product.unit}`}
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference !== "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span style={{ marginLeft: 130 }}>
+                        <strong>
+                          {getCurrencyCode()}
+                          {product.pricePerUnit
+                            ? product.pricePerUnit
+                                .toFixed(2)
+                                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                            : 0}
+                        </strong>
                       </span>
-                    </strong>
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference === "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {product.showDealPricePerUnit ? (
+                        <span style={{ marginLeft: 130 }}>
+                          <strong>
+                            {getCurrencyCode()}
+                            {product.pricePerUnit
+                              ? product.pricePerUnit
+                                  .toFixed(2)
+                                  .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                              : 0}
+                          </strong>
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference !== "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: 130,
+                          color: "red",
+                          fontSize: 12,
+                        }}
+                      >
+                        <strong>{product.priceLabel}</strong>
+                      </span>
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference === "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {product.showDealPricePerUnit ? (
+                        <span
+                          style={{
+                            marginLeft: 130,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{product.priceLabel}</strong>
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: 130,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{product.priceLabel}</strong>
+                        </span>
+                      )}
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "request-quote" && (
+                  <Typography
+                    variant="h4"
+                    color="textSecondary"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
+                  >
+                    <span style={{ marginLeft: 130 }}>
+                      <strong>
+                        {getCurrencyCode()}
+                        {product.pricePerUnit
+                          ? product.pricePerUnit
+                              .toFixed(2)
+                              .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                          : 0}
+                      </strong>
+                      <span style={{ fontSize: 12 }}>per unit</span>
+                    </span>
+                  </Typography>
+                )}
+                {product.pricingMechanism === "request-quote" && (
+                  <Typography
+                    //variant="h6"
+                    color="red"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
+                  >
+                    <span
+                      style={{ marginLeft: 130, color: "red", fontSize: 12 }}
+                    >
+                      <strong>{product.priceLabel}</strong>
+                    </span>
+                  </Typography>
+                )}
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong> Market Pricing Condition:</strong>
+                    <span>{product.marketPricingCondition}</span>
                   </span>
                 </Typography>
-                <br />
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Weight per Unit:</strong>
+                    <span>
+                      {product.weightPerUnit} {product.unit}{" "}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Brand:</strong>
+                    <span>{product.brand}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Stock Availability:</strong>
+                    <span>{product.stockStatus}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Deliverability:</strong>
+                    <span>{product.deliverability}</span>
+                  </span>
+                </Typography>
 
-                {product.refNumber !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Reference Number/Sku:</strong>
-                    </span>
-                    {product.refNumber}
-                  </Typography>
-                )}
-                {product.minQuantity !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Minimum Quantity Required:</strong>
-                    </span>
-                    <span>
-                      {product.minQuantity
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {product.minQuantity <= 1
-                        ? product.unit
-                        : product.unit + "s"}
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 10 }}>
+                    <strong>Pickup Availability:</strong>
+                    <span>{product.pickupInfo}</span>
+                  </span>
+                </Typography>
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Code:</strong>
+                      <span>{product.dealCode}</span>
                     </span>
                   </Typography>
                 )}
-                {product.remainingUnits !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Quantity In Stock:</strong>
-                    </span>
-                    <span>
-                      {product.remainingUnits
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {product.remainingUnits <= 1
-                        ? product.unit
-                        : product.unit + "s"}
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Expiry Date:</strong>
+                      <span>{product.dealExpiryDate}</span>
                     </span>
                   </Typography>
                 )}
-                {product.type !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Product Type:</strong>
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Type:</strong>
+                      <span>{product.dealType}</span>
                     </span>
-                    {product.type ? product.type : ""}
                   </Typography>
                 )}
-                {product.dosage !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Dosage:</strong>
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Status:</strong>
+                      <span>{product.dealStatus}</span>
                     </span>
-                    {product.dosage}
+                  </Typography>
+                )}
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 10 }}>
+                      <strong> Deal Instruction:</strong>
+                      <span>{product.dealComment}</span>
+                    </span>
                   </Typography>
                 )}
               </CardContent>
@@ -627,12 +790,18 @@ export default function CheckoutCard(props) {
               {product.pricePerUnit && (
                 <CheckoutActionPage
                   price={product.pricePerUnit}
-                  minimumQuantity={product.minQuantity}
+                  minimumQuantity={product.minimumQuantity}
                   productId={product.id}
-                  unit={product.unit}
+                  // unit={product.unit}
+                  allowDealQuantityChange={product.allowDealQuantityChange}
+                  showDealPricePerUnit={product.showDealPricePerUnit}
+                  salesPreference={product.salesPreference}
                   token={props.token}
                   userId={props.userId}
                   quantity={props.quantity}
+                  unit={props.unit}
+                  weightPerUnit={props.weightPerUnit}
+                  weightInKg={props.weightInKg}
                   preferredStartDate={props.preferredStartDate}
                   cartId={props.cartId}
                   currency={product.currency}
@@ -697,98 +866,211 @@ export default function CheckoutCard(props) {
                 >
                   {Str(product.shortDescription).limit(200, "...").get()}
                 </Typography>
-                <Typography
-                  variant="h5"
-                  color="textSecondary"
-                  component="p"
-                  style={{ marginTop: 5, marginBottom: 15 }}
-                >
-                  <span style={{ marginLeft: 130 }}>
-                    <strong>
-                      {getCurrencyCode()}
-                      {product.pricePerUnit
-                        ? product.pricePerUnit
-                            .toFixed(2)
-                            .replace(/\d(?=(\d{3})+\.)/g, "$&,")
-                        : ""}
-                      <span style={{ fontSize: 12 }}> &nbsp;</span>
-                    </strong>
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference !== "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span style={{ marginLeft: 60 }}>
+                        <strong>
+                          {getCurrencyCode()}
+                          {product.pricePerUnit
+                            ? product.pricePerUnit
+                                .toFixed(2)
+                                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                            : 0}
+                        </strong>
+                      </span>
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference === "deal" && (
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {product.showDealPricePerUnit ? (
+                        <span style={{ marginLeft: 60 }}>
+                          <strong>
+                            {getCurrencyCode()}
+                            {product.pricePerUnit
+                              ? product.pricePerUnit
+                                  .toFixed(2)
+                                  .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                              : 0}
+                          </strong>
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference !== "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: 60,
+                          color: "red",
+                          fontSize: 12,
+                        }}
+                      >
+                        <strong>{product.priceLabel}</strong>
+                      </span>
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "pricing" &&
+                  product.salesPreference === "deal" && (
+                    <Typography
+                      //variant="h6"
+                      color="red"
+                      component="p"
+                      style={{ marginTop: 5, marginBottom: 15 }}
+                    >
+                      {product.showDealPricePerUnit ? (
+                        <span
+                          style={{
+                            marginLeft: 60,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{product.priceLabel}</strong>
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: 60,
+                            color: "red",
+                            fontSize: 12,
+                          }}
+                        >
+                          <strong>{product.priceLabel}</strong>
+                        </span>
+                      )}
+                    </Typography>
+                  )}
+                {product.pricingMechanism === "request-quote" && (
+                  <Typography
+                    variant="h4"
+                    color="textSecondary"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
+                  >
+                    <span style={{ marginLeft: 60 }}>
+                      <strong>
+                        {getCurrencyCode()}
+                        {product.pricePerUnit
+                          ? product.pricePerUnit
+                              .toFixed(2)
+                              .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+                          : 0}
+                      </strong>
+                      <span style={{ fontSize: 12 }}>per unit</span>
+                    </span>
+                  </Typography>
+                )}
+                {product.pricingMechanism === "request-quote" && (
+                  <Typography
+                    //variant="h6"
+                    color="red"
+                    component="p"
+                    style={{ marginTop: 5, marginBottom: 15 }}
+                  >
+                    <span
+                      style={{ marginLeft: 60, color: "red", fontSize: 12 }}
+                    >
+                      <strong>{product.priceLabel}</strong>
+                    </span>
+                  </Typography>
+                )}
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong> Market Pricing Condition:</strong>
+                    <span>{product.marketPricingCondition}</span>
                   </span>
                 </Typography>
-                {product.refNumber !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Sku:</strong>
-                    </span>
-                    {product.refNumber}
-                  </Typography>
-                )}
-                {product.minQuantity !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Minimum Quantity Required:</strong>
-                    </span>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Weight per Unit:</strong>
                     <span>
-                      {product.minQuantity
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {product.minQuantity <= 1
-                        ? product.unit
-                        : product.unit + "s"}
+                      {product.weightPerUnit} {product.unit}{" "}
+                    </span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Brand:</strong>
+                    <span>{product.brand}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Stock Availability:</strong>
+                    <span>{product.stockStatus}</span>
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Deliverability:</strong>
+                    <span>{product.deliverability}</span>
+                  </span>
+                </Typography>
+
+                <Typography>
+                  <span style={{ fontSize: 14, marginLeft: 5 }}>
+                    <strong>Pickup Availability:</strong>
+                    <span>{product.pickupInfo}</span>
+                  </span>
+                </Typography>
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 5 }}>
+                      <strong> Deal Code:</strong>
+                      <span>{product.dealCode}</span>
                     </span>
                   </Typography>
                 )}
-                {product.remainingUnits !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Stock:</strong>
-                    </span>
-                    <span>
-                      {product.remainingUnits
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                      &nbsp;
-                      {product.remainingUnits <= 1
-                        ? product.unit
-                        : product.unit + "s"}
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 5 }}>
+                      <strong> Deal Expiry Date:</strong>
+                      <span>{product.dealExpiryDate}</span>
                     </span>
                   </Typography>
                 )}
-                {product.type !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Type:</strong>
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 5 }}>
+                      <strong> Deal Type:</strong>
+                      <span>{product.dealType}</span>
                     </span>
-                    {product.type ? product.type : ""}
                   </Typography>
                 )}
-                {product.dosage !== undefined && (
-                  <Typography
-                    variant="h5"
-                    style={{ color: "black", fontSize: 15 }}
-                  >
-                    <span style={{ marginRight: 20 }}>
-                      {" "}
-                      <strong>Dosage:</strong>
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 5 }}>
+                      <strong> Deal Status:</strong>
+                      <span>{product.dealStatus}</span>
                     </span>
-                    {product.dosage}
+                  </Typography>
+                )}
+                {product.salesPreference === "deal" && (
+                  <Typography>
+                    <span style={{ fontSize: 14, marginLeft: 5 }}>
+                      <strong> Deal Instruction:</strong>
+                      <span>{product.dealComment}</span>
+                    </span>
                   </Typography>
                 )}
               </CardContent>
@@ -806,12 +1088,18 @@ export default function CheckoutCard(props) {
               {product.pricePerUnit && (
                 <CheckoutActionPage
                   price={product.pricePerUnit}
-                  minimumQuantity={product.minQuantity}
+                  minimumQuantity={product.minimumQuantity}
                   productId={product.id}
-                  unit={product.unit}
+                  allowDealQuantityChange={product.allowDealQuantityChange}
+                  showDealPricePerUnit={product.showDealPricePerUnit}
+                  salesPreference={product.salesPreference}
+                  // unit={product.unit}
                   token={props.token}
                   userId={props.userId}
                   quantity={props.quantity}
+                  unit={props.unit}
+                  weightPerUnit={props.weightPerUnit}
+                  weightInKg={props.weightInKg}
                   preferredStartDate={props.preferredStartDate}
                   cartId={props.cartId}
                   currency={product.currency}

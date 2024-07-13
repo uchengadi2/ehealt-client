@@ -4,7 +4,10 @@ import Typography from "@mui/material/Typography";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-
+import useToken from "../../../custom-hooks/useToken";
+import useUserId from "../../../custom-hooks/useUserId";
+import Stack from "@mui/material/Stack";
+import Snackbar from "@material-ui/core/Snackbar";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -15,6 +18,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import api from "./../../../apis/local";
 import AddAffiliateForm from "./AddAffiliateForm";
+import AffiliateDeleteForm from "./AffiliateDeleteForm";
+import AffiliateEditForm from "./AffiliateEditForm";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -37,14 +42,28 @@ const useStyles = makeStyles((theme) => ({
 function Affiliates(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const { token, setToken } = useToken();
+  const { userId, setUserId } = useUserId();
+  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
-  const [open, setOpen] = useState(false);
+  const [updateAffiliateCounter, setUpdateAffiliateCounter] = useState(false);
+  const [updateEdittedAffiliateCounter, setUpdateEdittedAffiliateCounter] =
+    useState(false);
+  const [updateDeletedAffiliateCounter, setUpdateDeletedAffiliateCounter] =
+    useState(false);
 
   const [affiliateList, setAffiliateList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -58,7 +77,7 @@ function Affiliates(props) {
           id: affiliate._id,
           name: affiliate.name,
           affiliateNumber: affiliate.affiliateNumber,
-          type: affiliate.type,
+          affiliateType: affiliate.affiliateType,
           description: affiliate.description,
           country: affiliate.country,
           state: affiliate.state,
@@ -66,7 +85,8 @@ function Affiliates(props) {
           address: affiliate.address,
           contactPerson: affiliate.contactPerson,
           contactPersonEmail: affiliate.contactPersonEmail,
-          contactPhoneNumber: affiliate.contactPhoneNumber,
+          contactPhoneNumbers: affiliate.contactPhoneNumbers,
+          natureOfBusiness: affiliate.natureOfBusiness,
         });
       });
       setAffiliateList(allData);
@@ -76,18 +96,92 @@ function Affiliates(props) {
     //call the function
 
     fetchData().catch(console.error);
-  }, []);
+  }, [
+    updateAffiliateCounter,
+    updateEdittedAffiliateCounter,
+    updateDeletedAffiliateCounter,
+  ]);
 
   useEffect(() => {
     // 👇️ scroll to top on page load
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
+  const renderAffiliateUpdateCounter = () => {
+    setUpdateAffiliateCounter((prevState) => !prevState);
+  };
+
+  const renderAffiliateEdittedUpdateCounter = () => {
+    setUpdateEdittedAffiliateCounter((prevState) => !prevState);
+  };
+
+  const renderAffiliateDeletedUpdateCounter = () => {
+    setUpdateDeletedAffiliateCounter((prevState) => !prevState);
+  };
+
+  const handleSuccessfulCreateSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+  const handleSuccessfulEditSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleSuccessfulDeletedItemSnackbar = (message) => {
+    //setBecomePartnerOpen(false);
+    setAlert({
+      open: true,
+      message: message,
+      //backgroundColor: "#4BB543",
+      backgroundColor: "#FF731D",
+    });
+  };
+
+  const handleFailedSnackbar = (message) => {
+    setAlert({
+      open: true,
+      message: message,
+      backgroundColor: "#FF3232",
+    });
+    //setBecomePartnerOpen(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOpen = () => {
+  const handleAddOpen = () => {
     setOpen(true);
+  };
+
+  const handleDialogOpenStatus = () => {
+    setOpen(false);
+  };
+
+  const handleEditDialogOpenStatus = () => {
+    setEditOpen(false);
+  };
+
+  const handleDeleteDialogOpenStatus = () => {
+    setDeleteOpen(false);
+  };
+
+  const handleEditOpen = () => {
+    setEditOpen(true);
+  };
+
+  const handleDeleteOpen = () => {
+    setDeleteOpen(true);
   };
 
   const onRowsSelectionHandler = (ids, rows) => {
@@ -119,7 +213,7 @@ function Affiliates(props) {
         //editable: true,
       },
       {
-        field: "type",
+        field: "affiliateType",
         headerName: "Type",
         //type: "number",
         width: 150,
@@ -132,12 +226,12 @@ function Affiliates(props) {
         sortable: false,
         width: 250,
       },
-      {
-        field: "city",
-        headerName: "City",
-        sortable: false,
-        width: 250,
-      },
+      // {
+      //   field: "city",
+      //   headerName: "City",
+      //   sortable: false,
+      //   width: 250,
+      // },
       {
         field: "state",
         headerName: "State",
@@ -153,12 +247,13 @@ function Affiliates(props) {
     ];
 
     affiliateList.map((affiliate, index) => {
+      console.log("affiliate:", affiliate);
       let row = {
         numbering: ++counter,
         id: affiliate.id,
         affiliateNumber: affiliate.affiliateNumber,
-        type: affiliate.type
-          ? affiliate.type.replace(
+        affiliateType: affiliate.affiliateType
+          ? affiliate.affiliateType.replace(
               /(^\w|\s\w)(\S*)/g,
               (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
             )
@@ -177,24 +272,25 @@ function Affiliates(props) {
             )
           : "",
 
-        country: affiliate.city[0].country[0].name
-          ? affiliate.city[0].country[0].name.replace(
+        country: affiliate.state[0].country[0].name
+          ? affiliate.state[0].country[0].name.replace(
               /(^\w|\s\w)(\S*)/g,
               (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
             )
           : "",
-        state: affiliate.city[0].state[0].name
-          ? affiliate.city[0].state[0].name.replace(
+        state: affiliate.state[0].name
+          ? affiliate.state[0].name.replace(
               /(^\w|\s\w)(\S*)/g,
               (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
             )
           : "",
-        city: affiliate.city[0].name
-          ? affiliate.city[0].name.replace(
-              /(^\w|\s\w)(\S*)/g,
-              (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
-            )
-          : "",
+        description: affiliate.description,
+        contactPerson: affiliate.contactPerson,
+        contactPersonEmail: affiliate.contactPersonEmail,
+        contactPhoneNumbers: affiliate.contactPhoneNumbers,
+        natureOfBusiness: affiliate.natureOfBusiness,
+        countryId: affiliate.country,
+        stateId: affiliate.state[0].id,
       };
       rows.push(row);
     });
@@ -231,32 +327,93 @@ function Affiliates(props) {
       <Grid container spacing={1} direction="column">
         <Grid item xs>
           <Grid container spacing={2}>
-            <Grid item xs={10}>
+            <Grid item xs={9.3}>
               {/* <Item>xs=8</Item> */}
               <Typography variant="h4">Affiliates</Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={2.7}>
               <div>
-                <Button variant="contained" onClick={handleOpen}>
-                  Add Affiliate
-                </Button>
-                <Dialog
-                  //style={{ zIndex: 1302 }}
-                  fullScreen={matchesXS}
-                  open={open}
-                  // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
-                  onClose={() => [setOpen(false)]}
-                >
-                  <DialogContent>
-                    <AddAffiliateForm
-                    // token={token}
-                    // userId={userId}
-                    // handleDialogOpenStatus={handleDialogOpenStatus}
-                    // handleSuccessfulCreateSnackbar={handleSuccessfulCreateSnackbar}
-                    // handleFailedSnackbar={handleFailedSnackbar}
-                    />
-                  </DialogContent>
-                </Dialog>
+                <Stack direction="row" spacing={1.5}>
+                  <Button variant="contained" onClick={handleAddOpen}>
+                    Add
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={open}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setOpen(false)]}
+                  >
+                    <DialogContent>
+                      <AddAffiliateForm
+                        token={token}
+                        userId={userId}
+                        handleDialogOpenStatus={handleDialogOpenStatus}
+                        handleSuccessfulCreateSnackbar={
+                          handleSuccessfulCreateSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderAffiliateUpdateCounter={
+                          renderAffiliateUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="contained" onClick={handleEditOpen}>
+                    Edit
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={editOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setEditOpen(false)]}
+                  >
+                    <DialogContent>
+                      <AffiliateEditForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleEditDialogOpenStatus={handleEditDialogOpenStatus}
+                        handleSuccessfulEditSnackbar={
+                          handleSuccessfulEditSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderAffiliateEdittedUpdateCounter={
+                          renderAffiliateEdittedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="contained" onClick={handleDeleteOpen}>
+                    Delete
+                  </Button>
+                  <Dialog
+                    //style={{ zIndex: 1302 }}
+                    fullScreen={matchesXS}
+                    open={deleteOpen}
+                    // onClose={() => [setOpen(false), history.push("/utilities/countries")]}
+                    onClose={() => [setDeleteOpen(false)]}
+                  >
+                    <DialogContent>
+                      <AffiliateDeleteForm
+                        token={token}
+                        userId={userId}
+                        params={selectedRows}
+                        handleDeleteDialogOpenStatus={
+                          handleDeleteDialogOpenStatus
+                        }
+                        handleSuccessfulDeletedItemSnackbar={
+                          handleSuccessfulDeletedItemSnackbar
+                        }
+                        handleFailedSnackbar={handleFailedSnackbar}
+                        renderAffiliateDeletedUpdateCounter={
+                          renderAffiliateDeletedUpdateCounter
+                        }
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </Stack>
               </div>
             </Grid>
           </Grid>
@@ -267,6 +424,16 @@ function Affiliates(props) {
             {!loading && renderDataGrid()}
           </Box>
         </Grid>
+        <Snackbar
+          open={alert.open}
+          message={alert.message}
+          ContentProps={{
+            style: { backgroundColor: alert.backgroundColor },
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={() => setAlert({ ...alert, open: false })}
+          autoHideDuration={4000}
+        />
       </Grid>
     </Box>
   );

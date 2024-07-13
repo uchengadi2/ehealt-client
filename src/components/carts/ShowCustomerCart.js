@@ -32,7 +32,7 @@ import BecomePartnerFormContainer from "./../partner/BecomePartnerFormContainer"
 import CategoryProductsCard from "../CategoryProductsCard";
 import CartProductCard from "./CartProductCard";
 import UpperFooter from "../ui/UpperFooter";
-import { EDIT_CART } from "../../actions/types";
+import { EDIT_CART, DELETE_CART } from "../../actions/types";
 
 import { baseURL } from "./../../apis/util";
 import api from "./../../apis/local";
@@ -239,13 +239,17 @@ function ShowCustomerCart(props) {
   const [contactUsOpen, setContactUsOpen] = useState(false);
   const [becomePartnerOpen, setBecomePartnerOpen] = useState(false);
   const [cartProductList, setCartProductList] = useState([]);
+  const [cartForCheckoutList, setCartForCheckoutList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [updateCart, setUpdateCart] = useState();
+  const [updateCart, setUpdateCart] = useState(false);
   const [count, setCount] = useState(0);
   const [isProcessed, setIsProcessed] = useState(false);
   const [isLoading, setIsLoading] = useState(null);
   const [currency, setCurrency] = useState();
   const [policy, setPolicy] = useState();
+  const [salesPreference, setSalesPreference] = useState();
+  const [isAContributoryDeal, setIsAContributoryDeal] = useState();
+  const [dealOwner, setDealOwner] = useState();
 
   const dispatch = useDispatch();
 
@@ -265,8 +269,12 @@ function ShowCustomerCart(props) {
 
   const cartHolder = props.userId;
 
-  const renderCartUpdate = (value) => {
-    setUpdateCart(value);
+  // const renderCartUpdate = (value) => {
+  //   setUpdateCart(value);
+  // };
+
+  const renderCartUpdate = () => {
+    setUpdateCart((prevState) => !prevState);
   };
 
   const handleBecomeAPartnerOpenDialogBox = () => {
@@ -319,6 +327,40 @@ function ShowCustomerCart(props) {
           refNumber: cart.refNumber,
           quantity: cart.quantity,
           price: cart.price,
+          weightInKg: cart.weightInKg,
+          isVatable: cart.isVatable,
+          unit: cart.unit,
+          weightPerUnit: cart.weightPerUnit,
+          salesPreference: cart.salesPreference,
+          dealCode: cart.dealCode,
+          dealExpiryDate: cart.dealExpiryDate,
+          allowDealQuantityChange: cart.allowDealQuantityChange,
+          showDealPricePerUnit: cart.showDealPricePerUnit,
+          dealStatus: cart.dealStatus,
+          dealComment: cart.dealComment,
+          dealDeliveryMode: cart.dealDeliveryMode,
+          dealCentralizedDeliveryLocation: cart.dealCentralizedDeliveryLocation,
+          dealCentralizedAgreedDeliveryCost:
+            cart.dealCentralizedAgreedDeliveryCost,
+          dealDecentralizedDeliveryLocation:
+            cart.dealDecentralizedDeliveryLocation,
+          dealDecentralizedAgreedDeliveryCost:
+            cart.dealDecentralizedAgreedDeliveryCost,
+          showDealDeliveryCost: cart.showDealDeliveryCost,
+          productType: cart.productType,
+          dealType: cart.dealType,
+          showDealPaymentDetails: cart.showDealPaymentDetails,
+          dealPaymentPreference: cart.dealPaymentPreference,
+          requestDealRedemptionCode: cart.requestDealRedemptionCode,
+          isAContributoryDeal: cart.isAContributoryDeal,
+          dealOwner: cart.dealOwner,
+          dealOwnerEntity: cart.dealOwnerEntity,
+          dealInitialPercentageContribution:
+            cart.dealInitialPercentageContribution,
+          dealMaximumInstallmentAllowed: cart.dealMaximumInstallmentAllowed,
+          includeGatewayChargesInPrice: cart.includeGatewayChargesInPrice,
+          gatewayFixedCharge: cart.gatewayFixedCharge,
+          gatewayRateCharge: cart.gatewayRateCharge,
         });
       });
 
@@ -326,6 +368,86 @@ function ShowCustomerCart(props) {
         return;
       }
       setCartProductList(allData);
+      setSalesPreference(allData[0].salesPreference);
+      setIsAContributoryDeal(allData[0].isAContributoryDeal);
+      setDealOwner(allData[0].dealOwner);
+      setIsLoading(false);
+    };
+
+    //call the function
+
+    fetchData().catch(console.error);
+  }, [updateCart]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      let allData = [];
+      api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
+      const response = await api.get(`/carts`, {
+        params: {
+          cartHolder: cartHolder,
+          status: "marked-for-checkout",
+          //isDeleted: false,
+        },
+      });
+      const items = response.data.data.data;
+
+      if (!items) {
+        return;
+      }
+
+      items.map((cart) => {
+        allData.push({
+          id: cart._id,
+          product: cart.product,
+          cartHolder: cart.cartHolder,
+          dateAddedToCart: cart.dateAddedToCart,
+          preferredStartDate: cart.preferredStartDate,
+          refNumber: cart.refNumber,
+          quantity: cart.quantity,
+          price: cart.price,
+          weightInKg: cart.weightInKg,
+          isVatable: cart.isVatable,
+          unit: cart.unit,
+          weightPerUnit: cart.weightPerUnit,
+          salesPreference: cart.salesPreference,
+          dealCode: cart.dealCode,
+          dealExpiryDate: cart.dealExpiryDate,
+          allowDealQuantityChange: cart.allowDealQuantityChange,
+          showDealPricePerUnit: cart.showDealPricePerUnit,
+          dealStatus: cart.dealStatus,
+          dealComment: cart.dealComment,
+          dealDeliveryMode: cart.dealDeliveryMode,
+          dealCentralizedDeliveryLocation: cart.dealCentralizedDeliveryLocation,
+          dealCentralizedAgreedDeliveryCost:
+            cart.dealCentralizedAgreedDeliveryCost,
+          dealDecentralizedDeliveryLocation:
+            cart.dealDecentralizedDeliveryLocation,
+          dealDecentralizedAgreedDeliveryCost:
+            cart.dealDecentralizedAgreedDeliveryCost,
+          showDealDeliveryCost: cart.showDealDeliveryCost,
+          productType: cart.productType,
+          dealType: cart.dealType,
+          showDealPaymentDetails: cart.showDealPaymentDetails,
+          dealPaymentPreference: cart.dealPaymentPreference,
+          requestDealRedemptionCode: cart.requestDealRedemptionCode,
+          isAContributoryDeal: cart.isAContributoryDeal,
+          dealOwner: cart.dealOwner,
+          dealOwnerEntity: cart.dealOwnerEntity,
+          dealInitialPercentageContribution:
+            cart.dealInitialPercentageContribution,
+          dealMaximumInstallmentAllowed: cart.dealMaximumInstallmentAllowed,
+          includeGatewayChargesInPrice: cart.includeGatewayChargesInPrice,
+          gatewayFixedCharge: cart.gatewayFixedCharge,
+          gatewayRateCharge: cart.gatewayRateCharge,
+        });
+      });
+
+      if (!allData) {
+        return;
+      }
+      setCartForCheckoutList(allData);
       setIsLoading(false);
     };
 
@@ -389,6 +511,10 @@ function ShowCustomerCart(props) {
               key={`${cart.id}${index}`}
               cartHolder={cart.cartHolder}
               cartId={cart.id}
+              weightInKg={cart.weightInKg}
+              unit={cart.unit}
+              weightPerUnit={cart.weightPerUnit}
+              isVatable={cart.isVatable}
               currency={currency}
               dateAddedToCart={cart.dateAddedToCart}
               preferredStartDate={cart.preferredStartDate}
@@ -406,6 +532,41 @@ function ShowCustomerCart(props) {
               handleFailedSnackbar={props.handleFailedSnackbar}
               renderCartUpdate={renderCartUpdate}
               renderCartUpdateAfterRemoval={props.renderCartUpdateAfterRemoval}
+              salesPreference={cart.salesPreference}
+              dealCode={cart.dealCode}
+              dealExpiryDate={cart.dealExpiryDate}
+              allowDealQuantityChange={cart.allowDealQuantityChange}
+              showDealPricePerUnit={cart.showDealPricePerUnit}
+              dealStatus={cart.dealStatus}
+              dealComment={cart.dealComment}
+              dealDeliveryMode={cart.dealDeliveryMode}
+              dealCentralizedDeliveryLocation={
+                cart.dealCentralizedDeliveryLocation
+              }
+              dealCentralizedAgreedDeliveryCost={
+                cart.dealCentralizedAgreedDeliveryCost
+              }
+              dealDecentralizedDeliveryLocation={
+                cart.dealDecentralizedDeliveryLocation
+              }
+              dealDecentralizedAgreedDeliveryCost={
+                cart.dealDecentralizedAgreedDeliveryCost
+              }
+              showDealDeliveryCost={cart.showDealDeliveryCost}
+              productType={cart.productType}
+              dealType={cart.dealType}
+              showDealPaymentDetails={cart.showDealPaymentDetails}
+              dealPaymentPreference={cart.dealPaymentPreference}
+              requestDealRedemptionCode={cart.requestDealRedemptionCode}
+              dealOwner={cart.dealOwner}
+              dealOwnerEntity={cart.dealOwnerEntity}
+              dealInitialPercentageContribution={
+                cart.dealInitialPercentageContribution
+              }
+              dealMaximumInstallmentAllowed={cart.dealMaximumInstallmentAllowed}
+              includeGatewayChargesInPrice={cart.includeGatewayChargesInPrice}
+              gatewayFixedCharge={cart.gatewayFixedCharge}
+              gatewayRateCharge={cart.gatewayRateCharge}
             />
           ))}
         </Grid>
@@ -426,6 +587,10 @@ function ShowCustomerCart(props) {
               key={`${cart.id}${index}`}
               cartHolder={cart.cartHolder}
               cartId={cart.id}
+              weightInKg={cart.weightInKg}
+              unit={cart.unit}
+              weightPerUnit={cart.weightPerUnit}
+              isVatable={cart.isVatable}
               dateAddedToCart={cart.dateAddedToCart}
               preferredStartDate={cart.preferredStartDate}
               cartCounterHandler={props.cartCounterHandler}
@@ -443,6 +608,41 @@ function ShowCustomerCart(props) {
               handleFailedSnackbar={props.handleFailedSnackbar}
               renderCartUpdate={renderCartUpdate}
               renderCartUpdateAfterRemoval={props.renderCartUpdateAfterRemoval}
+              salesPreference={cart.salesPreference}
+              dealCode={cart.dealCode}
+              dealExpiryDate={cart.dealExpiryDate}
+              allowDealQuantityChange={cart.allowDealQuantityChange}
+              showDealPricePerUnit={cart.showDealPricePerUnit}
+              dealStatus={cart.dealStatus}
+              dealComment={cart.dealComment}
+              dealDeliveryMode={cart.dealDeliveryMode}
+              dealCentralizedDeliveryLocation={
+                cart.dealCentralizedDeliveryLocation
+              }
+              dealCentralizedAgreedDeliveryCost={
+                cart.dealCentralizedAgreedDeliveryCost
+              }
+              dealDecentralizedDeliveryLocation={
+                cart.dealDecentralizedDeliveryLocation
+              }
+              dealDecentralizedAgreedDeliveryCost={
+                cart.dealDecentralizedAgreedDeliveryCost
+              }
+              showDealDeliveryCost={cart.showDealDeliveryCost}
+              productType={cart.productType}
+              dealType={cart.dealType}
+              showDealPaymentDetails={cart.showDealPaymentDetails}
+              dealPaymentPreference={cart.dealPaymentPreference}
+              requestDealRedemptionCode={cart.requestDealRedemptionCode}
+              dealOwner={cart.dealOwner}
+              dealOwnerEntity={cart.dealOwnerEntity}
+              dealInitialPercentageContribution={
+                cart.dealInitialPercentageContribution
+              }
+              dealMaximumInstallmentAllowed={cart.dealMaximumInstallmentAllowed}
+              includeGatewayChargesInPrice={cart.includeGatewayChargesInPrice}
+              gatewayFixedCharge={cart.gatewayFixedCharge}
+              gatewayRateCharge={cart.gatewayRateCharge}
             />
           ))}
         </Grid>
@@ -461,6 +661,27 @@ function ShowCustomerCart(props) {
       props.handleMakeOpenLoginFormDialogStatus();
       setLoading(false);
       return;
+    }
+
+    if (salesPreference === "deal" && !isAContributoryDeal) {
+      //delete all items in this user's cart
+      cartForCheckoutList.map((cart, index) => {
+        const createForm = async () => {
+          api.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${props.token}`;
+          await api.delete(`/carts/${cart.id}`);
+          dispatch({
+            type: DELETE_CART,
+            //payload: response2.data.data.data,
+          });
+          //props.cartCounterHandler(-1);
+        };
+        createForm().catch((err) => {
+          //props.handleFailedSnackbar();
+          console.log("err:", err.message);
+        });
+      });
     }
 
     let data = {
@@ -517,7 +738,7 @@ function ShowCustomerCart(props) {
       //props.handleFailedSnackbar("Something went wrong, please try again!!!");
     }
     setLoading(false);
-    history.push(`/checkouts`);
+    history.push(`/checkouts/checkouts`);
   };
 
   return (

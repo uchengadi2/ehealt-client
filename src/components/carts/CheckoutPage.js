@@ -214,7 +214,7 @@ function CheckoutPage(props) {
   const [contactUsOpen, setContactUsOpen] = useState(false);
   const [becomePartnerOpen, setBecomePartnerOpen] = useState(false);
   const [cartProductList, setCartProductList] = useState([]);
-  const [updateCheckout, setUpdateCheckout] = useState();
+
   const [totalCost, setTotalCost] = useState();
   const [currency, setCurrency] = useState();
   const [isLoading, setIsLoading] = useState(null);
@@ -223,6 +223,30 @@ function CheckoutPage(props) {
   const [policy, setPolicy] = useState([]);
   const [implementSalesTaxCollection, setImplementSalesTaxCollection] =
     useState();
+  const [salesPreference, setSalesPreference] = useState();
+  const [dealDeliveryMode, setDealDeliveryMode] = useState();
+  const [dealStatus, setDealStatus] = useState();
+  const [dealType, setDealType] = useState();
+  const [dealCode, setDealCode] = useState();
+  const [dealPaymentPreference, setDealPaymentPreference] = useState();
+  const [showDealPaymentDetails, setShowDealPaymentDetails] = useState();
+  const [requestDealRedemptionCode, setRequestDealRedemptionCode] = useState();
+  const [dealCentralizedDeliveryLocation, setDealCentralizedDeliveryLocation] =
+    useState();
+  const [
+    dealCentralizedAgreedDeliveryCost,
+    setDealCentralizedAgreedDeliveryCost,
+  ] = useState();
+  const [
+    dealDecentralizedDeliveryLocation,
+    setDealDecentralizedDeliveryLocation,
+  ] = useState([]);
+  const [
+    dealDecentralizedAgreedDeliveryCost,
+    setDealDecentralizedAgreedDeliveryCost,
+  ] = useState();
+  const [showDealDeliveryCost, setShowDealDeliveryCost] = useState();
+  const [updateCheckout, setUpdateCheckout] = useState(false);
 
   const [alert, setAlert] = useState({
     open: false,
@@ -238,9 +262,12 @@ function CheckoutPage(props) {
     },
   };
 
-  const renderCheckoutUpdate = (value) => {
-    console.log("the value of this removed cart is:", value);
-    setUpdateCheckout(value);
+  // const renderCheckoutUpdate = (value) => {
+  //   setUpdateCheckout(value);
+  // };
+
+  const renderCheckoutUpdate = () => {
+    setUpdateCheckout((prevState) => !prevState);
   };
 
   const cartHolder = props.userId;
@@ -298,18 +325,61 @@ function CheckoutPage(props) {
           status: cart.status,
           preferredStartDate: cart.preferredStartDate,
           weightInKg: cart.weightInKg,
+          unit: cart.unit,
+          weightPerUnit: cart.weightPerUnit,
+          salesPreference: cart.salesPreference,
+          dealCode: cart.dealCode,
+          dealExpiryDate: cart.dealExpiryDate,
+          allowDealQuantityChange: cart.allowDealQuantityChange,
+          showDealPricePerUnit: cart.showDealPricePerUnit,
+          dealStatus: cart.dealStatus,
+          dealType: cart.dealType,
+          dealComment: cart.dealComment,
+          dealDeliveryMode: cart.dealDeliveryMode,
+          dealCentralizedDeliveryLocation: cart.dealCentralizedDeliveryLocation,
+          dealCentralizedAgreedDeliveryCost:
+            cart.dealCentralizedAgreedDeliveryCost,
+          dealDecentralizedDeliveryLocation:
+            cart.dealDecentralizedDeliveryLocation,
+          dealDecentralizedAgreedDeliveryCost:
+            cart.dealDecentralizedAgreedDeliveryCost,
+          showDealDeliveryCost: cart.showDealDeliveryCost,
+          productType: cart.productType,
+          showDealPaymentDetails: cart.showDealPaymentDetails,
+          dealPaymentPreference: cart.dealPaymentPreference,
+          requestDealRedemptionCode: cart.requestDealRedemptionCode,
         });
       });
 
-      if (allData.lenght === 0) {
-        return;
+      if (allData.length === 0) {
+        setIsLoading(false);
       }
 
       if (!allData) {
-        return;
+        setIsLoading(false);
       }
 
       setCartProductList(allData);
+      setSalesPreference(allData[0].salesPreference);
+      setDealDeliveryMode(allData[0].dealDeliveryMode);
+      setDealStatus(allData[0].dealStatus);
+      setDealCode(allData[0].dealCode);
+      setDealType(allData[0].dealType);
+      setDealPaymentPreference(allData[0].dealPaymentPreference);
+      setShowDealPaymentDetails(allData[0].showDealPaymentDetails);
+      setRequestDealRedemptionCode(allData[0].requestDealRedemptionCode);
+      setDealCentralizedDeliveryLocation(
+        allData[0].dealCentralizedDeliveryLocation
+      );
+      setDealCentralizedAgreedDeliveryCost(
+        allData[0].dealCentralizedAgreedDeliveryCost
+      );
+      setDealDecentralizedDeliveryLocation(
+        allData[0].dealDecentralizedDeliveryLocation
+      );
+      setDealDecentralizedAgreedDeliveryCost(
+        allData[0].dealDecentralizedAgreedDeliveryCost
+      );
       setIsLoading(false);
     };
 
@@ -374,11 +444,39 @@ function CheckoutPage(props) {
               dateAddedToCart={cart.dateAddedToCart}
               refNumber={cart.refNumber}
               quantity={cart.quantity}
+              unit={cart.unit}
+              weightPerUnit={cart.weightPerUnit}
+              weightInKg={cart.weightInKg}
               price={cart.price}
+              dealCode={cart.dealCode}
+              dealExpiryDate={cart.dealExpiryDate}
+              allowDealQuantityChange={cart.allowDealQuantityChange}
+              showDealPricePerUnit={cart.showDealPricePerUnit}
+              dealStatus={cart.dealStatus}
+              dealType={cart.dealType}
+              dealComment={cart.dealComment}
+              dealDeliveryMode={cart.dealDeliveryMode}
+              dealCentralizedDeliveryLocation={
+                cart.dealCentralizedDeliveryLocation
+              }
+              dealCentralizedAgreedDeliveryCost={
+                cart.dealCentralizedAgreedDeliveryCost
+              }
+              dealDecentralizedDeliveryLocation={
+                cart.dealDecentralizedDeliveryLocation
+              }
+              dealDecentralizedAgreedDeliveryCost={
+                cart.dealDecentralizedAgreedDeliveryCost
+              }
+              showDealDeliveryCost={cart.showDealDeliveryCost}
+              productType={cart.productType}
+              showDealPaymentDetails={cart.showDealPaymentDetails}
+              dealPaymentPreference={cart.dealPaymentPreference}
+              salesPreference={cart.salesPreference}
+              productSalesPreference={salesPreference}
               isVatable={cart.isVatable}
               revenueMargin={cart.revenueMargin}
               revenueMarginShouldPrevail={cart.revenueMarginShouldPrevail}
-              weightInKg={cart.weightInKg}
               preferredStartDate={cart.preferredStartDate}
               currency={currency}
               status={cart.status}
@@ -418,6 +516,34 @@ function CheckoutPage(props) {
               price={cart.price}
               isVatable={cart.isVatable}
               weightInKg={cart.weightInKg}
+              unit={cart.unit}
+              weightPerUnit={cart.weightPerUnit}
+              dealCode={cart.dealCode}
+              dealExpiryDate={cart.dealExpiryDate}
+              allowDealQuantityChange={cart.allowDealQuantityChange}
+              showDealPricePerUnit={cart.showDealPricePerUnit}
+              dealStatus={cart.dealStatus}
+              dealType={cart.dealType}
+              dealComment={cart.dealComment}
+              dealDeliveryMode={cart.dealDeliveryMode}
+              dealCentralizedDeliveryLocation={
+                cart.dealCentralizedDeliveryLocation
+              }
+              dealCentralizedAgreedDeliveryCost={
+                cart.dealCentralizedAgreedDeliveryCost
+              }
+              dealDecentralizedDeliveryLocation={
+                cart.dealDecentralizedDeliveryLocation
+              }
+              dealDecentralizedAgreedDeliveryCost={
+                cart.dealDecentralizedAgreedDeliveryCost
+              }
+              showDealDeliveryCost={cart.showDealDeliveryCost}
+              productType={cart.productType}
+              showDealPaymentDetails={cart.showDealPaymentDetails}
+              dealPaymentPreference={cart.dealPaymentPreference}
+              salesPreference={cart.salesPreference}
+              productSalesPreference={salesPreference}
               preferredStartDate={cart.preferredStartDate}
               currency={currency}
               revenueMargin={cart.revenueMargin}
@@ -452,7 +578,8 @@ function CheckoutPage(props) {
 
   cartProductList.map((cart, index) => {
     totalWeightInKg =
-      totalWeightInKg + parseFloat(cart.weightInKg) * cart.quantity;
+      // totalWeightInKg + parseFloat(cart.weightInKg) * cart.quantity;
+      totalWeightInKg + parseFloat(cart.weightInKg);
     //setCurrency(cart.currency);
   });
 
@@ -476,8 +603,7 @@ function CheckoutPage(props) {
         )}
         {!isLoading && cartProductList.length === 0 ? (
           <p style={{ marginTop: 50, marginLeft: 10 }}>
-            {" "}
-            There are no product in your checkout
+            There are no item in your checkout
           </p>
         ) : (
           <Grid item>{cartList}</Grid>
@@ -496,6 +622,24 @@ function CheckoutPage(props) {
               vat={prevailingVat}
               vatRate={vat}
               policy={policy}
+              salesPreference={salesPreference}
+              dealDeliveryMode={dealDeliveryMode}
+              dealStatus={dealStatus}
+              dealCode={dealCode}
+              dealType={dealType}
+              dealPaymentPreference={dealPaymentPreference}
+              showDealPaymentDetails={showDealPaymentDetails}
+              requestDealRedemptionCode={requestDealRedemptionCode}
+              dealCentralizedDeliveryLocation={dealCentralizedDeliveryLocation}
+              dealCentralizedAgreedDeliveryCost={
+                dealCentralizedAgreedDeliveryCost
+              }
+              dealDecentralizedDeliveryLocation={
+                dealDecentralizedDeliveryLocation
+              }
+              dealDecentralizedAgreedDeliveryCost={
+                dealDecentralizedAgreedDeliveryCost
+              }
               implementSalesTaxCollection={implementSalesTaxCollection}
               implementVatCollection={implementVatCollection}
               currency={currency}

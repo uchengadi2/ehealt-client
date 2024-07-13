@@ -258,39 +258,6 @@ function ProductDetails(props) {
     setBecomePartnerOpen(true);
   };
 
-  //confirm if product is on promp
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     let allData = [];
-  //     api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
-  //     const response = await api.get(`/productsonsale`, {
-  //       params: {
-  //         course: courseId,
-  //         //status: "active",
-  //       },
-  //     });
-  //     const item = response.data.data.data;
-
-  //     allData.push({
-  //       id: item[0].id,
-  //       price: item[0].salesPricePerUnit,
-  //       minQuantity: item[0].minimumQuantity,
-  //     });
-
-  //     if (!allData) {
-  //       return;
-  //     }
-
-  //     setPromoPrice(allData[0].price);
-  //     setIsOnPromo(true);
-  //     setPromoMinQuantity(allData[0].minQuantity);
-  //   };
-
-  //   //call the function
-
-  //   fetchData().catch(console.error);
-  // }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -310,51 +277,85 @@ function ProductDetails(props) {
           images: product[0].images,
           shortDescription: product[0].shortDescription,
           fullDescription: product[0].fullDescription,
-          features: product[0].features,
-          totalUnit: product[0].totalUnits,
-          remainingUnits: product[0].remainingUnits,
           pricePerUnit: product[0].pricePerUnit,
           category: product[0].category,
           currency: product[0].currency,
-          minQuantity: product[0].minQuantity,
-          refNumber: product[0].refNumber,
+          minimumQuantity: product[0].minQuantity,
+          sku: product[0].sku,
           unit: product[0].unit,
           isFeaturedProduct: product[0].isFeaturedProduct,
           configuration: product[0].configuration,
           displayOnStore: product[0].displayOnStore,
-          expiryDate: product[0].expiryDate,
-          manufacturer: product[0].manufacturer,
-          benefits: product[0].benefits,
-          sideEffects: product[0].sideEffects,
-          model: product[0].model,
-          yearManufactured: product[0].yearManufactured,
-          brand: product[0].brand,
-          make: product[0].make,
-          source: product[0].source,
-          dosage: product[0].dosage,
-          ingredients: product[0].ingredients,
           salesPreference: product[0].salesPreference,
           keyword1: product[0].keyword1,
           keyword2: product[0].keyword2,
           keyword3: product[0].keyword3,
-          remainingUnits: product[0].remainingUnits,
-          shopsAvailable: product[0].shopsAvailable,
           slug: product[0].slug,
-          requestQuote: product[0].requestQuote,
           allowSubscription: product[0].allowSubscription,
-          video: product[0].video,
-          type: product[0].type,
+          //video: product[0].video,
           createBy: product[0].createBy,
-          howToUse: product[0].howToUse,
           pricingMechanism: product[0].pricingMechanism,
-
-          weightInKg: product[0].weightInKg,
-          presentWeightUnitIn: product[0].presentWeightUnitIn,
+          weightPerUnit: product[0].weightPerUnit,
           isVatable: product[0].isVatable,
-          revenueMargin: product[0].revenueMargin,
-          revenueMarginShouldPrevail: product[0].revenueMarginShouldPrevail,
-          origins: product[0].origins,
-          testimonials: product[0].testimonials,
+          priceLabel: product[0].priceLabel,
+          stockStatus: product[0].stockStatus,
+          brand: product[0].brand,
+          marketPricingCondition: product[0].marketPricingCondition,
+          hasVariant: product[0].hasVariant,
+          barcode: product[0].barcode,
+          deliverability: product[0].deliverability,
+          pickupInfo: product[0].pickupInfo,
+          allowPriceFreezing: product[0].allowPriceFreezing,
+          allowFreezedPriceLowBound: product[0].allowFreezedPriceLowBound,
+          freezedPriceLowBound: product[0].freezedPriceLowBound,
+          chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+            product[0].chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+          chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+            product[0].chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+          freezedPriceMaximumDurationInWeeks:
+            product[0].freezedPriceMaximumDurationInWeeks,
+          minimumFreezableQuantity: product[0].minimumFreezableQuantity,
+          datePriceWasSet: product[0].datePriceWasSet,
+          requiredMaximumNumberOfCommunityMembers:
+            product[0].requiredMaximumNumberOfCommunityMembers,
+          communityTotalPurchaseableUnit:
+            product[0].communityTotalPurchaseableUnit,
+          communityDeliveryPeriod: product[0].communityDeliveryPeriod,
+          communityDeliveryType: product[0].communityDeliveryType,
+          communityInstruction: product[0].communityInstruction,
+          dealCode: product[0].dealCode,
+          dealExpiryDate: product[0].dealExpiryDate,
+          dealType: product[0].dealType,
+          showDealPricePerUnit: product[0].showDealPricePerUnit,
+          allowDealQuantityChange: product[0].allowDealQuantityChange,
+          dealStatus: product[0].dealStatus,
+          dealComment: product[0].dealComment,
+          dealDeliveryMode: product[0].dealDeliveryMode,
+          dealCentralizedDeliveryLocation:
+            product[0].dealCentralizedDeliveryLocation,
+          dealCentralizedAgreedDeliveryCost:
+            product[0].dealCentralizedAgreedDeliveryCost,
+          dealDecentralizedDeliveryLocation:
+            product[0].dealDecentralizedDeliveryLocation,
+          dealDecentralizedAgreedDeliveryCost:
+            product[0].dealDecentralizedAgreedDeliveryCost,
+          showDealDeliveryCost: product[0].showDealDeliveryCost,
+          productType: product[0].productType,
+          dealPaymentPreference: product[0].dealPaymentPreference,
+          showDealPaymentDetails: product[0].showDealPaymentDetails,
+          requestDealRedemptionCode: product[0].requestDealRedemptionCode,
+          isAContributoryDeal: product[0].isAContributoryDeal,
+          dealOwner: product[0].dealOwner,
+          dealOwnerEntity: product[0].dealOwnerEntity,
+
+          dealInitialPercentageContribution:
+            product[0].dealInitialPercentageContribution,
+          dealMaximumInstallmentAllowed:
+            product[0].dealMaximumInstallmentAllowed,
+          includeGatewayChargesInPrice: product[0].includeGatewayChargesInPrice,
+          gatewayFixedCharge: product[0].gatewayFixedCharge,
+          gatewayRateCharge: product[0].gatewayRateCharge,
+          isACreditDeal: product[0].isACreditDeal,
         });
 
         setProduct({
@@ -365,52 +366,85 @@ function ProductDetails(props) {
           images: allData[0].images,
           shortDescription: allData[0].shortDescription,
           fullDescription: allData[0].fullDescription,
-          features: allData[0].features,
-          totalUnit: allData[0].totalUnit,
-          remainingUnits: allData[0].remainingUnits,
           pricePerUnit: allData[0].pricePerUnit,
           category: allData[0].category,
-          minQuantity: allData[0].minQuantity,
+          minimumQuantity: allData[0].minimumQuantity,
           currency: allData[0].currency,
           unit: allData[0].unit,
-          refNumber: allData[0].refNumber,
+          sku: allData[0].sku,
           isFeaturedProduct: allData[0].isFeaturedProduct,
           configuration: allData[0].configuration,
           displayOnStore: allData[0].displayOnStore,
-          expiryDate: allData[0].expiryDate,
-          manufacturer: allData[0].manufacturer,
-          benefits: allData[0].benefits,
-          sideEffects: allData[0].sideEffects,
-          model: allData[0].model,
-          yearManufactured: allData[0].yearManufactured,
           brand: allData[0].brand,
-          make: allData[0].make,
-          source: allData[0].source,
-          dosage: allData[0].dosage,
-          ingredients: allData[0].ingredients,
           salesPreference: allData[0].salesPreference,
           keyword1: allData[0].keyword1,
           keyword2: allData[0].keyword2,
           keyword3: allData[0].keyword3,
-          remainingUnits: allData[0].remainingUnits,
-          shopsAvailable: allData[0].shopsAvailable,
-          channel: allData[0].channel,
           slug: allData[0].slug,
-          requestQuote: allData[0].requestQuote,
           allowSubscription: allData[0].allowSubscription,
-          video: allData[0].video,
-          type: allData[0].type,
+          //video: allData[0].video,
           createBy: allData[0].createBy,
-          howToUse: allData[0].howToUse,
           pricingMechanism: allData[0].pricingMechanism,
-
-          weightInKg: allData[0].weightInKg,
-          presentWeightUnitIn: allData[0].presentWeightUnitIn,
+          weightPerUnit: allData[0].weightPerUnit,
           isVatable: allData[0].isVatable,
-          revenueMargin: allData[0].revenueMargin,
-          revenueMarginShouldPrevail: allData[0].revenueMarginShouldPrevail,
-          origins: allData[0].origins,
-          testimonials: allData[0].testimonials,
+          priceLabel: allData[0].priceLabel,
+          stockStatus: allData[0].stockStatus,
+          marketPricingCondition: allData[0].marketPricingCondition,
+          hasVariant: allData[0].hasVariant,
+          barcode: allData[0].barcode,
+          deliverability: allData[0].deliverability,
+          pickupInfo: allData[0].pickupInfo,
+          allowPriceFreezing: allData[0].allowPriceFreezing,
+          allowFreezedPriceLowBound: allData[0].allowFreezedPriceLowBound,
+          freezedPriceLowBound: allData[0].freezedPriceLowBound,
+          chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+            allData[0].chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+          chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+            allData[0].chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+          freezedPriceMaximumDurationInWeeks:
+            allData[0].freezedPriceMaximumDurationInWeeks,
+          minimumFreezableQuantity: allData[0].minimumFreezableQuantity,
+          datePriceWasSet: allData[0].datePriceWasSet,
+          requiredMaximumNumberOfCommunityMembers:
+            allData[0].requiredMaximumNumberOfCommunityMembers,
+          communityTotalPurchaseableUnit:
+            allData[0].communityTotalPurchaseableUnit,
+          communityDeliveryPeriod: allData[0].communityDeliveryPeriod,
+          communityDeliveryType: allData[0].communityDeliveryType,
+          communityInstruction: allData[0].communityInstruction,
+          dealCode: allData[0].dealCode,
+          dealExpiryDate: allData[0].dealExpiryDate,
+          dealType: allData[0].dealType,
+          showDealPricePerUnit: allData[0].showDealPricePerUnit,
+          allowDealQuantityChange: allData[0].allowDealQuantityChange,
+          dealStatus: allData[0].dealStatus,
+          dealComment: allData[0].dealComment,
+          dealDeliveryMode: allData[0].dealDeliveryMode,
+          dealCentralizedDeliveryLocation:
+            allData[0].dealCentralizedDeliveryLocation,
+          dealCentralizedAgreedDeliveryCost:
+            allData[0].dealCentralizedAgreedDeliveryCost,
+          dealDecentralizedDeliveryLocation:
+            allData[0].dealDecentralizedDeliveryLocation,
+          dealDecentralizedAgreedDeliveryCost:
+            allData[0].dealDecentralizedAgreedDeliveryCost,
+          showDealDeliveryCost: allData[0].showDealDeliveryCost,
+          productType: allData[0].productType,
+          dealPaymentPreference: allData[0].dealPaymentPreference,
+          showDealPaymentDetails: allData[0].showDealPaymentDetails,
+          requestDealRedemptionCode: allData[0].requestDealRedemptionCode,
+          isAContributoryDeal: allData[0].isAContributoryDeal,
+          dealOwner: allData[0].dealOwner,
+          dealOwnerEntity: allData[0].dealOwnerEntity,
+
+          dealInitialPercentageContribution:
+            allData[0].dealInitialPercentageContribution,
+          dealMaximumInstallmentAllowed:
+            allData[0].dealMaximumInstallmentAllowed,
+          includeGatewayChargesInPrice: allData[0].includeGatewayChargesInPrice,
+          gatewayFixedCharge: allData[0].gatewayFixedCharge,
+          gatewayRateCharge: allData[0].gatewayRateCharge,
+          isACreditDeal: allData[0].isACreditDeal,
         });
 
         setIsLoading(false);
@@ -440,25 +474,86 @@ function ProductDetails(props) {
             totalUnits={product.totalUnits}
             pricePerUnit={product.pricePerUnit}
             currency={product.currency}
-            refNumber={product.refNumber}
             category={product.category}
-            benefits={product.benefits}
-            sideEffects={product.sideEffects}
-            model={product.model}
-            yearManufactured={product.yearManufactured}
+            categorySlug={categorySlug}
+            slug={slug}
             brand={product.brand}
-            make={product.make}
-            source={product.source}
-            dosage={product.dosage}
-            slug={product.slug}
-            ingredients={product.ingredients}
+            //slug={product.slug}
             salesPreference={product.salesPreference}
-            remainingUnits={product.remainingUnits}
-            shopsAvailable={product.shopsAvailable}
-            type={product.type}
-            mainImage={product.mainImage}
+            displayOnStore={product.displayOnStore}
             image={product.image}
-            video={product.video}
+            images={product.images}
+            pricingMechanism={product.pricingMechanism}
+            weightPerUnit={product.weightPerUnit}
+            isVatable={product.isVatable}
+            priceLabel={product.priceLabel}
+            stockStatus={product.stockStatus}
+            marketPricingCondition={product.marketPricingCondition}
+            hasVariant={product.hasVariant}
+            barcode={product.barcode}
+            deliverability={product.deliverability}
+            pickupInfo={product.pickupInfo}
+            allowPriceFreezing={product.allowPriceFreezing}
+            allowFreezedPriceLowBound={product.allowFreezedPriceLowBound}
+            freezedPriceLowBound={product.freezedPriceLowBound}
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound={
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound
+            }
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound={
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound
+            }
+            freezedPriceMaximumDurationInWeeks={
+              product.freezedPriceMaximumDurationInWeeks
+            }
+            minimumFreezableQuantity={product.minimumFreezableQuantity}
+            datePriceWasSet={product.datePriceWasSet}
+            requiredMaximumNumberOfCommunityMembers={
+              product.requiredMaximumNumberOfCommunityMembers
+            }
+            communityTotalPurchaseableUnit={
+              product.communityTotalPurchaseableUnit
+            }
+            communityDeliveryPeriod={product.communityDeliveryPeriod}
+            communityDeliveryType={product.communityDeliveryType}
+            communityInstruction={product.communityInstruction}
+            dealCode={product.dealCode}
+            dealExpiryDate={product.dealExpiryDate}
+            dealType={product.dealType}
+            showDealPricePerUnit={product.showDealPricePerUnit}
+            allowDealQuantityChange={product.allowDealQuantityChange}
+            dealStatus={product.dealStatus}
+            dealComment={product.dealComment}
+            dealDeliveryMode={product.dealDeliveryMode}
+            dealCentralizedDeliveryLocation={
+              product.dealCentralizedDeliveryLocation
+            }
+            dealCentralizedAgreedDeliveryCost={
+              product.dealCentralizedAgreedDeliveryCost
+            }
+            dealDecentralizedDeliveryLocation={
+              product.dealDecentralizedDeliveryLocation
+            }
+            dealDecentralizedAgreedDeliveryCost={
+              product.dealDecentralizedAgreedDeliveryCost
+            }
+            showDealDeliveryCost={product.showDealDeliveryCost}
+            productType={product.productType}
+            dealPaymentPreference={product.dealPaymentPreference}
+            showDealPaymentDetails={product.showDealPaymentDetails}
+            requestDealRedemptionCode={product.requestDealRedemptionCode}
+            isAContributoryDeal={product.isAContributoryDeal}
+            isACreditDeal={product.isACreditDeal}
+            dealOwner={product.dealOwner}
+            dealOwnerEntity={product.dealOwnerEntity}
+            dealInitialPercentageContribution={
+              product.dealInitialPercentageContribution
+            }
+            dealMaximumInstallmentAllowed={
+              product.dealMaximumInstallmentAllowed
+            }
+            includeGatewayChargesInPrice={product.includeGatewayChargesInPrice}
+            gatewayFixedCharge={product.gatewayFixedCharge}
+            gatewayRateCharge={product.gatewayRateCharge}
             key={product.id}
             token={props.token}
             userId={props.userId}
@@ -487,31 +582,93 @@ function ProductDetails(props) {
             // isOnPromo={isOnPromo}
             // promoPrice={promoPrice}
             // promoMinQuantity={promoMinQuantity}
+
             features={product.features}
             shortDescription={product.shortDescription}
             fullDescription={product.fullDescription}
             totalUnits={product.totalUnits}
             pricePerUnit={product.pricePerUnit}
             currency={product.currency}
-            refNumber={product.refNumber}
             category={product.category}
-            benefits={product.benefits}
-            sideEffects={product.sideEffects}
-            model={product.model}
-            yearManufactured={product.yearManufactured}
+            categorySlug={categorySlug}
+            slug={slug}
             brand={product.brand}
-            make={product.make}
-            source={product.source}
-            dosage={product.dosage}
-            slug={product.slug}
-            ingredients={product.ingredients}
+            //slug={product.slug}
             salesPreference={product.salesPreference}
-            remainingUnits={product.remainingUnits}
-            shopsAvailable={product.shopsAvailable}
-            type={product.type}
-            mainImage={product.mainImage}
+            displayOnStore={product.displayOnStore}
             image={product.image}
-            video={product.video}
+            images={product.images}
+            pricingMechanism={product.pricingMechanism}
+            weightPerUnit={product.weightPerUnit}
+            isVatable={product.isVatable}
+            priceLabel={product.priceLabel}
+            stockStatus={product.stockStatus}
+            marketPricingCondition={product.marketPricingCondition}
+            hasVariant={product.hasVariant}
+            barcode={product.barcode}
+            deliverability={product.deliverability}
+            pickupInfo={product.pickupInfo}
+            allowPriceFreezing={product.allowPriceFreezing}
+            allowFreezedPriceLowBound={product.allowFreezedPriceLowBound}
+            freezedPriceLowBound={product.freezedPriceLowBound}
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound={
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound
+            }
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound={
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound
+            }
+            freezedPriceMaximumDurationInWeeks={
+              product.freezedPriceMaximumDurationInWeeks
+            }
+            minimumFreezableQuantity={product.minimumFreezableQuantity}
+            datePriceWasSet={product.datePriceWasSet}
+            requiredMaximumNumberOfCommunityMembers={
+              product.requiredMaximumNumberOfCommunityMembers
+            }
+            communityTotalPurchaseableUnit={
+              product.communityTotalPurchaseableUnit
+            }
+            communityDeliveryPeriod={product.communityDeliveryPeriod}
+            communityDeliveryType={product.communityDeliveryType}
+            communityInstruction={product.communityInstruction}
+            dealCode={product.dealCode}
+            dealExpiryDate={product.dealExpiryDate}
+            dealType={product.dealType}
+            showDealPricePerUnit={product.showDealPricePerUnit}
+            allowDealQuantityChange={product.allowDealQuantityChange}
+            dealStatus={product.dealStatus}
+            dealComment={product.dealComment}
+            dealDeliveryMode={product.dealDeliveryMode}
+            dealCentralizedDeliveryLocation={
+              product.dealCentralizedDeliveryLocation
+            }
+            dealCentralizedAgreedDeliveryCost={
+              product.dealCentralizedAgreedDeliveryCost
+            }
+            dealDecentralizedDeliveryLocation={
+              product.dealDecentralizedDeliveryLocation
+            }
+            dealDecentralizedAgreedDeliveryCost={
+              product.dealDecentralizedAgreedDeliveryCost
+            }
+            showDealDeliveryCost={product.showDealDeliveryCost}
+            productType={product.productType}
+            dealPaymentPreference={product.dealPaymentPreference}
+            showDealPaymentDetails={product.showDealPaymentDetails}
+            requestDealRedemptionCode={product.requestDealRedemptionCode}
+            isAContributoryDeal={product.isAContributoryDeal}
+            isACreditDeal={product.isACreditDeal}
+            dealOwner={product.dealOwner}
+            dealOwnerEntity={product.dealOwnerEntity}
+            dealInitialPercentageContribution={
+              product.dealInitialPercentageContribution
+            }
+            dealMaximumInstallmentAllowed={
+              product.dealMaximumInstallmentAllowed
+            }
+            includeGatewayChargesInPrice={product.includeGatewayChargesInPrice}
+            gatewayFixedCharge={product.gatewayFixedCharge}
+            gatewayRateCharge={product.gatewayRateCharge}
             key={product.id}
             token={props.token}
             userId={props.userId}

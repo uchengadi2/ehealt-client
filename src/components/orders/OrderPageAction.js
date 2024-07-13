@@ -676,7 +676,7 @@ function OrderPageAction(props) {
 
             <Typography style={{ width: 300, marginTop: 15 }}>
               Quantity Ordered:&nbsp;{quantity}&nbsp;
-              {quantity > 1 ? props.unit + "s" : props.unit}
+              {quantity > 1 ? "units" : "unit"}
             </Typography>
 
             <Typography style={{ width: 300, fontSize: 20, marginTop: 15 }}>
@@ -699,6 +699,7 @@ function OrderPageAction(props) {
                 variant="contained"
                 className={classes.submitButton}
                 onClick={onSubmit}
+                disabled
               >
                 {loading ? (
                   <CircularProgress size={30} color="inherit" />
@@ -730,7 +731,7 @@ function OrderPageAction(props) {
                 Quantity Ordered:&nbsp;
                 {quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 &nbsp;
-                {quantity > 1 ? props.unit + "s" : props.unit}
+                {quantity > 1 ? "units" : "unit"}
               </Typography>
 
               <Typography

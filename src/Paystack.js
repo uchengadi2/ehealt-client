@@ -73,8 +73,8 @@ function Paystack(props) {
     className: classes.checkout,
     email: props.email,
     amount: props.amount,
-    publicKey: "pk_test_209acad1bf3004d1adcc1232404a6e6930076d58", //herbalking test
-    //publicKey: "pk_live_2ff0e8d43f92ab5b3419a7fc41a0816f21f4c7dd", //herbalking live
+    //publicKey: "pk_test_9181f2dcbb5a6bf2cf56c8f2632eaa5e2fd182cb", //wholeroof test
+    publicKey: "pk_live_5700e72ac96f8aafda7af34e76b1dcfd1b6ec8b2", //wholeroof live
   };
 
   // you can call this function anything
@@ -142,6 +142,24 @@ function Paystack(props) {
       deliveryStatus: props.data.deliveryStatus,
       deliveryMode: props.data.deliveryMode,
       daysToDelivery: props.data.daysToDelivery,
+
+      salesPreference: props.data.salesPreference,
+      dealDeliveryMode: props.data.dealDeliveryMode,
+      dealStatus: props.data.dealStatus,
+      dealCode: props.data.dealCode,
+      dealType: props.data.dealType,
+      dealCentralizedDeliveryLocation:
+        props.data.dealCentralizedDeliveryLocation,
+      dealCentralizedAgreedDeliveryCost:
+        props.data.dealCentralizedAgreedDeliveryCost,
+      dealDecentralizedDeliveryLocation:
+        props.data.dealDecentralizedDeliveryLocation,
+      dealDecentralizedAgreedDeliveryCost:
+        props.data.dealDecentralizedAgreedDeliveryCost,
+      showDealPaymentDetails: props.data.showDealPaymentDetails,
+      dealPaymentPreference: props.data.dealPaymentPreference,
+      dealRedemptionCode: props.data.dealRedemptionCode,
+      requestDealRedemptionCode: props.data.requestDealRedemptionCode,
     };
 
     if (transData) {
@@ -232,6 +250,24 @@ function Paystack(props) {
               deliveryStatus: props.data.deliveryStatus,
               deliveryMode: props.data.deliveryMode,
               daysToDelivery: props.data.daysToDelivery,
+
+              salesPreference: props.data.salesPreference,
+              dealDeliveryMode: props.data.dealDeliveryMode,
+              dealStatus: props.data.dealStatus,
+              dealCode: props.data.dealCode,
+              dealType: props.data.dealType,
+              dealCentralizedDeliveryLocation:
+                props.data.dealCentralizedDeliveryLocation,
+              dealCentralizedAgreedDeliveryCost:
+                props.data.dealCentralizedAgreedDeliveryCost,
+              dealDecentralizedDeliveryLocation:
+                props.data.dealDecentralizedDeliveryLocation,
+              dealDecentralizedAgreedDeliveryCost:
+                props.data.dealDecentralizedAgreedDeliveryCost,
+              showDealPaymentDetails: props.data.showDealPaymentDetails,
+              dealPaymentPreference: props.data.dealPaymentPreference,
+              dealRedemptionCode: props.data.dealRedemptionCode,
+              requestDealRedemptionCode: props.data.requestDealRedemptionCode,
             };
 
             if (data) {
@@ -293,7 +329,7 @@ function Paystack(props) {
     props.handleSuccessfulCreateSnackbar(
       `Thank you for your patronage, we will process your request as soon as possible`
     );
-    history.push("/thankyou");
+    history.push("/thankyou/online/success");
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Lottie from "react-lottie";
+import { useParams } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -15,6 +16,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Snackbar from "@material-ui/core/Snackbar";
 import ReactPlayer from "react-player";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import DealsCentralStandAlonePage from "./deals/DealsCentralStandAlonePage";
 
 import api from "./../apis/local";
 import CallToAction from "./ui/CallToAction";
@@ -33,6 +35,7 @@ import ShoppingPreferences from "./homePageCards/ShoppingPreferences";
 
 import AllCourses from "./homePageCards/AllCourses";
 import AllProducts from "./homePageCards/AllProducts";
+import FreezingPriceAdMainHome from "./homePageCards/FreezingPriceAdMainHome";
 
 import { baseURL } from "./../apis/util";
 
@@ -42,6 +45,18 @@ const useStyles = makeStyles((theme) => ({
     height: "80vh",
     // height: "100%",
     marginTop: "12em",
+    position: "relative",
+    "& video": {
+      objectFit: "cover",
+    },
+  },
+
+  rootMobile: {
+    maxWidth: "100%",
+    width: "100%",
+    height: "80vh",
+    // height: "100%",
+    marginTop: "8.5em",
     position: "relative",
     "& video": {
       objectFit: "cover",
@@ -217,7 +232,23 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: "cover",
     //backgroundAttachment: "fixed",
     backgroundRepeat: "no-repeat",
-    height: "30em",
+    //height: "28em",
+    height: "17em",
+    width: "100%",
+    [theme.breakpoints.down("md")]: {
+      // backgroundImage: `url(${mobileBackground})`,
+      backgroundAttachment: "inherit",
+    },
+  },
+
+  backgroundMobile: {
+    backgroundImage: `url(${background})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    //backgroundAttachment: "fixed",
+    backgroundRepeat: "no-repeat",
+    //height: "28em",
+    height: "17em",
     width: "100%",
     [theme.breakpoints.down("md")]: {
       // backgroundImage: `url(${mobileBackground})`,
@@ -252,6 +283,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Marketplace = (props) => {
   const classes = useStyles();
+  const params = useParams();
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
@@ -266,7 +298,10 @@ const Marketplace = (props) => {
   const [isLoading, setIsLoading] = useState(null);
   const [updateLearningPath, setUpdateLearningPath] = useState(false);
   const [updateBuyingPath, setUpdateBuyingPath] = useState(false);
-  const [path, setPath] = useState("retail");
+  const [path, setPath] = useState(
+    params.preference === undefined ? "retail" : params.preference
+  );
+  //const [path, setPath] = useState("retail");
   const [policy, setPolicy] = useState();
   const [currency, setCurrency] = useState();
 
@@ -283,6 +318,8 @@ const Marketplace = (props) => {
       preserveAspectRatio: "xMidyMid slice",
     },
   };
+
+  const preference = params.preference;
 
   const handleBecomeAPartnerOpenDialogBox = () => {
     setBecomePartnerOpen(false);
@@ -335,46 +372,69 @@ const Marketplace = (props) => {
             id: product._id,
             name: product.name,
             image: product.imageCover,
-            features: product.features,
             shortDescription: product.shortDescription,
-            longDescription: product.longDescription,
-            totalUnits: product.totalUnits,
+            fullDescription: product.fullDescription,
             pricePerUnit: product.pricePerUnit,
-            refNumber: product.refNumber,
             category: product.category,
-            minQuantity: product.minQuantity,
+            minimumQuantity: product.minQuantity,
             currency: product.currency,
             unit: product.unit,
             isFeaturedProduct: product.isFeaturedProduct,
             configuration: product.configuration,
             displayOnStore: product.displayOnStore,
-            expiryDate: product.expiryDate,
-            manufacturer: product.manufacturer,
-            countryOfOrigin: product.countryOfOrigin,
-            benefits: product.benefits,
-            sideEffects: product.sideEffects,
-            model: product.model,
-            yearManufactured: product.yearManufactured,
             brand: product.brand,
-            make: product.make,
-            source: product.source,
-            dosage: product.dosage,
-            ingredients: product.ingredients,
             salesPreference: product.salesPreference,
             keyword1: product.keyword1,
             keyword2: product.keyword2,
             keyword3: product.keyword3,
-            remainingUnits: product.remainingUnits,
-            shopsAvailable: product.shopsAvailable,
             slug: product.slug,
-            type: product.type,
             images: product.images,
-            requestQuote: product.requestQuote,
+            sku: product.sku,
             pricingMechanism: product.pricingMechanism,
+            priceLabel: product.priceLabel,
+            weightPerUnit: product.weightPerUnit,
+            stockStatus: product.stockStatus,
+            allowSubscription: product.allowSubscription,
+            isVatable: product.isVatable,
+            hasVariant: product.hasVariant,
+            barcode: product.barcode,
+            marketPricingCondition: product.marketPricingCondition,
+            deliverability: product.deliverability,
+            pickupInfo: product.pickupInfo,
+            allowPriceFreezing: product.allowPriceFreezing,
+            allowFreezedPriceLowBound: product.allowFreezedPriceLowBound,
+            freezedPriceLowBound: product.freezedPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+            freezedPriceMaximumDurationInWeeks:
+              product.freezedPriceMaximumDurationInWeeks,
+            minimumFreezableQuantity: product.minimumFreezableQuantity,
+            datePriceWasSet: product.datePriceWasSet,
+            dealCode: product.dealCode,
+            dealExpiryDate: product.dealExpiryDate,
+            dealType: product.dealType,
+            showDealPricePerUnit: product.showDealPricePerUnit,
+            allowDealQuantityChange: product.allowDealQuantityChange,
+            dealStatus: product.dealStatus,
+            dealComment: product.dealComment,
+            dealDeliveryMode: product.dealDeliveryMode,
+            dealCentralizedDeliveryLocation:
+              product.dealCentralizedDeliveryLocation,
+            dealCentralizedAgreedDeliveryCost:
+              product.dealCentralizedAgreedDeliveryCost,
+            dealDecentralizedDeliveryLocation:
+              product.dealDecentralizedDeliveryLocation,
+            dealDecentralizedAgreedDeliveryCost:
+              product.dealDecentralizedAgreedDeliveryCost,
+            showDealDeliveryCost: product.showDealDeliveryCost,
+            productType: product.productType,
           });
         });
         setProductsList(allData);
         setIsLoading(false);
+        setCurrency(allData.length > 0 ? allData[0].currency : "");
       }
 
       if (path === "wholesale") {
@@ -388,46 +448,373 @@ const Marketplace = (props) => {
             id: product._id,
             name: product.name,
             image: product.imageCover,
-            features: product.features,
             shortDescription: product.shortDescription,
-            longDescription: product.longDescription,
-            totalUnits: product.totalUnits,
+            fullDescription: product.fullDescription,
             pricePerUnit: product.pricePerUnit,
-            refNumber: product.refNumber,
             category: product.category,
-            minQuantity: product.minQuantity,
+            minimumQuantity: product.minQuantity,
             currency: product.currency,
             unit: product.unit,
             isFeaturedProduct: product.isFeaturedProduct,
             configuration: product.configuration,
             displayOnStore: product.displayOnStore,
-            expiryDate: product.expiryDate,
-            manufacturer: product.manufacturer,
-            countryOfOrigin: product.countryOfOrigin,
-            benefits: product.benefits,
-            sideEffects: product.sideEffects,
-            model: product.model,
-            yearManufactured: product.yearManufactured,
             brand: product.brand,
-            make: product.make,
-            source: product.source,
-            dosage: product.dosage,
-            ingredients: product.ingredients,
             salesPreference: product.salesPreference,
             keyword1: product.keyword1,
             keyword2: product.keyword2,
             keyword3: product.keyword3,
-            remainingUnits: product.remainingUnits,
-            shopsAvailable: product.shopsAvailable,
             slug: product.slug,
-            type: product.type,
             images: product.images,
-            requestQuote: product.requestQuote,
+            sku: product.sku,
             pricingMechanism: product.pricingMechanism,
+            priceLabel: product.priceLabel,
+            weightPerUnit: product.weightPerUnit,
+            stockStatus: product.stockStatus,
+            allowSubscription: product.allowSubscription,
+            isVatable: product.isVatable,
+            hasVariant: product.hasVariant,
+            barcode: product.barcode,
+            marketPricingCondition: product.marketPricingCondition,
+            deliverability: product.deliverability,
+            pickupInfo: product.pickupInfo,
+            allowPriceFreezing: product.allowPriceFreezing,
+            allowFreezedPriceLowBound: product.allowFreezedPriceLowBound,
+            freezedPriceLowBound: product.freezedPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+            freezedPriceMaximumDurationInWeeks:
+              product.freezedPriceMaximumDurationInWeeks,
+            minimumFreezableQuantity: product.minimumFreezableQuantity,
+            datePriceWasSet: product.datePriceWasSet,
+            dealCode: product.dealCode,
+            dealExpiryDate: product.dealExpiryDate,
+            dealType: product.dealType,
+            showDealPricePerUnit: product.showDealPricePerUnit,
+            allowDealQuantityChange: product.allowDealQuantityChange,
+            dealStatus: product.dealStatus,
+            dealComment: product.dealComment,
+            dealDeliveryMode: product.dealDeliveryMode,
+            dealCentralizedDeliveryLocation:
+              product.dealCentralizedDeliveryLocation,
+            dealCentralizedAgreedDeliveryCost:
+              product.dealCentralizedAgreedDeliveryCost,
+            dealDecentralizedDeliveryLocation:
+              product.dealDecentralizedDeliveryLocation,
+            dealDecentralizedAgreedDeliveryCost:
+              product.dealDecentralizedAgreedDeliveryCost,
+            showDealDeliveryCost: product.showDealDeliveryCost,
+            productType: product.productType,
           });
         });
         setProductsList(allData);
         setIsLoading(false);
+        setCurrency(allData.length > 0 ? allData[0].currency : "");
+      } //ends here
+
+      if (path === "derica") {
+        //data.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await api.get("/products?sort=desc", {
+          params: { displayOnStore: "yes", salesPreference: "derica" },
+        });
+        const workingData = response.data.data.data;
+        workingData.map((product) => {
+          allData.push({
+            id: product._id,
+            name: product.name,
+            image: product.imageCover,
+            shortDescription: product.shortDescription,
+            fullDescription: product.fullDescription,
+            pricePerUnit: product.pricePerUnit,
+            category: product.category,
+            minimumQuantity: product.minQuantity,
+            currency: product.currency,
+            unit: product.unit,
+            isFeaturedProduct: product.isFeaturedProduct,
+            configuration: product.configuration,
+            displayOnStore: product.displayOnStore,
+            brand: product.brand,
+            salesPreference: product.salesPreference,
+            keyword1: product.keyword1,
+            keyword2: product.keyword2,
+            keyword3: product.keyword3,
+            slug: product.slug,
+            images: product.images,
+            sku: product.sku,
+            pricingMechanism: product.pricingMechanism,
+            priceLabel: product.priceLabel,
+            weightPerUnit: product.weightPerUnit,
+            stockStatus: product.stockStatus,
+            allowSubscription: product.allowSubscription,
+            isVatable: product.isVatable,
+            hasVariant: product.hasVariant,
+            barcode: product.barcode,
+            marketPricingCondition: product.marketPricingCondition,
+            deliverability: product.deliverability,
+            pickupInfo: product.pickupInfo,
+            allowPriceFreezing: product.allowPriceFreezing,
+            allowFreezedPriceLowBound: product.allowFreezedPriceLowBound,
+            freezedPriceLowBound: product.freezedPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+            freezedPriceMaximumDurationInWeeks:
+              product.freezedPriceMaximumDurationInWeeks,
+            minimumFreezableQuantity: product.minimumFreezableQuantity,
+            datePriceWasSet: product.datePriceWasSet,
+            dealCode: product.dealCode,
+            dealExpiryDate: product.dealExpiryDate,
+            dealType: product.dealType,
+            showDealPricePerUnit: product.showDealPricePerUnit,
+            allowDealQuantityChange: product.allowDealQuantityChange,
+            dealStatus: product.dealStatus,
+            dealComment: product.dealComment,
+            dealDeliveryMode: product.dealDeliveryMode,
+            dealCentralizedDeliveryLocation:
+              product.dealCentralizedDeliveryLocation,
+            dealCentralizedAgreedDeliveryCost:
+              product.dealCentralizedAgreedDeliveryCost,
+            dealDecentralizedDeliveryLocation:
+              product.dealDecentralizedDeliveryLocation,
+            dealDecentralizedAgreedDeliveryCost:
+              product.dealDecentralizedAgreedDeliveryCost,
+            showDealDeliveryCost: product.showDealDeliveryCost,
+            productType: product.productType,
+          });
+        });
+        setProductsList(allData);
+        setIsLoading(false);
+        setCurrency(allData.length > 0 ? allData[0].currency : "");
+      } //ends here
+
+      if (path === "paint") {
+        //data.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await api.get("/products?sort=desc", {
+          params: { displayOnStore: "yes", salesPreference: "paint" },
+        });
+        const workingData = response.data.data.data;
+        workingData.map((product) => {
+          allData.push({
+            id: product._id,
+            name: product.name,
+            image: product.imageCover,
+            shortDescription: product.shortDescription,
+            fullDescription: product.fullDescription,
+            pricePerUnit: product.pricePerUnit,
+            category: product.category,
+            minimumQuantity: product.minQuantity,
+            currency: product.currency,
+            unit: product.unit,
+            isFeaturedProduct: product.isFeaturedProduct,
+            configuration: product.configuration,
+            displayOnStore: product.displayOnStore,
+            brand: product.brand,
+            salesPreference: product.salesPreference,
+            keyword1: product.keyword1,
+            keyword2: product.keyword2,
+            keyword3: product.keyword3,
+            slug: product.slug,
+            images: product.images,
+            sku: product.sku,
+            pricingMechanism: product.pricingMechanism,
+            priceLabel: product.priceLabel,
+            weightPerUnit: product.weightPerUnit,
+            stockStatus: product.stockStatus,
+            allowSubscription: product.allowSubscription,
+            isVatable: product.isVatable,
+            hasVariant: product.hasVariant,
+            barcode: product.barcode,
+            marketPricingCondition: product.marketPricingCondition,
+            deliverability: product.deliverability,
+            pickupInfo: product.pickupInfo,
+            allowPriceFreezing: product.allowPriceFreezing,
+            allowFreezedPriceLowBound: product.allowFreezedPriceLowBound,
+            freezedPriceLowBound: product.freezedPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+            freezedPriceMaximumDurationInWeeks:
+              product.freezedPriceMaximumDurationInWeeks,
+            minimumFreezableQuantity: product.minimumFreezableQuantity,
+            datePriceWasSet: product.datePriceWasSet,
+            dealCode: product.dealCode,
+            dealExpiryDate: product.dealExpiryDate,
+            dealType: product.dealType,
+            showDealPricePerUnit: product.showDealPricePerUnit,
+            allowDealQuantityChange: product.allowDealQuantityChange,
+            dealStatus: product.dealStatus,
+            dealComment: product.dealComment,
+            dealDeliveryMode: product.dealDeliveryMode,
+            dealCentralizedDeliveryLocation:
+              product.dealCentralizedDeliveryLocation,
+            dealCentralizedAgreedDeliveryCost:
+              product.dealCentralizedAgreedDeliveryCost,
+            dealDecentralizedDeliveryLocation:
+              product.dealDecentralizedDeliveryLocation,
+            dealDecentralizedAgreedDeliveryCost:
+              product.dealDecentralizedAgreedDeliveryCost,
+            showDealDeliveryCost: product.showDealDeliveryCost,
+            productType: product.productType,
+          });
+        });
+        setProductsList(allData);
+        setIsLoading(false);
+        setCurrency(allData.length > 0 ? allData[0].currency : "");
+      } //ends here
+
+      if (path === "community") {
+        //data.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await api.get("/products?sort=desc", {
+          params: { displayOnStore: "yes", salesPreference: "community" },
+        });
+        const workingData = response.data.data.data;
+        workingData.map((product) => {
+          allData.push({
+            id: product._id,
+            name: product.name,
+            image: product.imageCover,
+            shortDescription: product.shortDescription,
+            fullDescription: product.fullDescription,
+            pricePerUnit: product.pricePerUnit,
+            category: product.category,
+            minimumQuantity: product.minQuantity,
+            currency: product.currency,
+            unit: product.unit,
+            isFeaturedProduct: product.isFeaturedProduct,
+            configuration: product.configuration,
+            displayOnStore: product.displayOnStore,
+            brand: product.brand,
+            salesPreference: product.salesPreference,
+            keyword1: product.keyword1,
+            keyword2: product.keyword2,
+            keyword3: product.keyword3,
+            slug: product.slug,
+            images: product.images,
+            sku: product.sku,
+            pricingMechanism: product.pricingMechanism,
+            priceLabel: product.priceLabel,
+            weightPerUnit: product.weightPerUnit,
+            stockStatus: product.stockStatus,
+            allowSubscription: product.allowSubscription,
+            isVatable: product.isVatable,
+            hasVariant: product.hasVariant,
+            barcode: product.barcode,
+            marketPricingCondition: product.marketPricingCondition,
+            deliverability: product.deliverability,
+            pickupInfo: product.pickupInfo,
+            allowPriceFreezing: product.allowPriceFreezing,
+            allowFreezedPriceLowBound: product.allowFreezedPriceLowBound,
+            freezedPriceLowBound: product.freezedPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+            freezedPriceMaximumDurationInWeeks:
+              product.freezedPriceMaximumDurationInWeeks,
+            minimumFreezableQuantity: product.minimumFreezableQuantity,
+            datePriceWasSet: product.datePriceWasSet,
+            dealCode: product.dealCode,
+            dealExpiryDate: product.dealExpiryDate,
+            dealType: product.dealType,
+            showDealPricePerUnit: product.showDealPricePerUnit,
+            allowDealQuantityChange: product.allowDealQuantityChange,
+            dealStatus: product.dealStatus,
+            dealComment: product.dealComment,
+            dealDeliveryMode: product.dealDeliveryMode,
+            dealCentralizedDeliveryLocation:
+              product.dealCentralizedDeliveryLocation,
+            dealCentralizedAgreedDeliveryCost:
+              product.dealCentralizedAgreedDeliveryCost,
+            dealDecentralizedDeliveryLocation:
+              product.dealDecentralizedDeliveryLocation,
+            dealDecentralizedAgreedDeliveryCost:
+              product.dealDecentralizedAgreedDeliveryCost,
+            showDealDeliveryCost: product.showDealDeliveryCost,
+            productType: product.productType,
+          });
+        });
+        setProductsList(allData);
+        setIsLoading(false);
+        setCurrency(allData.length > 0 ? allData[0].currency : "");
+      } //ends here
+
+      if (path === "deal") {
+        //data.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await api.get("/products?sort=desc", {
+          params: { displayOnStore: "yes", salesPreference: "deal" },
+        });
+        const workingData = response.data.data.data;
+        workingData.map((product) => {
+          allData.push({
+            id: product._id,
+            name: product.name,
+            image: product.imageCover,
+            shortDescription: product.shortDescription,
+            fullDescription: product.fullDescription,
+            pricePerUnit: product.pricePerUnit,
+            category: product.category,
+            minimumQuantity: product.minQuantity,
+            currency: product.currency,
+            unit: product.unit,
+            isFeaturedProduct: product.isFeaturedProduct,
+            configuration: product.configuration,
+            displayOnStore: product.displayOnStore,
+            brand: product.brand,
+            salesPreference: product.salesPreference,
+            keyword1: product.keyword1,
+            keyword2: product.keyword2,
+            keyword3: product.keyword3,
+            slug: product.slug,
+            images: product.images,
+            sku: product.sku,
+            pricingMechanism: product.pricingMechanism,
+            priceLabel: product.priceLabel,
+            weightPerUnit: product.weightPerUnit,
+            stockStatus: product.stockStatus,
+            allowSubscription: product.allowSubscription,
+            isVatable: product.isVatable,
+            hasVariant: product.hasVariant,
+            barcode: product.barcode,
+            marketPricingCondition: product.marketPricingCondition,
+            deliverability: product.deliverability,
+            pickupInfo: product.pickupInfo,
+            allowPriceFreezing: product.allowPriceFreezing,
+            allowFreezedPriceLowBound: product.allowFreezedPriceLowBound,
+            freezedPriceLowBound: product.freezedPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithoutPriceLowBound,
+            chargesPerWeekOnFreezedPriceServiceWithPriceLowBound:
+              product.chargesPerWeekOnFreezedPriceServiceWithPriceLowBound,
+            freezedPriceMaximumDurationInWeeks:
+              product.freezedPriceMaximumDurationInWeeks,
+            minimumFreezableQuantity: product.minimumFreezableQuantity,
+            datePriceWasSet: product.datePriceWasSet,
+            dealCode: product.dealCode,
+            dealExpiryDate: product.dealExpiryDate,
+            dealType: product.dealType,
+            showDealPricePerUnit: product.showDealPricePerUnit,
+            allowDealQuantityChange: product.allowDealQuantityChange,
+            dealStatus: product.dealStatus,
+            dealComment: product.dealComment,
+            dealDeliveryMode: product.dealDeliveryMode,
+            dealCentralizedDeliveryLocation:
+              product.dealCentralizedDeliveryLocation,
+            dealCentralizedAgreedDeliveryCost:
+              product.dealCentralizedAgreedDeliveryCost,
+            dealDecentralizedDeliveryLocation:
+              product.dealDecentralizedDeliveryLocation,
+            dealDecentralizedAgreedDeliveryCost:
+              product.dealDecentralizedAgreedDeliveryCost,
+            showDealDeliveryCost: product.showDealDeliveryCost,
+            productType: product.productType,
+          });
+        });
+        setProductsList(allData);
+        setIsLoading(false);
+        setCurrency(allData.length > 0 ? allData[0].currency : "");
       } //ends here
     };
 
@@ -466,7 +853,7 @@ const Marketplace = (props) => {
       });
 
       setPolicy(allData[0]);
-      setCurrency(allData[0].currency);
+      //setCurrency(allData[0].currency);
     };
 
     //call the function
@@ -493,45 +880,36 @@ const Marketplace = (props) => {
               shortDescription={Str(product.shortDescription)
                 .limit(500, "...")
                 .get()}
-              longDescription={product.longDescription}
-              features={product.features}
-              totalUnits={product.totalUnits}
+              fullDescription={product.fullDescription}
               pricePerUnit={product.pricePerUnit}
-              refNumber={product.refNumber}
-              price={product.price}
               category={product.category}
-              minQuantity={product.minQuantity}
-              //currency={product.currency}
+              marketPricingCondition={product.marketPricingCondition}
+              minimumQuantity={product.minimumQuantity}
+              sku={product.sku}
+              priceLabel={product.priceLabel}
+              barcode={product.barcode}
               currency={currency}
               unit={product.unit}
               isFeaturedProduct={product.isFeaturedProduct}
               configuration={product.configuration}
               displayOnStore={product.displayOnStore}
-              expiryDate={product.expiryDate}
-              manufacturer={product.manufacturer}
-              countryOfOrigin={product.countryOfOrigin}
-              benefits={product.benefits}
-              sideEffects={product.sideEffects}
-              model={product.model}
-              yearManufactured={product.yearManufactured}
               brand={product.brand}
-              make={product.make}
-              source={product.source}
               salesPreference={product.salesPreference}
               keyword1={product.keyword1}
               keyword2={product.keyword2}
               keyword3={product.keyword3}
               image={product.image}
-              dosage={product.dosage}
-              ingredients={product.ingredients}
               productId={product.id}
-              remainingUnits={product.remainingUnits}
               slug={product.slug}
-              shopsAvailable={product.shopsAvailable}
-              type={product.type}
-              requestQuote={product.requestQuote}
               pricingMechanism={product.pricingMechanism}
               images={product.images}
+              weightPerUnit={product.weightPerUnit}
+              stockStatus={product.stockStatus}
+              allowSubscription={product.allowSubscription}
+              deliverability={product.deliverability}
+              pickupInfo={product.pickupInfo}
+              isVatable={product.isVatable}
+              hasVariant={product.hasVariant}
               token={props.token}
               userId={props.userId}
               setToken={props.setToken}
@@ -539,6 +917,29 @@ const Marketplace = (props) => {
               updateLearningPathInfoInfo={updateLearningPathInfoInfo}
               updateBuyingPathInfoInfo={updateBuyingPathInfoInfo}
               path={path}
+              allowPriceFreezing={product.allowPriceFreezing}
+              dealCode={product.dealCode}
+              dealExpiryDate={product.dealExpiryDate}
+              dealType={product.dealType}
+              showDealPricePerUnit={product.showDealPricePerUnit}
+              allowDealQuantityChange={product.allowDealQuantityChange}
+              dealStatus={product.dealStatus}
+              dealComment={product.dealComment}
+              dealDeliveryMode={product.dealDeliveryMode}
+              dealCentralizedDeliveryLocation={
+                product.dealCentralizedDeliveryLocation
+              }
+              dealCentralizedAgreedDeliveryCost={
+                product.dealCentralizedAgreedDeliveryCost
+              }
+              dealDecentralizedDeliveryLocation={
+                product.dealDecentralizedDeliveryLocation
+              }
+              dealDecentralizedAgreedDeliveryCost={
+                product.dealDecentralizedAgreedDeliveryCost
+              }
+              showDealDeliveryCost={product.showDealDeliveryCost}
+              productType={product.productType}
             />
           ))}
         </Grid>
@@ -561,45 +962,36 @@ const Marketplace = (props) => {
               shortDescription={Str(product.shortDescription)
                 .limit(500, "...")
                 .get()}
-              longDescription={product.longDescription}
-              features={product.features}
-              totalUnits={product.totalUnits}
+              fullDescription={product.fullDescription}
               pricePerUnit={product.pricePerUnit}
-              refNumber={product.refNumber}
-              price={product.price}
               category={product.category}
-              minQuantity={product.minQuantity}
-              //currency={product.currency}
+              minimumQuantity={product.minimumQuantity}
+              marketPricingCondition={product.marketPricingCondition}
+              sku={product.sku}
+              priceLabel={product.priceLabel}
+              barcode={product.barcode}
               currency={currency}
               unit={product.unit}
               isFeaturedProduct={product.isFeaturedProduct}
               configuration={product.configuration}
               displayOnStore={product.displayOnStore}
-              expiryDate={product.expiryDate}
-              manufacturer={product.manufacturer}
-              countryOfOrigin={product.countryOfOrigin}
-              benefits={product.benefits}
-              sideEffects={product.sideEffects}
-              model={product.model}
-              yearManufactured={product.yearManufactured}
               brand={product.brand}
-              make={product.make}
-              source={product.source}
-              dosage={product.dosage}
-              ingredients={product.ingredients}
               salesPreference={product.salesPreference}
+              deliverability={product.deliverability}
+              pickupInfo={product.pickupInfo}
               keyword1={product.keyword1}
               keyword2={product.keyword2}
               keyword3={product.keyword3}
               image={product.image}
               productId={product.id}
-              remainingUnits={product.remainingUnits}
               slug={product.slug}
-              shopsAvailable={product.shopsAvailable}
-              type={product.type}
-              requestQuote={product.requestQuote}
               pricingMechanism={product.pricingMechanism}
               images={product.images}
+              weightPerUnit={product.weightPerUnit}
+              stockStatus={product.stockStatus}
+              allowSubscription={product.allowSubscription}
+              isVatable={product.isVatable}
+              hasVariant={product.hasVariant}
               token={props.token}
               userId={props.userId}
               setToken={props.setToken}
@@ -607,6 +999,29 @@ const Marketplace = (props) => {
               updateLearningPathInfoInfo={updateLearningPathInfoInfo}
               updateBuyingPathInfoInfo={updateBuyingPathInfoInfo}
               path={path}
+              allowPriceFreezing={product.allowPriceFreezing}
+              dealCode={product.dealCode}
+              dealExpiryDate={product.dealExpiryDate}
+              dealType={product.dealType}
+              showDealPricePerUnit={product.showDealPricePerUnit}
+              allowDealQuantityChange={product.allowDealQuantityChange}
+              dealStatus={product.dealStatus}
+              dealComment={product.dealComment}
+              dealDeliveryMode={product.dealDeliveryMode}
+              dealCentralizedDeliveryLocation={
+                product.dealCentralizedDeliveryLocation
+              }
+              dealCentralizedAgreedDeliveryCost={
+                product.dealCentralizedAgreedDeliveryCost
+              }
+              dealDecentralizedDeliveryLocation={
+                product.dealDecentralizedDeliveryLocation
+              }
+              dealDecentralizedAgreedDeliveryCost={
+                product.dealDecentralizedAgreedDeliveryCost
+              }
+              showDealDeliveryCost={product.showDealDeliveryCost}
+              productType={product.productType}
             />
           ))}
         </Grid>
@@ -617,35 +1032,35 @@ const Marketplace = (props) => {
   return (
     <>
       {/* <Grid container direction="row" className={classes.mainContainer}> */}
-      <Grid container direction="row" className={classes.root}>
-        {/* <section className={classes.root}> */}
-        <Grid
-          container
-          alignItems="center"
-          className={classes.background}
-          justifyContent={matchesSM ? "center" : "space-between"}
-          direction={matchesSM ? "column" : "row"}
-          style={{ marginTop: -100 }}
-        >
-          <Grid item>
-            {" "}
-            {/*..... HERO BLOCK.... */}
-            <Grid
-              container
-              //justifyContent="flex-end"
-              //alignItems="center"
-              direction="row"
-            >
-              <Box
-                width="100%"
-                height="100%"
-                display="flex"
-                flexDirection="column"
-                //justifyContent="center"
+      {matchesMD ? (
+        <Grid container direction="row" className={classes.root}>
+          <Grid
+            container
+            alignItems="center"
+            className={classes.background}
+            justifyContent={matchesSM ? "center" : "space-between"}
+            direction={matchesSM ? "column" : "row"}
+            style={{ marginTop: -100 }}
+          >
+            <Grid item>
+              {" "}
+              {/*..... HERO BLOCK.... */}
+              <Grid
+                container
+                //justifyContent="flex-end"
                 //alignItems="center"
-                color="#fff"
+                direction="row"
               >
-                <Grid sm item className={classes.heroTextContainer}>
+                <Box
+                  width="100%"
+                  height="100%"
+                  display="flex"
+                  flexDirection="column"
+                  //justifyContent="center"
+                  //alignItems="center"
+                  color="#fff"
+                >
+                  {/* <Grid sm item className={classes.heroTextContainer}>
                   {matchesMD ? (
                     <Typography
                       variant={matchesSM ? "subtitle2" : "h2"}
@@ -654,21 +1069,7 @@ const Marketplace = (props) => {
                       //justifyContent="center"
                       //alignItems="center"
                     >
-                      {/* <span
-                        style={{
-                          marginLeft: matchesSM ? 20 : 5,
-                        }}
-                      >
-                        {" "}
-                        NextChamp is a learn-by-doing learning platform <br />
-                      </span>{" "}
-                      <span style={{ marginLeft: matchesSM ? 20 : 60 }}>
-                        that makes professionals from novices
-                      </span>
-                      <br />
-                      <span style={{ marginLeft: matchesSM ? 20 : 110 }}>
-                        and experts from professionals
-                      </span> */}
+                      
                       <br />
                     </Typography>
                   ) : (
@@ -679,68 +1080,163 @@ const Marketplace = (props) => {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      {/* <span
-                        style={{
-                          marginLeft: matchesSM ? 7 : 5,
-                        }}
-                      >
-                        {" "}
-                        NextChamp is a learn-by-doing learning platform <br />
-                      </span>{" "}
-                      <span style={{ marginLeft: matchesSM ? 20 : 60 }}>
-                        that makes professionals from novices
-                      </span>
-                      <br />
-                      <span style={{ marginLeft: matchesSM ? 30 : 110 }}>
-                        and experts from professionals
-                      </span> */}
+                      
                     </Typography>
                   )}
 
-                  {/* {matchesMD ? (
-                    <Grid
-                      container
-                      justifyContent="flex-start"
-                      direction={matchesSM ? "column" : "row"}
-                      // className={classes.topCover}
-                    >
-                      
-                    </Grid>
-                  ) : (
-                    
-                  )} */}
-                </Grid>
-              </Box>
-              {/* </div> */}
-              {/* <Grid sm item className={classes.animation}>
+                  
+                </Grid> */}
+                </Box>
+                {/* </div> */}
+                {/* <Grid sm item className={classes.animation}>
             <Lottie options={defaultOptions} height={"100%"} width={"100%"} />
           </Grid> */}
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        {/* </section> */}
+          {/* </section> */}
 
-        <TopCover />
-        <ShoppingPreferences
-          updatePathHandler={updatePathHandler}
-          updateBuyingPathInfoInfo={updateBuyingPathInfoInfo}
-        />
-        {isLoading && (
-          <CircularProgress
-            size={100}
-            color="inherit"
-            style={{ marginTop: 250, marginLeft: 650 }}
+          <TopCover />
+          <FreezingPriceAdMainHome />
+          <ShoppingPreferences
+            updatePathHandler={updatePathHandler}
+            updateBuyingPathInfoInfo={updateBuyingPathInfoInfo}
+            preference={preference}
           />
-        )}
-        {!isLoading && path === "retail" && <Grid item>{allProductList}</Grid>}
-        {!isLoading && path === "wholesale" && (
-          <Grid item>{allProductList}</Grid>
-        )}
+          {!isLoading && productsList.length === 0 && (
+            <Typography style={{ marginLeft: 100, marginTop: 80 }}>
+              There Are No Available Products In this category
+            </Typography>
+          )}
+          {isLoading && (
+            <CircularProgress
+              size={100}
+              color="inherit"
+              style={{ marginTop: 250, marginLeft: 650 }}
+            />
+          )}
+          {!isLoading && path === "retail" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "derica" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "paint" && <Grid item>{allProductList}</Grid>}
+          {!isLoading && path === "wholesale" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "community" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "deal" && <Grid item>{allProductList}</Grid>}
 
-        <Grid item className={classes.footer}>
-          <UpperFooter />
+          <Grid item className={classes.footer}>
+            <UpperFooter />
+          </Grid>
         </Grid>
-      </Grid>
+      ) : (
+        <Grid container direction="row" className={classes.rootMobile}>
+          <Grid
+            container
+            alignItems="center"
+            className={classes.backgroundMobile}
+            justifyContent={matchesSM ? "center" : "space-between"}
+            direction={matchesSM ? "column" : "row"}
+            style={{ marginTop: -100, height: "22.5%" }}
+          >
+            <Grid item>
+              {" "}
+              {/*..... HERO BLOCK.... */}
+              <Grid
+                container
+                //justifyContent="flex-end"
+                //alignItems="center"
+                direction="row"
+              >
+                <Box
+                  width="100%"
+                  height="100%"
+                  display="flex"
+                  flexDirection="column"
+                  //justifyContent="center"
+                  //alignItems="center"
+                  color="#fff"
+                >
+                  {/* <Grid sm item className={classes.heroTextContainer}>
+                 {matchesMD ? (
+                   <Typography
+                     variant={matchesSM ? "subtitle2" : "h2"}
+                     align="left"
+                     style={{ marginTop: "16rem" }}
+                     //justifyContent="center"
+                     //alignItems="center"
+                   >
+                     
+                     <br />
+                   </Typography>
+                 ) : (
+                   <Typography
+                     variant={matchesSM ? "subtitle2" : "h2"}
+                     align="left"
+                     style={{ marginTop: "16rem", fontSize: "1.2rem" }}
+                     justifyContent="center"
+                     alignItems="center"
+                   >
+                     
+                   </Typography>
+                 )}
+
+                 
+               </Grid> */}
+                </Box>
+                {/* </div> */}
+                {/* <Grid sm item className={classes.animation}>
+           <Lottie options={defaultOptions} height={"100%"} width={"100%"} />
+         </Grid> */}
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* </section> */}
+          <FreezingPriceAdMainHome />
+          <TopCover />
+          <DealsCentralStandAlonePage />
+          <ShoppingPreferences
+            updatePathHandler={updatePathHandler}
+            updateBuyingPathInfoInfo={updateBuyingPathInfoInfo}
+            preference={preference}
+          />
+          {!isLoading && productsList.length === 0 && (
+            <Typography style={{ marginLeft: 50, marginTop: 30 }}>
+              There Are No Available Products In this category
+            </Typography>
+          )}
+          {isLoading && (
+            <CircularProgress
+              size={100}
+              color="inherit"
+              style={{ marginTop: 250, marginLeft: 650 }}
+            />
+          )}
+          {!isLoading && path === "retail" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "derica" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "paint" && <Grid item>{allProductList}</Grid>}
+          {!isLoading && path === "wholesale" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "community" && (
+            <Grid item>{allProductList}</Grid>
+          )}
+          {!isLoading && path === "deal" && <Grid item>{allProductList}</Grid>}
+
+          <Grid item className={classes.footer}>
+            <UpperFooter />
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 };

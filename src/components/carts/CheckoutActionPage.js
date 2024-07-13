@@ -62,6 +62,19 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.green,
     },
   },
+
+  submitDisabledUpdateButton: {
+    borderRadius: 10,
+    height: 40,
+    width: 200,
+    marginLeft: 70,
+    marginTop: 30,
+    color: "white",
+    backgroundColor: theme.palette.common.grey,
+    "&:hover": {
+      backgroundColor: theme.palette.common.grey,
+    },
+  },
   removeItem: {
     borderRadius: 10,
     height: 40,
@@ -242,8 +255,57 @@ const renderRequestedQuantityField = ({
   );
 };
 
+const renderDealSameQuantityField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Quantity"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={input.value}
+      fullWidth
+      //required
+      type={type}
+      {...custom}
+      //defaultValue={quantity}
+      onChange={input.onChange}
+      //   inputProps={{
+      //     style: {
+      //       height: 1,
+      //     },
+
+      //   }}
+      InputProps={{
+        inputProps: {
+          min: 1,
+          style: {
+            height: 1,
+          },
+          readOnly: true,
+        },
+      }}
+    />
+  );
+};
+
 function CheckoutActionPage(props) {
-  const { price, productId, token, userId } = props;
+  const {
+    price,
+    productId,
+    token,
+    userId,
+    showDealPricePerUnit,
+    allowDealQuantityChange,
+    salesPreference,
+  } = props;
   const [quantity, setQuantity] = useState(+props.quantity);
   const [productQuantityInCart, setProductQuantityInCart] = useState();
   const [productLocation, setProductLocation] = useState();
@@ -461,13 +523,14 @@ function CheckoutActionPage(props) {
     label,
     meta: { touched, error, invalid },
     type,
+    helperText,
     id,
     ...custom
   }) => {
     return (
       <TextField
         //error={touched && invalid}
-        helperText="Minimum Quantity Required(MQR)"
+        helperText={helperText}
         variant="outlined"
         label={label}
         id={input.name}
@@ -476,7 +539,9 @@ function CheckoutActionPage(props) {
         //required
         type={type}
         {...custom}
-        defaultValue={`${props.minimumQuantity} ${props.unit}`}
+        defaultValue={`${props.minimumQuantity} ${
+          props.minimumQuantity <= 1 ? "unit" : "units"
+        }`}
         disabled
         onChange={input.onChange}
         //   inputProps={{
@@ -634,45 +699,6 @@ function CheckoutActionPage(props) {
     return <React.Fragment>Update</React.Fragment>;
   };
 
-  //function to remove product from cart
-
-  // const onItemRemovalSubmit = () => {
-  //   setLoadingRemoval(true);
-
-  //   let data = {};
-
-  //   data = {
-  //     isDeleted: true,
-  //   };
-
-  //   if (data) {
-  //     const createForm = async () => {
-  //       api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
-  //       await api.delete(`/carts/${props.cartId}`);
-
-  //       //if (response.data.status === "success") {
-  //       dispatch({
-  //         type: DELETE_CART,
-  //         //payload: response.data.data.data,
-  //       });
-
-  //       props.handleSuccessfulCreateSnackbar(
-  //         `This item is removed successfully!!!`
-  //       );
-
-  //       setLoadingRemoval(false);
-  //       props.cartCounterHandler(-1);
-  //       props.renderCartUpdate(props.cartId);
-  //     };
-  //     createForm().catch((err) => {
-  //       props.handleFailedSnackbar();
-  //       console.log("err:", err.message);
-  //     });
-  //   } else {
-  //     props.handleFailedSnackbar("Something went wrong, please try again!!!");
-  //   }
-  // };
-
   //function to update product in cart
 
   const onItemRemovalSubmit = () => {
@@ -686,7 +712,8 @@ function CheckoutActionPage(props) {
       );
 
       //history.push("/");
-      props.renderCheckoutUpdate(props.cartId);
+      // props.renderCheckoutUpdate(props.cartId);
+      props.renderCheckoutUpdate();
 
       setLoadingRemoval(false);
     };
@@ -729,8 +756,21 @@ function CheckoutActionPage(props) {
 
     let data = {};
 
+    let weightInKg = 0;
+
+    if (props.unit === "kg") {
+      weightInKg = props.weightPerUnit * quantity;
+    } else if (props.unit === "g") {
+      weightInKg = (props.weightPerUnit / 1000) * quantity;
+    } else if (props.unit === "ibs") {
+      weightInKg = props.weightPerUnit * 0.45359237 * quantity;
+    } else if (props.unit === "tonnes") {
+      weightInKg = props.weightPerUnit * 1000 * quantity;
+    }
+
     data = {
       quantity: quantity,
+      weightInKg: weightInKg,
       // price: props.price,
       // currency: props.currency,
       // // totalDeliveryCost: totalDeliveryCost,
@@ -754,7 +794,8 @@ function CheckoutActionPage(props) {
 
           setLoading(false);
           //props.renderCartUpdate(props.cartId);
-          props.renderCheckoutUpdate(props.cartId);
+          // props.renderCheckoutUpdate(props.cartId);
+          props.renderCheckoutUpdate();
           //setIsCheckoutVisible(true);
         } else {
           props.handleFailedSnackbar(
@@ -876,6 +917,7 @@ function CheckoutActionPage(props) {
             id="minimumQuantity"
             name="minimumQuantity"
             defaultValue={`${props.minimumQuantity}`}
+            helperText={"Minimum Required Order Quantity"}
             type="text"
             component={renderMinimumQuantityField}
             style={{ width: 300 }}
@@ -887,9 +929,16 @@ function CheckoutActionPage(props) {
             defaultValue={quantity}
             type="number"
             onChange={onChange}
-            component={renderRequestedQuantityField}
+            component={
+              salesPreference === "deal" && allowDealQuantityChange
+                ? renderRequestedQuantityField
+                : salesPreference !== "deal"
+                ? renderRequestedQuantityField
+                : renderDealSameQuantityField
+            }
             style={{ width: 300, marginTop: 10 }}
           />
+
           <Grid container direction="row">
             <Grid item style={{ width: 50, marginTop: 10, fontSize: 25 }}>
               <span style={{ color: "grey" }}>&#8358;</span>
@@ -912,7 +961,20 @@ function CheckoutActionPage(props) {
             //component={Link}
             // to="/mobileapps"
             // to={`/checkouts/${userId}`}
-            className={classes.submitUpdateButton}
+            className={
+              salesPreference === "deal" && allowDealQuantityChange
+                ? classes.submitUpdateButton
+                : salesPreference !== "deal"
+                ? classes.submitUpdateButton
+                : classes.submitDisabledUpdateButton
+            }
+            disabled={
+              salesPreference === "deal" && allowDealQuantityChange
+                ? false
+                : salesPreference !== "deal"
+                ? false
+                : true
+            }
             onClick={onSubmit}
           >
             {loading ? (

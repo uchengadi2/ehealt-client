@@ -223,7 +223,7 @@ function SendProductToCartForm(props) {
     return (
       <TextField
         //error={touched && invalid}
-        helperText="Minimum Quantity Required(MQR)"
+        helperText="Minimum Quantity Required(MQR)qqqq"
         variant="outlined"
         label={label}
         id={input.name}
@@ -295,6 +295,9 @@ function SendProductToCartForm(props) {
       isDeleted: false,
       price: price,
       currency: props.currency,
+      includeGatewayChargesInPrice: props.includeGatewayChargesInPrice,
+      gatewayFixedCharge: props.gatewayFixedCharge,
+      gatewayRateCharge: props.gatewayRateCharge,
     };
 
     if (sameProductAlreadyInCart === false) {

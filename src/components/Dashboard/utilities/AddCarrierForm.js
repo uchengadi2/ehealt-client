@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Field, reduxForm } from "redux-form";
 import { useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -20,7 +21,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import api from "./../../../apis/local";
-//import { CREATE_CITY } from "../../../actions/types";
+import { CREATE_CARRIER } from "../../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +56,7 @@ const renderNameField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the name of the city"
+      helperText="Carrier Name"
       variant="outlined"
       label={label}
       id={input.name}
@@ -74,7 +75,7 @@ const renderNameField = ({
   );
 };
 
-const renderCityCodeField = ({
+const renderCarrierNumberField = ({
   input,
   label,
   meta: { touched, error, invalid },
@@ -85,7 +86,7 @@ const renderCityCodeField = ({
   return (
     <TextField
       //error={touched && invalid}
-      helperText="Enter the code for this City"
+      helperText="Carrier Number"
       variant="outlined"
       label={label}
       id={input.name}
@@ -117,7 +118,7 @@ const renderDescriptionField = ({
       error={touched && invalid}
       //placeholder="category description"
       variant="outlined"
-      helperText="Describe the city"
+      helperText="Describe the Carrier"
       label={label}
       id={input.name}
       // value={formInput.description}
@@ -134,6 +135,185 @@ const renderDescriptionField = ({
   );
 };
 
+const renderAddressField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Carrier Address"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={true}
+      minRows={5}
+      {...custom}
+      onChange={input.onChange}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderCarrierVehiclesField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Carrier Vehicles"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={true}
+      minRows={5}
+      {...custom}
+      onChange={input.onChange}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderCarrierBankDetailsField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      error={touched && invalid}
+      //placeholder="category description"
+      variant="outlined"
+      helperText="Carrier Bank Details"
+      label={label}
+      id={input.name}
+      // value={formInput.description}
+      fullWidth
+      type={type}
+      style={{ marginTop: 20 }}
+      multiline={true}
+      minRows={5}
+      {...custom}
+      onChange={input.onChange}
+
+      // onChange={handleInput}
+    />
+  );
+};
+
+const renderContactPersonField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={formInput.name}
+      fullWidth
+      style={{ marginTop: 20 }}
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+const renderContactPersonEmailAddressField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person Email Address"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      style={{ marginTop: 20 }}
+      fullWidth
+      //required
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+
+const renderContactPersonPhoneNumberField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  type,
+  id,
+  ...custom
+}) => {
+  return (
+    <TextField
+      //error={touched && invalid}
+      helperText="Contact Person Phone Number"
+      variant="outlined"
+      label={label}
+      id={input.name}
+      //value={formInput.name}
+      fullWidth
+      style={{ marginTop: 20 }}
+      type={type}
+      {...custom}
+      onChange={input.onChange}
+      inputProps={{
+        style: {
+          height: 1,
+        },
+      }}
+    />
+  );
+};
+
 function AddCarrierForm(props) {
   const classes = useStyles();
   const [state, setState] = useState("");
@@ -141,6 +321,7 @@ function AddCarrierForm(props) {
   const [countryList, setCountryList] = useState([]);
   const [stateList, setStateList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [carrierType, setCarrierType] = useState("local");
 
   const dispatch = useDispatch();
 
@@ -184,6 +365,10 @@ function AddCarrierForm(props) {
     setState(event.target.value);
   };
 
+  const handleCarrierTypeChange = (event) => {
+    setCarrierType(event.target.value);
+  };
+
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
     setStateList([]);
@@ -211,6 +396,35 @@ function AddCarrierForm(props) {
     });
   };
 
+  const renderCarrierTypeField = ({
+    input,
+    label,
+    meta: { touched, error, invalid },
+    type,
+    id,
+    ...custom
+  }) => {
+    return (
+      <Box>
+        <FormControl variant="outlined">
+          {/* <InputLabel id="vendor_city">City</InputLabel> */}
+          <Select
+            labelId="carrierType"
+            id="carrierType"
+            value={carrierType}
+            onChange={handleCarrierTypeChange}
+            label="Carrier Type"
+            style={{ width: 500, height: 38, marginTop: 20 }}
+          >
+            <MenuItem value={"local"}>Local</MenuItem>
+            <MenuItem value={"foreign"}>Foreign</MenuItem>
+          </Select>
+          <FormHelperText>Select Carrier Type</FormHelperText>
+        </FormControl>
+      </Box>
+    );
+  };
+
   const renderStateField = ({
     input,
     label,
@@ -233,9 +447,7 @@ function AddCarrierForm(props) {
           >
             {renderStateList()}
           </Select>
-          <FormHelperText>
-            Select State/Region/Province where City is located
-          </FormHelperText>
+          <FormHelperText>Select Carrier State</FormHelperText>
         </FormControl>
       </Box>
     );
@@ -263,7 +475,7 @@ function AddCarrierForm(props) {
           >
             {renderCountryList()}
           </Select>
-          <FormHelperText>Select Country where city is located</FormHelperText>
+          <FormHelperText>Select Carrier Country</FormHelperText>
         </FormControl>
       </Box>
     );
@@ -277,38 +489,50 @@ function AddCarrierForm(props) {
     setLoading(true);
     const data = {
       name: formValues.name,
-      code: formValues.code
-        ? formValues.code
+      carrierNumber: formValues.carrierNumber
+        ? formValues.carrierNumber
         : "CT-" + Math.floor(Math.random() * 100000),
       description: formValues.description,
       country: country,
       state: state,
+      carrierType: carrierType,
+      address: formValues.address,
+      contactPerson: formValues.contactPerson,
+      contactPhoneNumbers: formValues.contactPhoneNumbers,
+      contactPersonEmail: formValues.contactPersonEmail,
+      vehicles: formValues.vehicles,
+      bankDetails: formValues.bankDetails,
       createdBy: props.userId,
     };
+
+    console.log("data:", data);
     if (data) {
       const createForm = async () => {
         api.defaults.headers.common["Authorization"] = `Bearer ${props.token}`;
-        const response = await api.post(`/cities`, data);
+        const response = await api.post(`/carriers`, data);
 
         if (response.data.status === "success") {
           dispatch({
-            //type: CREATE_CITY,
+            type: CREATE_CARRIER,
             payload: response.data.data.data,
           });
 
           props.handleSuccessfulCreateSnackbar(
-            `${response.data.data.data.name} City is added successfully!!!`
+            `${response.data.data.data.name} Carrier is added successfully!!!`
           );
+          props.renderCarrierUpdateCounter();
           props.handleDialogOpenStatus();
           setLoading(false);
         } else {
           props.handleFailedSnackbar(
-            "Something went wrong, please try again!!!"
+            "vvvvSomething went wrong, please try again!!!"
           );
         }
       };
       createForm().catch((err) => {
-        props.handleFailedSnackbar();
+        props.handleFailedSnackbar(
+          "xxxxxSomething went wrong, please try again!!!"
+        );
         console.log("err:", err.message);
       });
     } else {
@@ -318,6 +542,22 @@ function AddCarrierForm(props) {
 
   return (
     <div className={classes.root}>
+      <Grid
+        item
+        container
+        style={{ marginTop: 1, marginBottom: 2 }}
+        justifyContent="center"
+      >
+        <CancelRoundedIcon
+          style={{
+            marginLeft: 460,
+            fontSize: 30,
+            marginTop: "-10px",
+            cursor: "pointer",
+          }}
+          onClick={() => [props.handleDialogOpenStatus()]}
+        />
+      </Grid>
       <Grid item container justifyContent="center">
         <FormLabel
           style={{ color: "grey", fontSize: "1.3em" }}
@@ -351,10 +591,10 @@ function AddCarrierForm(props) {
           <Grid item style={{ width: "33%", marginLeft: 10 }}>
             <Field
               label=""
-              id="code"
-              name="code"
+              id="carrierNumber"
+              name="carrierNumber"
               type="text"
-              component={renderCityCodeField}
+              component={renderCarrierNumberField}
             />
           </Grid>
         </Grid>
@@ -377,10 +617,59 @@ function AddCarrierForm(props) {
 
         <Field
           label=""
+          id="address"
+          name="address"
+          type="text"
+          component={renderAddressField}
+        />
+        <Field
+          label=""
           id="description"
           name="description"
           type="text"
           component={renderDescriptionField}
+        />
+        <Field
+          label=""
+          id="carrierType"
+          name="carrierType"
+          type="text"
+          component={renderCarrierTypeField}
+        />
+        <Field
+          label=""
+          id="contactPerson"
+          name="contactPerson"
+          type="text"
+          component={renderContactPersonField}
+        />
+        <Field
+          label=""
+          id="contactPhoneNumbers"
+          name="contactPhoneNumbers"
+          type="text"
+          component={renderContactPersonPhoneNumberField}
+        />
+        <Field
+          label=""
+          id="contactPersonEmail"
+          name="contactPersonEmail"
+          type="text"
+          component={renderContactPersonEmailAddressField}
+        />
+        <Field
+          label=""
+          id="vehicles"
+          name="vehicles"
+          type="text"
+          component={renderCarrierVehiclesField}
+        />
+        <Field
+          label=""
+          id="bankDetails"
+          name="bankDetails"
+          type="text"
+          component={renderCarrierBankDetailsField}
         />
 
         <Button

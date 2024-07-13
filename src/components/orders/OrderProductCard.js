@@ -567,9 +567,7 @@ export default function OrderProductCard(props) {
                             .toFixed(2)
                             .replace(/\d(?=(\d{3})+\.)/g, "$&,")
                         : 0}
-                      <span
-                        style={{ fontSize: 12 }}
-                      >{`per ${product.unit}`}</span>
+                      <span style={{ fontSize: 12 }}>{`per unit`}</span>
                     </strong>
                   </span>
                 </Typography>
@@ -597,11 +595,7 @@ export default function OrderProductCard(props) {
                     {props.orderedQuantity
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                    {`${
-                      props.orderedQuantity > 1
-                        ? product.unit + "s"
-                        : product.unit
-                    }`}
+                    {`${props.orderedQuantity > 1 ? "units" : "unit"}`}
                   </Typography>
                 )}
                 {props.dateOrdered !== undefined && (
@@ -840,9 +834,7 @@ export default function OrderProductCard(props) {
                             .toFixed(2)
                             .replace(/\d(?=(\d{3})+\.)/g, "$&,")
                         : 0}
-                      <span
-                        style={{ fontSize: 12 }}
-                      >{`per ${product.unit}`}</span>
+                      <span style={{ fontSize: 12 }}>{`per unit`}</span>
                     </strong>
                   </span>
                 </Typography>
@@ -870,11 +862,7 @@ export default function OrderProductCard(props) {
                     {props.orderedQuantity
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                    {`${
-                      props.orderedQuantity > 1
-                        ? product.unit + "s"
-                        : product.unit
-                    }`}
+                    {`${props.orderedQuantity > 1 ? "units" : "unit"}`}
                   </Typography>
                 )}
                 {props.dateOrdered !== undefined && (
